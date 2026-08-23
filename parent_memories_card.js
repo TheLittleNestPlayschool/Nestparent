@@ -1,7 +1,60 @@
 import {
   memoriesOverview,
-  memoryChapters
+  memoryChapters,
+  memoryCollections
 } from "./parent_memories_data.js";
+
+
+/*   build special collections*/
+
+function buildMemoryCollections(){
+
+  const availableCollections =
+    memoryCollections.filter(
+      collection=>
+        collection.available
+    );
+
+
+  if(
+    availableCollections.length ===
+    0
+  ){
+    return "";
+  }
+
+
+  return `
+    <div class="memory-specials">
+
+      ${
+        availableCollections
+          .map(
+            collection=>`
+              <button
+                class="memory-special"
+                type="button"
+                data-memory-collection="${collection.id}"
+              >
+
+                <span class="memory-special-symbol">
+                  ${collection.symbol}
+                </span>
+
+                <span class="memory-special-title">
+                  ${collection.title}
+                </span>
+
+              </button>
+            `
+          )
+          .join("")
+      }
+
+    </div>
+  `;
+
+}
 
 
 /*   create memories card*/
@@ -55,6 +108,10 @@ export function createMemoriesCard(){
             ${memoriesOverview.count}
             little moments saved
           </div>
+
+          ${
+            buildMemoryCollections()
+          }
 
         </div>
 
@@ -121,6 +178,42 @@ export function createMemoriesCard(){
                 {
                   detail:{
                     chapter
+                  }
+                }
+              )
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  article
+    .querySelectorAll(
+      ".memory-special"
+    )
+    .forEach(
+      button=>{
+
+        button.addEventListener(
+          "click",
+          event=>{
+
+            event.stopPropagation();
+
+
+            const collection =
+              button.dataset.memoryCollection;
+
+
+            window.dispatchEvent(
+              new CustomEvent(
+                "parent:memory-collection",
+                {
+                  detail:{
+                    collection
                   }
                 }
               )
