@@ -1,510 +1,122 @@
-/*   archive stage*/
+/*   archive data*/
 
-.memory-archive-experience{
-  opacity:0;
+const archiveGroups = [
+  {
+    id:"july-2026",
+    title:"July 2026",
+    copy:"The month before August",
+    count:28
+  },
+  {
+    id:"june-2026",
+    title:"June 2026",
+    copy:"Little moments from early summer",
+    count:34
+  },
+  {
+    id:"may-2026",
+    title:"May 2026",
+    copy:"A month full of growing",
+    count:29
+  },
+  {
+    id:"april-2026",
+    title:"April 2026",
+    copy:"Earlier pieces of Mia's story",
+    count:22
+  }
+];
 
-  pointer-events:none;
+/*   create archive card*/
 
-  filter:
-    blur(8px);
+export function createMemoryArchiveCard(){
+  const article =
+    document.createElement(
+      "article"
+    );
 
-  transform:
-    translate(-50%,-50%)
-    translateY(34px)
-    scale(.96);
+  article.className =
+    "experience memory-archive-experience";
 
-  z-index:24;
+  article.dataset.type =
+    "memory-archive";
 
-  transition:
-    opacity 1.35s ease .18s,
-    transform 1.45s cubic-bezier(.20,.62,.18,1) .18s,
-    filter 1.2s ease .18s;
-}
+  article.innerHTML = `
+    <div class="memory-archive-card">
+      <div class="memory-archive-heading">
+        <span class="memory-archive-kicker">
+          Mia's Story So Far
+        </span>
 
+        <h2 class="memory-archive-title">
+          Wander a little further back.
+        </h2>
 
-.memory-archive-experience.is-visible{
-  opacity:1;
+        <p class="memory-archive-copy">
+          Her earlier Little Nest moments are
+          waiting here whenever you want to
+          return to them.
+        </p>
+      </div>
 
-  pointer-events:auto;
+      <div class="memory-archive-list">
+        ${
+          archiveGroups
+            .map(
+              group=>`
+                <button
+                  class="memory-archive-item"
+                  type="button"
+                  data-memory-archive="${group.id}"
+                >
+                  <span class="memory-archive-item-title">
+                    ${group.title}
+                  </span>
 
-  filter:
-    blur(0);
+                  <span class="memory-archive-item-copy">
+                    ${group.copy}
+                  </span>
 
-  transform:
-    translate(-50%,-50%)
-    translateY(0)
-    scale(1);
-}
+                  <span class="memory-archive-item-count">
+                    ${group.count} moments
+                  </span>
+                </button>
+              `
+            )
+            .join("")
+        }
+      </div>
+    </div>
+  `;
 
-
-/*   archive fading underneath*/
-
-.memory-archive-experience.is-leaving{
-  opacity:0;
-
-  pointer-events:none;
-
-  z-index:19;
-
-  filter:
-    blur(3px);
-
-  transform:
-    translate(-50%,-50%)
-    translate3d(
-      -6px,
-      10px,
-      -30px
+  article
+    .querySelectorAll(
+      ".memory-archive-item"
     )
-    scale(.988);
+    .forEach(
+      button=>{
+        button.addEventListener(
+          "click",
+          event=>{
+            event.stopPropagation();
 
-  transition:
-    opacity .58s ease,
-    transform 1.15s cubic-bezier(.20,.62,.18,1),
-    filter .72s ease;
-}
+            const archive =
+              button.dataset.memoryArchive;
 
-
-/*   archive card*/
-
-.memory-archive-card{
-  position:relative;
-
-  width:100%;
-  height:100%;
-
-  display:flex;
-
-  flex-direction:column;
-
-  padding:
-    28px
-    24px
-    24px;
-
-  overflow:hidden;
-
-  border:
-    1px solid
-    rgba(
-      255,
-      255,
-      255,
-      .90
+            window.dispatchEvent(
+              new CustomEvent(
+                "parent:memory-archive",
+                {
+                  detail:{
+                    archive
+                  }
+                }
+              )
+            );
+          }
+        );
+      }
     );
 
-  border-radius:34px;
-
-  background:
-    linear-gradient(
-      155deg,
-      rgba(
-        250,
-        252,
-        249,
-        .97
-      ),
-      rgba(
-        239,
-        245,
-        240,
-        .96
-      )
-    );
-
-  box-shadow:
-    0 25px 70px
-    rgba(
-      38,
-      54,
-      48,
-      .14
-    );
-}
-
-
-/*   archive atmosphere*/
-
-.memory-archive-card::before{
-  content:"";
-
-  position:absolute;
-
-  width:250px;
-  height:250px;
-
-  right:-110px;
-  top:-95px;
-
-  border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(
-        221,
-        232,
-        216,
-        .72
-      ),
-      rgba(
-        221,
-        232,
-        216,
-        0
-      )
-      72%
-    );
-
-  pointer-events:none;
-}
-
-
-.memory-archive-card::after{
-  content:"";
-
-  position:absolute;
-
-  width:220px;
-  height:220px;
-
-  left:-90px;
-  bottom:-105px;
-
-  border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(
-        246,
-        225,
-        188,
-        .46
-      ),
-      rgba(
-        246,
-        225,
-        188,
-        0
-      )
-      72%
-    );
-
-  pointer-events:none;
-}
-
-
-/*   archive heading*/
-
-.memory-archive-heading{
-  position:relative;
-
-  z-index:2;
-}
-
-
-.memory-archive-kicker{
-  display:block;
-
-  margin-bottom:9px;
-
-  font-size:10px;
-
-  font-weight:700;
-
-  letter-spacing:.14em;
-
-  text-transform:uppercase;
-
-  color:
-    rgba(
-      38,
-      50,
-      47,
-      .42
-    );
-}
-
-
-.memory-archive-title{
-  max-width:320px;
-
-  margin:0;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:
-    clamp(
-      29px,
-      7vw,
-      36px
-    );
-
-  line-height:1;
-
-  font-weight:400;
-
-  letter-spacing:-.035em;
-
-  color:var(--ink);
-}
-
-
-.memory-archive-copy{
-  max-width:305px;
-
-  margin:
-    12px
-    0
-    0;
-
-  font-size:12px;
-
-  line-height:1.55;
-
-  color:
-    rgba(
-      38,
-      50,
-      47,
-      .54
-    );
-}
-
-
-/*   archive list*/
-
-.memory-archive-list{
-  position:relative;
-
-  z-index:2;
-
-  flex:1;
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(0,1fr)
-    );
-
-  gap:11px;
-
-  align-content:center;
-
-  margin-top:18px;
-}
-
-
-/*   archive item*/
-
-.memory-archive-item{
-  position:relative;
-
-  min-width:0;
-  min-height:126px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:flex-start;
-
-  justify-content:flex-end;
-
-  padding:17px;
-
-  border:
-    1px solid
-    rgba(
-      255,
-      255,
-      255,
-      .94
-    );
-
-  border-radius:22px;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .82
-    );
-
-  box-shadow:
-    inset 0 1px 0
-    rgba(
-      255,
-      255,
-      255,
-      .90
-    ),
-    0 10px 28px
-    rgba(
-      57,
-      77,
-      68,
-      .06
-    );
-
-  color:var(--ink);
-
-  text-align:left;
-
-  cursor:pointer;
-
-  overflow:hidden;
-
-  transition:
-    transform .36s var(--ease),
-    background .36s ease;
-
-  -webkit-tap-highlight-color:
-    transparent;
-}
-
-
-.memory-archive-item::before{
-  content:"";
-
-  position:absolute;
-
-  width:88px;
-  height:88px;
-
-  right:-30px;
-  top:-32px;
-
-  border-radius:50%;
-
-  background:
-    rgba(
-      208,
-      227,
-      214,
-      .30
-    );
-
-  pointer-events:none;
-}
-
-
-.memory-archive-item:active{
-  transform:
-    scale(.97);
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .95
-    );
-}
-
-
-/*   archive item text*/
-
-.memory-archive-item-title{
-  position:relative;
-
-  z-index:1;
-
-  display:block;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:18px;
-
-  line-height:1.05;
-
-  letter-spacing:-.02em;
-}
-
-
-.memory-archive-item-copy{
-  position:relative;
-
-  z-index:1;
-
-  display:block;
-
-  margin-top:5px;
-
-  max-width:128px;
-
-  font-size:9px;
-
-  line-height:1.35;
-
-  color:
-    rgba(
-      38,
-      50,
-      47,
-      .48
-    );
-}
-
-
-.memory-archive-item-count{
-  position:absolute;
-
-  right:13px;
-  bottom:11px;
-
-  z-index:1;
-
-  font-size:9px;
-
-  font-weight:700;
-
-  color:
-    rgba(
-      38,
-      50,
-      47,
-      .30
-    );
-}
-
-
-/*   responsive*/
-
-@media (max-width:420px){
-
-  .memory-archive-card{
-    padding:
-      25px
-      21px
-      21px;
-  }
-
-
-  .memory-archive-list{
-    gap:9px;
-  }
-
-
-  .memory-archive-item{
-    min-height:116px;
-
-    padding:15px;
-  }
-
-
-  .memory-archive-item-title{
-    font-size:17px;
-  }
-
+  return article;
 }
