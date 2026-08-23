@@ -4,8 +4,25 @@ import {
 
 
 import {
-  createNestCard
-} from "./parent_nest_card.js";
+  buildExperienceCards
+} from "./parent_card_builder.js";
+
+
+import {
+  renderCardPositions
+} from "./parent_card_positions.js";
+
+
+import {
+  activateCarouselInput
+} from "./parent_carousel_input.js";
+
+
+import {
+  openNestStage as openNestStageView,
+  closeNestStage as closeNestStageView,
+  isNestStageOpen
+} from "./parent_nest_stage.js";
 
 
 const carousel =
@@ -30,28 +47,8 @@ let activeIndex =
   0;
 
 
-let startX =
-  0;
-
-
-let deltaX =
-  0;
-
-
-let dragging =
-  false;
-
-
 let hasInteracted =
   false;
-
-
-let nestOpen =
-  false;
-
-
-let nestCard =
-  null;
 
 
 /*   build cards*/
@@ -65,148 +62,9 @@ export function buildCards(){
   }
 
 
-  experiences.forEach(
-    (
-      item,
-      index
-    )=>{
-
-      const article =
-        document.createElement(
-          "article"
-        );
-
-
-      article.className =
-        "experience";
-
-
-      article.dataset.index =
-        index;
-
-
-      const typeLabel =
-        ({
-          session:
-            "Story",
-
-          learning:
-            "Learning",
-
-          activity:
-            "Activity",
-
-          personal:
-            "Growth",
-
-          world:
-            "My World",
-
-          home:
-            "Home"
-        })[item.type]
-        ||
-        "Story";
-
-
-      article.innerHTML = `
-        <div class="card">
-
-          <div
-            class="photo"
-            style="
-              background-image:
-              url('${item.photo}')
-            "
-          ></div>
-
-          <div class="type-mark">
-            ${typeLabel}
-          </div>
-
-          <div class="content">
-
-            <div class="moment-label">
-              ${item.label}
-            </div>
-
-            <h2 class="moment-title">
-              ${item.title}
-            </h2>
-
-            <p class="moment-copy">
-              ${item.copy}
-            </p>
-
-            <div class="learn-row">
-
-              ${
-                item.categories
-                  .map(
-                    category=>`
-                      <span class="learn-pill">
-                        ${category}
-                      </span>
-                    `
-                  )
-                  .join("")
-              }
-
-            </div>
-
-          </div>
-
-        </div>
-      `;
-
-
-      article.addEventListener(
-        "click",
-        ()=>{
-
-          if(
-            nestOpen
-          ){
-            return;
-          }
-
-
-          if(
-            Math.abs(
-              deltaX
-            ) <
-            8
-            &&
-            Number(
-              article.dataset.index
-            )
-            ===
-            activeIndex
-          ){
-
-            window.dispatchEvent(
-              new CustomEvent(
-                "parent:open-experience",
-                {
-                  detail:{
-                    index:
-                      activeIndex
-                  }
-                }
-              )
-            );
-
-          }
-
-        }
-      );
-
-
-      carousel.appendChild(
-        article
-      );
-
-    }
+  buildExperienceCards(
+    carousel,
+    openExperience
   );
 
 
@@ -215,426 +73,52 @@ export function buildCards(){
 }
 
 
-/*   position cards*/
+/*   open experience*/
 
-function renderPositions(){
-
-  if(
-    !carousel
-  ){
-    return;
-  }
-
-
-  const cards = [
-    ...carousel.querySelectorAll(
-      ".experience:not(.nest-experience)"
-    )
-  ];
-
-
-  cards.forEach(
-    (
-      card,
-      index
-    )=>{
-
-      if(
-        nestOpen
-      ){
-
-        renderNestModePosition(
-          card,
-          index
-        );
-
-
-        return;
-
-      }
-
-
-      const offset =
-        index -
-        activeIndex;
-
-
-      renderCardOffset(
-        card,
-        offset
-      );
-
-    }
-  );
-
-}
-
-
-/*   position cards while nest is open*/
-
-function renderNestModePosition(
-  card,
+function openExperience(
   index
 ){
 
-  const relativeIndex =
-    index -
-    activeIndex;
-
-
   if(
-    relativeIndex <
-    0
-  ){
-
-    card.style.opacity =
-      "0";
-
-
-    card.style.pointerEvents =
-      "none";
-
-
-    card.style.filter =
-      "blur(8px)";
-
-
-    card.style.transform = `
-      translate(-50%,-50%)
-      translate3d(
-        -64%,
-        10px,
-        -120px
-      )
-      rotate(2.6deg)
-      scale(.78)
-    `;
-
-
-    card.style.zIndex =
-      "5";
-
-
-    card.dataset.pos =
-      -1;
-
-
-    return;
-
-  }
-
-
-  /*
-    Current card becomes position 1.
-
-    The next existing card becomes position 2.
-  */
-
-  const offset =
-    relativeIndex +
-    1;
-
-
-  renderCardOffset(
-    card,
-    offset
-  );
-
-}
-
-
-/*   render one card position*/
-
-function renderCardOffset(
-  card,
-  offset
-){
-
-  if(
-    offset <
-    -2
-    ||
-    offset >
-    2
-  ){
-
-    card.style.opacity =
-      "0";
-
-
-    card.style.pointerEvents =
-      "none";
-
-
-    card.style.transform = `
-      translate(-50%,-50%)
-      translateX(
-        ${offset * 64}%
-      )
-      scale(.74)
-    `;
-
-
-    card.style.filter =
-      "blur(9px)";
-
-
-    card.style.zIndex =
-      "4";
-
-
-    card.dataset.pos =
-      offset;
-
-
-    return;
-
-  }
-
-
-  const x =
-    offset *
-    73;
-
-
-  const scale =
-    offset ===
-    0
-      ?
-        1
-      :
-        .86;
-
-
-  const rotate =
-    offset *
-    -2.6;
-
-
-  const z =
-    offset ===
-    0
-      ?
-        0
-      :
-        -90;
-
-
-  const y =
-    Math.abs(
-      offset
-    )
-    *
-    10;
-
-
-  const opacity =
-    offset ===
-    0
-      ?
-        1
-      :
-        .46;
-
-
-  card.style.opacity =
-    opacity;
-
-
-  card.style.pointerEvents =
-    offset ===
-    0
-      ?
-        "auto"
-      :
-        "none";
-
-
-  card.style.filter =
-    offset ===
-    0
-      ?
-        "blur(0px)"
-      :
-        "blur(1.4px)";
-
-
-  card.style.transform = `
-    translate(-50%,-50%)
-    translate3d(
-      ${x}%,
-      ${y}px,
-      ${z}px
-    )
-    rotate(
-      ${rotate}deg
-    )
-    scale(
-      ${scale}
-    )
-  `;
-
-
-  card.style.zIndex =
-    10 -
-    Math.abs(
-      offset
-    );
-
-
-  card.dataset.pos =
-    offset;
-
-}
-
-
-/*   open nest stage*/
-
-export function openNestStage(){
-
-  if(
-    nestOpen
-    ||
-    !carousel
+    isNestStageOpen()
   ){
     return;
   }
 
 
-  nestOpen =
-    true;
+  if(
+    index !==
+    activeIndex
+  ){
+    return;
+  }
 
 
-  hideHint();
-
-
-  /*
-    Build the Nest card before moving
-    the existing stage.
-  */
-
-  nestCard =
-    createNestCard();
-
-
-  carousel.appendChild(
-    nestCard
-  );
-
-
-  /*
-    Force its starting state to exist
-    before the stage begins moving.
-  */
-
-  void nestCard.offsetWidth;
-
-
-  /*
-    Existing center card now moves
-    into the right-hand position.
-  */
-
-  renderPositions();
-
-
-  /*
-    Nest card becomes the new center.
-  */
-
-  requestAnimationFrame(
-    ()=>{
-
-      requestAnimationFrame(
-        ()=>{
-
-          if(
-            !nestCard
-          ){
-            return;
-          }
-
-
-          nestCard.classList.add(
-            "is-visible"
-          );
-
+  window.dispatchEvent(
+    new CustomEvent(
+      "parent:open-experience",
+      {
+        detail:{
+          index:
+            activeIndex
         }
-      );
-
-    }
-  );
-
-}
-
-
-/*   close nest stage*/
-
-export function closeNestStage(){
-
-  if(
-    !nestOpen
-  ){
-    return;
-  }
-
-
-  nestOpen =
-    false;
-
-
-  if(
-    nestCard
-  ){
-
-    nestCard.classList.remove(
-      "is-visible"
-    );
-
-  }
-
-
-  /*
-    Bring the original experience
-    back into the center.
-  */
-
-  renderPositions();
-
-
-  const cardToRemove =
-    nestCard;
-
-
-  nestCard =
-    null;
-
-
-  window.setTimeout(
-    ()=>{
-
-      if(
-        cardToRemove
-        &&
-        cardToRemove.parentNode
-      ){
-
-        cardToRemove.remove();
-
       }
-
-    },
-    1250
+    )
   );
 
 }
 
 
-/*   nest state*/
+/*   render positions*/
 
-export function isNestStageOpen(){
+function renderPositions(){
 
-  return nestOpen;
+  renderCardPositions({
+    carousel,
+    activeIndex,
+    nestOpen:
+      isNestStageOpen()
+  });
 
 }
 
@@ -646,7 +130,7 @@ function move(
 ){
 
   if(
-    nestOpen
+    isNestStageOpen()
   ){
     return;
   }
@@ -686,7 +170,7 @@ function move(
 }
 
 
-/*   hint*/
+/*   hide hint*/
 
 export function hideHint(){
 
@@ -713,160 +197,55 @@ export function hideHint(){
 }
 
 
-/*   pointer down*/
+/*   open nest stage*/
 
-function pointerDown(
-  event
-){
+export function openNestStage(){
 
-  if(
-    nestOpen
-  ){
-    return;
-  }
-
-
-  if(
-    deepSheet
-    &&
-    deepSheet
-      .classList
-      .contains(
-        "open"
-      )
-  ){
-    return;
-  }
-
-
-  dragging =
-    true;
-
-
-  startX =
-    event.clientX
-    ??
-    event
-      .touches?.[0]
-      ?.clientX
-    ??
-    0;
-
-
-  deltaX =
-    0;
+  openNestStageView({
+    carousel,
+    activeIndex,
+    hideHint
+  });
 
 }
 
 
-/*   pointer move*/
+/*   close nest stage*/
 
-function pointerMove(
-  event
-){
+export function closeNestStage(){
 
-  if(
-    !dragging
-  ){
-    return;
-  }
-
-
-  const x =
-    event.clientX
-    ??
-    event
-      .touches?.[0]
-      ?.clientX
-    ??
-    0;
-
-
-  deltaX =
-    x -
-    startX;
+  closeNestStageView({
+    carousel,
+    activeIndex
+  });
 
 }
 
 
-/*   pointer up*/
+/*   expose nest state*/
 
-function pointerUp(){
-
-  if(
-    !dragging
-  ){
-    return;
-  }
-
-
-  dragging =
-    false;
-
-
-  if(
-    deltaX <
-    -52
-  ){
-
-    move(
-      1
-    );
-
-  }
-
-
-  else if(
-    deltaX >
-    52
-  ){
-
-    move(
-      -1
-    );
-
-  }
-
-
-  window.setTimeout(
-    ()=>{
-
-      deltaX =
-        0;
-
-    },
-    0
-  );
-
-}
+export {
+  isNestStageOpen
+};
 
 
 /*   activate carousel*/
 
 export function activateCarousel(){
 
-  if(
-    !carousel
-  ){
-    return;
-  }
+  activateCarouselInput({
+    carousel,
+    deepSheet,
 
+    canMove:
+      ()=>{
 
-  carousel.addEventListener(
-    "pointerdown",
-    pointerDown
-  );
+        return !isNestStageOpen();
 
+      },
 
-  window.addEventListener(
-    "pointermove",
-    pointerMove
-  );
-
-
-  window.addEventListener(
-    "pointerup",
-    pointerUp
-  );
+    onMove:
+      move
+  });
 
 }
