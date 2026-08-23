@@ -56,23 +56,30 @@
       255,
       255,
       255,
-      .94
+      1
     );
 
   box-shadow:
-    0 0 4px
+    0 0 3px
     rgba(
       255,
       255,
       255,
-      .72
+      1
     ),
-    0 0 9px
+    0 0 8px
     rgba(
+      255,
+      255,
+      255,
+      .90
+    ),
+    0 0 16px
+    rgba(
+      204,
       218,
-      226,
-      224,
-      .30
+      222,
+      .62
     );
 
   opacity:var(--star-opacity);
@@ -86,37 +93,48 @@
     ease-in-out
     var(--star-delay)
     infinite;
+
+  will-change:
+    opacity,
+    transform;
 }
 
 
 .arrival-star.is-silver{
   background:
     rgba(
-      224,
-      230,
-      230,
-      .94
+      215,
+      225,
+      229,
+      1
     );
 
   box-shadow:
-    0 0 4px
+    0 0 3px
     rgba(
-      236,
-      241,
-      241,
-      .62
+      235,
+      242,
+      244,
+      1
     ),
-    0 0 8px
+    0 0 9px
     rgba(
-      191,
-      203,
-      203,
-      .25
+      210,
+      223,
+      227,
+      .95
+    ),
+    0 0 18px
+    rgba(
+      184,
+      202,
+      208,
+      .68
     );
 }
 
 
-/*   slightly brighter star flare*/
+/*   star flare*/
 
 .arrival-star::after{
   content:"";
@@ -128,7 +146,7 @@
 
   width:
     calc(
-      var(--star-size) * 4
+      var(--star-size) * 5
     );
 
   height:1px;
@@ -140,7 +158,7 @@
       255,
       255,
       255,
-      .36
+      .82
     );
 
   transform:
@@ -149,11 +167,11 @@
       -50%
     );
 
-  opacity:.45;
+  opacity:.72;
 }
 
 
-.arrival-star:nth-child(3n)::before{
+.arrival-star::before{
   content:"";
 
   position:absolute;
@@ -165,7 +183,7 @@
 
   height:
     calc(
-      var(--star-size) * 4
+      var(--star-size) * 5
     );
 
   border-radius:999px;
@@ -175,7 +193,7 @@
       255,
       255,
       255,
-      .30
+      .74
     );
 
   transform:
@@ -183,8 +201,60 @@
       -50%,
       -50%
     );
+
+  opacity:.66;
 }
 
+
+/*   larger feature twinkles*/
+
+.arrival-star.is-feature{
+  box-shadow:
+    0 0 4px
+    rgba(
+      255,
+      255,
+      255,
+      1
+    ),
+    0 0 12px
+    rgba(
+      255,
+      255,
+      255,
+      1
+    ),
+    0 0 25px
+    rgba(
+      195,
+      214,
+      220,
+      .82
+    );
+}
+
+
+.arrival-star.is-feature::after{
+  width:
+    calc(
+      var(--star-size) * 7
+    );
+
+  opacity:.95;
+}
+
+
+.arrival-star.is-feature::before{
+  height:
+    calc(
+      var(--star-size) * 7
+    );
+
+  opacity:.90;
+}
+
+
+/*   star blink*/
 
 @keyframes starBlink{
 
@@ -192,7 +262,7 @@
   100%{
     opacity:
       calc(
-        var(--star-opacity) * .35
+        var(--star-opacity) * .42
       );
 
     transform:
@@ -200,34 +270,45 @@
   }
 
 
-  38%{
+  30%{
+    opacity:
+      calc(
+        var(--star-opacity) * .66
+      );
+
+    transform:
+      scale(.88);
+  }
+
+
+  46%{
     opacity:
       var(--star-opacity);
 
     transform:
-      scale(1.12);
+      scale(1.35);
   }
 
 
-  57%{
+  60%{
     opacity:
       calc(
-        var(--star-opacity) * .54
-      );
-
-    transform:
-      scale(.86);
-  }
-
-
-  76%{
-    opacity:
-      calc(
-        var(--star-opacity) * .86
+        var(--star-opacity) * .82
       );
 
     transform:
       scale(1);
+  }
+
+
+  77%{
+    opacity:
+      calc(
+        var(--star-opacity) * .58
+      );
+
+    transform:
+      scale(.82);
   }
 
 }
@@ -238,7 +319,7 @@
 .arrival-stars.is-leaving .arrival-star{
   animation:
     starLeave
-    900ms
+    1050ms
     var(--ease)
     var(--leave-delay)
     forwards;
@@ -256,14 +337,12 @@
   }
 
 
-  35%{
+  30%{
     opacity:
-      calc(
-        var(--star-opacity) * .65
-      );
+      1;
 
     transform:
-      scale(1.22);
+      scale(1.4);
   }
 
 
@@ -271,7 +350,7 @@
     opacity:0;
 
     transform:
-      scale(.2);
+      scale(.12);
   }
 
 }
@@ -279,7 +358,7 @@
 
 /*   tap bloom*/
 
-.arrival-screen::before{
+.arrival-screen::after{
   content:"";
 
   position:absolute;
@@ -291,8 +370,8 @@
 
   width:
     min(
-      62vw,
-      310px
+      72vw,
+      360px
     );
 
   aspect-ratio:1;
@@ -306,16 +385,16 @@
         255,
         255,
         255,
-        .58
+        .78
       )
       0%,
       rgba(
         255,
         255,
         255,
-        .28
+        .34
       )
-      34%,
+      38%,
       rgba(
         255,
         255,
@@ -326,7 +405,7 @@
     );
 
   filter:
-    blur(24px);
+    blur(28px);
 
   opacity:0;
 
@@ -335,20 +414,16 @@
       -50%,
       -50%
     )
-    scale(.62);
+    scale(.58);
 
   pointer-events:none;
-
-  will-change:
-    opacity,
-    transform;
 }
 
 
-.arrival-screen.is-tapped::before{
+.arrival-screen.is-tapped::after{
   animation:
     arrivalBloom
-    620ms
+    700ms
     cubic-bezier(.22,.72,.18,1)
     1;
 }
@@ -364,19 +439,19 @@
         -50%,
         -50%
       )
-      scale(.62);
+      scale(.58);
   }
 
 
-  28%{
-    opacity:.88;
+  26%{
+    opacity:.90;
 
     transform:
       translate(
         -50%,
         -50%
       )
-      scale(.9);
+      scale(.88);
   }
 
 
@@ -388,7 +463,7 @@
         -50%,
         -50%
       )
-      scale(1.12);
+      scale(1.14);
   }
 
 
@@ -400,7 +475,7 @@
         -50%,
         -50%
       )
-      scale(1.32);
+      scale(1.38);
   }
 
 }
@@ -776,7 +851,6 @@
   }
 
 
-  .arrival-screen::before,
   .arrival-star{
     animation:none !important;
   }
