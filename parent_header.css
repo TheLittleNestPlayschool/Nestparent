@@ -12,12 +12,14 @@
   left:23px;
   right:22px;
 
-  z-index:20;
+  z-index:50;
 
   display:flex;
 
   align-items:center;
   justify-content:space-between;
+
+  pointer-events:none;
 }
 
 
@@ -31,6 +33,8 @@
   max-width:310px;
 
   user-select:none;
+
+  pointer-events:none;
 }
 
 
@@ -91,6 +95,8 @@
 .profile{
   position:relative;
 
+  z-index:60;
+
   display:grid;
 
   place-items:center;
@@ -136,6 +142,10 @@
 
   cursor:pointer;
 
+  pointer-events:auto;
+
+  touch-action:manipulation;
+
   -webkit-tap-highlight-color:
     transparent;
 }
@@ -156,6 +166,8 @@
 
   width:31px;
   height:29px;
+
+  pointer-events:none;
 
   transition:
     transform .28s var(--ease);
@@ -185,6 +197,8 @@
 
   transform-origin:
     center;
+
+  pointer-events:none;
 }
 
 
@@ -223,6 +237,8 @@
 
   transform-origin:
     left center;
+
+  pointer-events:none;
 }
 
 
@@ -309,6 +325,8 @@
   transform:
     translateX(-50%);
 
+  pointer-events:none;
+
   animation:
     littleNestBreathe
     5.4s
@@ -336,6 +354,8 @@
       42,
       .55
     );
+
+  pointer-events:none;
 }
 
 
@@ -402,6 +422,8 @@
 
   transform:
     translateX(-50%);
+
+  pointer-events:none;
 
   animation:
     littleEggFloat
@@ -502,6 +524,20 @@
       rotate(132deg);
   }
 
+}
+
+
+/*   open nest*/
+
+.nest-orb.is-open{
+  transform:
+    scale(1.045);
+}
+
+
+.nest-orb.is-open .little-nest{
+  transform:
+    scale(1.08);
 }
 
 
