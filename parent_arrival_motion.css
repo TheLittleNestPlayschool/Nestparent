@@ -1,0 +1,237 @@
+/*   opening breath*/
+
+.arrival-copy{
+  animation:
+    arrivalBreath
+    2.8s
+    cubic-bezier(.22,.72,.18,1)
+    .35s
+    1;
+}
+
+
+@keyframes arrivalBreath{
+
+  0%{
+    transform:
+      translateY(-2vh)
+      scale(1);
+  }
+
+
+  42%{
+    transform:
+      translateY(-2vh)
+      scale(1.018);
+  }
+
+
+  100%{
+    transform:
+      translateY(-2vh)
+      scale(1);
+  }
+
+}
+
+
+/*   tap bloom*/
+
+.arrival-screen::after{
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
+  z-index:1;
+
+  width:
+    min(
+      72vw,
+      360px
+    );
+
+  aspect-ratio:1;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(
+        255,
+        255,
+        255,
+        .78
+      )
+      0%,
+      rgba(
+        202,
+        228,
+        255,
+        .38
+      )
+      34%,
+      rgba(
+        151,
+        201,
+        255,
+        .16
+      )
+      52%,
+      rgba(
+        255,
+        255,
+        255,
+        0
+      )
+      74%
+    );
+
+  filter:
+    blur(28px);
+
+  opacity:0;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    )
+    scale(.58);
+
+  pointer-events:none;
+}
+
+
+.arrival-screen.is-tapped::after{
+  animation:
+    arrivalBloom
+    700ms
+    cubic-bezier(.22,.72,.18,1)
+    1;
+}
+
+
+@keyframes arrivalBloom{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(.58);
+  }
+
+
+  26%{
+    opacity:.92;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(.88);
+  }
+
+
+  62%{
+    opacity:.58;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(1.14);
+  }
+
+
+  100%{
+    opacity:0;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(1.38);
+  }
+
+}
+
+
+/*   reveal transitions*/
+
+.profile{
+  transition:
+    opacity 1.4s ease,
+    transform 1.5s var(--ease);
+}
+
+
+.experience-shell.app-content{
+  transition:
+    opacity 2.4s ease,
+    transform 2.4s var(--ease),
+    filter 2.2s ease;
+}
+
+
+.hint.app-content{
+  transition:
+    opacity 1.5s ease;
+}
+
+
+.nav-orb.app-content{
+  transition:
+    opacity 1.5s ease,
+    transform 1.7s var(--ease),
+    background .32s var(--ease),
+    box-shadow .32s var(--ease);
+}
+
+
+/*   supporting control delays*/
+
+.app.is-ready .profile{
+  transition-delay:.35s;
+}
+
+
+.app.is-ready .hint.app-content{
+  transition-delay:1.3s;
+}
+
+
+.app.is-ready .nav-orb.app-content{
+  transition-delay:1.1s;
+}
+
+
+/*   reduced motion*/
+
+@media (prefers-reduced-motion:reduce){
+
+  .arrival-copy{
+    animation:none;
+  }
+
+
+  .experience-shell.app-content,
+  .profile,
+  .hint.app-content,
+  .nav-orb.app-content{
+    transition-duration:.01ms !important;
+
+    transition-delay:0ms !important;
+  }
+
+}
