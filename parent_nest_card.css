@@ -37,6 +37,32 @@
 }
 
 
+/*   nest leaving*/
+
+.nest-experience.is-leaving{
+  opacity:0;
+
+  pointer-events:none;
+
+  filter:
+    blur(5px);
+
+  transform:
+    translate(-50%,-50%)
+    translate3d(
+      -18px,
+      22px,
+      0
+    )
+    scale(.975);
+
+  transition:
+    opacity .95s ease,
+    transform 1.05s cubic-bezier(.20,.62,.18,1),
+    filter .90s ease;
+}
+
+
 /*   nest card surface*/
 
 .nest-stage-card{
