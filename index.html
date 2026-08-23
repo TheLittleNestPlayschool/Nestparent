@@ -11,13 +11,20 @@
 
 <body>
   <main class="app" id="app">
-    <div class="ambient"></div>
+    <div class="time-atmosphere" aria-hidden="true">
+      <span class="color-field field-a"></span>
+      <span class="color-field field-b"></span>
+      <span class="color-field field-c"></span>
+      <span class="color-field field-d"></span>
+      <span class="light-drift"></span>
+    </div>
     <div class="grain"></div>
 
     <header class="topbar">
       <div class="identity">
         <span class="eyebrow">The Little Nest</span>
-        <span class="hello">Good morning, Mom</span>
+        <span class="hello" id="timeGreeting">Good morning, Mom</span>
+        <span class="subhello" id="timeMessage">Mia's morning is waiting for you.</span>
       </div>
       <button class="profile" aria-label="Profile">
         <span class="profile-dot"></span>
@@ -25,10 +32,7 @@
     </header>
 
     <section class="experience-shell">
-      <div class="intro">
-        <div class="intro-kicker">Just finished · Session 1</div>
-        <h1 class="intro-title">Here’s what filled Mia’s Little Nest morning.</h1>
-      </div>
+      <div class="intro intro-quiet" aria-hidden="true"></div>
 
       <div class="carousel-wrap">
         <div class="carousel" id="carousel"></div>
@@ -371,7 +375,65 @@
       });
     });
 
-    buildCards();
+
+    function mixColor(a,b,t){
+      const ah=a.replace("#",""), bh=b.replace("#","");
+      const ar=parseInt(ah.slice(0,2),16), ag=parseInt(ah.slice(2,4),16), ab=parseInt(ah.slice(4,6),16);
+      const br=parseInt(bh.slice(0,2),16), bg=parseInt(bh.slice(2,4),16), bb=parseInt(bh.slice(4,6),16);
+      const r=Math.round(ar+(br-ar)*t), g=Math.round(ag+(bg-ag)*t), bl=Math.round(ab+(bb-ab)*t);
+      return `rgb(${r} ${g} ${bl})`;
+    }
+
+    function getPalette(hour){
+      const palettes={
+        morning:["#fff7dc","#f6e7c9","#e7efe0","#fffaf1"],
+        afternoon:["#e4efe4","#d2e2d7","#f5ead3","#edf4e8"],
+        evening:["#d9e3ee","#d8d4e8","#ece6de","#cfdce7"]
+      };
+
+      let from,to,t;
+
+      if(hour < 11){
+        from=palettes.morning; to=palettes.morning; t=0;
+      }else if(hour < 14){
+        from=palettes.morning; to=palettes.afternoon; t=(hour-11)/3;
+      }else if(hour < 17){
+        from=palettes.afternoon; to=palettes.afternoon; t=0;
+      }else if(hour < 20){
+        from=palettes.afternoon; to=palettes.evening; t=(hour-17)/3;
+      }else{
+        from=palettes.evening; to=palettes.evening; t=0;
+      }
+
+      return from.map((c,i)=>mixColor(c,to[i],t));
+    }
+
+    function applyTimeAtmosphere(){
+      const now=new Date();
+      const hour=now.getHours()+now.getMinutes()/60;
+      const palette=getPalette(hour);
+
+      const root=document.documentElement;
+      palette.forEach((color,i)=>root.style.setProperty(`--time-c${i+1}`,color));
+
+      let greeting="Good evening, Mom";
+      let message="Come see a little of Mia's day.";
+
+      if(hour < 12){
+        greeting="Good morning, Mom";
+        message="Mia's morning is waiting for you.";
+      }else if(hour < 18){
+        greeting="Good afternoon, Mom";
+        message="A little of Mia's day is waiting for you.";
+      }
+
+      document.getElementById("timeGreeting").textContent=greeting;
+      document.getElementById("timeMessage").textContent=message;
+    }
+
+    applyTimeAtmosphere();
+
+        buildCards();
   </script>
 </body>
 </html>
