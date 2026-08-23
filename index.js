@@ -1,6 +1,6 @@
 const experiences = [
   {
-    type: "session",
+    type: "sessionlklklklkl",
     title: "Mia just finished Session 1.",
     label: "Today at The Little Nest",
     copy: "Letter A, Number 1, movement, listening and self-expression were all part of her morning.",
