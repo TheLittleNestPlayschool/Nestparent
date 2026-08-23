@@ -1,0 +1,287 @@
+/* ==================================================
+   MOVING TIME ATMOSPHERE
+   ================================================== */
+
+.time-atmosphere{
+  position:absolute;
+
+  inset:-12%;
+
+  z-index:-3;
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 18%,
+      rgba(255,255,255,.46),
+      transparent 34%
+    ),
+    linear-gradient(
+      160deg,
+      var(--time-c4),
+      var(--time-c3)
+    );
+
+  pointer-events:none;
+}
+
+
+.color-field,
+.light-drift{
+  position:absolute;
+
+  display:block;
+
+  border-radius:50%;
+
+  filter:blur(42px);
+
+  will-change:transform;
+
+  pointer-events:none;
+}
+
+
+/* ==================================================
+   COLOR FIELDS
+   ================================================== */
+
+.field-a{
+  width:72vw;
+  height:72vw;
+
+  left:-16vw;
+  top:-12vw;
+
+  background:var(--time-c1);
+
+  opacity:.72;
+
+  animation:
+    fieldA
+    34s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+.field-b{
+  width:68vw;
+  height:68vw;
+
+  right:-18vw;
+  top:22vh;
+
+  background:var(--time-c2);
+
+  opacity:.68;
+
+  animation:
+    fieldB
+    42s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+.field-c{
+  width:78vw;
+  height:78vw;
+
+  left:10vw;
+  bottom:-28vw;
+
+  background:var(--time-c3);
+
+  opacity:.56;
+
+  animation:
+    fieldC
+    48s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+.field-d{
+  width:54vw;
+  height:54vw;
+
+  right:10vw;
+  top:3vh;
+
+  background:var(--time-c4);
+
+  opacity:.5;
+
+  animation:
+    fieldD
+    38s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+/* ==================================================
+   LIGHT DRIFT
+   ================================================== */
+
+.light-drift{
+  width:90vw;
+  height:38vw;
+
+  left:-26vw;
+  top:20vh;
+
+  border-radius:48%;
+
+  background:
+    rgba(255,255,255,.34);
+
+  filter:blur(58px);
+
+  opacity:.42;
+
+  transform:rotate(-18deg);
+
+  animation:
+    lightSweep
+    52s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+/* ==================================================
+   ATMOSPHERE MOVEMENT
+   ================================================== */
+
+@keyframes fieldA{
+
+  from{
+    transform:
+      translate3d(0,0,0)
+      scale(1);
+  }
+
+  to{
+    transform:
+      translate3d(15vw,7vh,0)
+      scale(1.16);
+  }
+
+}
+
+
+@keyframes fieldB{
+
+  from{
+    transform:
+      translate3d(0,0,0)
+      scale(.94);
+  }
+
+  to{
+    transform:
+      translate3d(-13vw,-8vh,0)
+      scale(1.12);
+  }
+
+}
+
+
+@keyframes fieldC{
+
+  from{
+    transform:
+      translate3d(-4vw,0,0)
+      scale(1);
+  }
+
+  to{
+    transform:
+      translate3d(12vw,-9vh,0)
+      scale(1.14);
+  }
+
+}
+
+
+@keyframes fieldD{
+
+  from{
+    transform:
+      translate3d(0,0,0)
+      scale(.95);
+  }
+
+  to{
+    transform:
+      translate3d(-11vw,10vh,0)
+      scale(1.08);
+  }
+
+}
+
+
+@keyframes lightSweep{
+
+  from{
+    transform:
+      translate3d(0,0,0)
+      rotate(-18deg)
+      scale(1);
+  }
+
+  to{
+    transform:
+      translate3d(58vw,13vh,0)
+      rotate(-8deg)
+      scale(1.14);
+  }
+
+}
+
+
+/* ==================================================
+   SUBTLE GRAIN
+   ================================================== */
+
+.grain{
+  position:absolute;
+
+  inset:0;
+
+  z-index:-1;
+
+  pointer-events:none;
+
+  opacity:.08;
+
+  background-image:
+    url(
+      "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E"
+    );
+
+  mix-blend-mode:soft-light;
+}
+
+
+/* ==================================================
+   REDUCED MOTION
+   ================================================== */
+
+@media (prefers-reduced-motion:reduce){
+
+  .color-field,
+  .light-drift{
+    animation:none !important;
+  }
+
+}
