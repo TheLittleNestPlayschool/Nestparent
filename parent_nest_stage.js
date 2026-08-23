@@ -16,8 +16,117 @@ let nestCard =
   null;
 
 
+let mainBackCard =
+  null;
+
+
 let returnTimer =
   null;
+
+
+/*   get main back card*/
+
+function getMainBackCard(
+  carousel,
+  activeIndex
+){
+
+  if(
+    !carousel
+  ){
+    return null;
+  }
+
+
+  return carousel.querySelector(
+    `.experience:not(.nest-experience)[data-index="${activeIndex}"]`
+  );
+
+}
+
+
+/*   activate main back card*/
+
+function activateMainBackCard(
+  carousel,
+  activeIndex
+){
+
+  mainBackCard =
+    getMainBackCard(
+      carousel,
+      activeIndex
+    );
+
+
+  if(
+    !mainBackCard
+  ){
+    return;
+  }
+
+
+  mainBackCard.classList.add(
+    "is-stage-back"
+  );
+
+
+  mainBackCard.style.pointerEvents =
+    "auto";
+
+
+  mainBackCard.addEventListener(
+    "click",
+    handleMainBackCard
+  );
+
+}
+
+
+/*   deactivate main back card*/
+
+function deactivateMainBackCard(){
+
+  if(
+    !mainBackCard
+  ){
+    return;
+  }
+
+
+  mainBackCard.classList.remove(
+    "is-stage-back"
+  );
+
+
+  mainBackCard.removeEventListener(
+    "click",
+    handleMainBackCard
+  );
+
+
+  mainBackCard.style.pointerEvents =
+    "none";
+
+}
+
+
+/*   main card back*/
+
+function handleMainBackCard(
+  event
+){
+
+  event.stopPropagation();
+
+
+  window.dispatchEvent(
+    new CustomEvent(
+      "parent:return-main-stage"
+    )
+  );
+
+}
 
 
 /*   open nest stage*/
@@ -80,7 +189,7 @@ export function openNestStage({
   void nestCard.offsetWidth;
 
 
-  /*   move current Mia card to the right*/
+  /*   move current card right*/
 
   renderCardPositions({
     carousel,
@@ -89,7 +198,15 @@ export function openNestStage({
   });
 
 
-  /*   bring Nest card into center*/
+  /*   right card becomes back target*/
+
+  activateMainBackCard(
+    carousel,
+    activeIndex
+  );
+
+
+  /*   reveal nest*/
 
   requestAnimationFrame(
     ()=>{
@@ -141,7 +258,46 @@ export function closeNestStage({
     nestCard;
 
 
-  /*   Nest begins leaving first*/
+  const returningCard =
+    mainBackCard
+    ||
+    getMainBackCard(
+      carousel,
+      activeIndex
+    );
+
+
+  /*   stop back interaction*/
+
+  deactivateMainBackCard();
+
+
+  /*
+    Nest remains underneath.
+
+    Mia is promoted above it before
+    she begins moving toward center.
+  */
+
+  if(
+    returningCard
+  ){
+
+    returningCard.classList.add(
+      "is-returning-front"
+    );
+
+
+    returningCard.style.pointerEvents =
+      "none";
+
+  }
+
+
+  /*
+    Nest begins fading underneath
+    the returning Mia card.
+  */
 
   if(
     cardToRemove
@@ -153,7 +309,7 @@ export function closeNestStage({
 
 
     cardToRemove.classList.add(
-      "is-leaving"
+      "is-leaving-under"
     );
 
 
@@ -164,10 +320,10 @@ export function closeNestStage({
 
 
   /*
-    Give the Nest card a small head start.
+    Small overlap only.
 
-    Mia then begins her relaxed glide
-    back toward the center.
+    Mia begins travelling over the
+    fading Nest almost immediately.
   */
 
   returnTimer =
@@ -185,13 +341,13 @@ export function closeNestStage({
         });
 
       },
-      220
+      110
     );
 
 
   /*
-    Keep the outgoing Nest card alive
-    long enough to finish its exit.
+    Nest can disappear once its fade
+    underneath Mia has completed.
   */
 
   window.setTimeout(
@@ -219,7 +375,45 @@ export function closeNestStage({
       }
 
     },
-    1450
+    1050
+  );
+
+
+  /*
+    Mia keeps the foreground stacking
+    until her relaxed glide completes.
+  */
+
+  window.setTimeout(
+    ()=>{
+
+      if(
+        returningCard
+      ){
+
+        returningCard.classList.remove(
+          "is-returning-front"
+        );
+
+
+        returningCard.style.pointerEvents =
+          "auto";
+
+      }
+
+
+      if(
+        mainBackCard ===
+        returningCard
+      ){
+
+        mainBackCard =
+          null;
+
+      }
+
+    },
+    1700
   );
 
 }
