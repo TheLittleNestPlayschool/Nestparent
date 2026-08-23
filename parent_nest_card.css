@@ -505,6 +505,25 @@
 }
 
 
+/*   previous nest card*/
+
+.nest-experience.is-stage-back{
+  cursor:pointer;
+
+  pointer-events:auto;
+}
+
+
+.nest-experience.is-stage-back .nest-stage-card{
+  cursor:pointer;
+}
+
+
+.nest-experience.is-stage-back .nest-destination{
+  pointer-events:none;
+}
+
+
 /*   responsive*/
 
 @media (max-width:420px){
