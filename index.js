@@ -1,6 +1,41 @@
-import "./parent_time.js";
-import "./parent_experiences.js";
-import "./parent_carousel.js";
-import "./parent_sheet.js";
-import "./parent_navigation.js";
-import "./parent_arrival.js";
+import {
+  applyTimeAtmosphere
+} from "./parent_time.js";
+
+
+import {
+  buildCards,
+  activateCarousel
+} from "./parent_carousel.js";
+
+
+import {
+  activateSheet
+} from "./parent_sheet.js";
+
+
+import {
+  activateNavigation
+} from "./parent_navigation.js";
+
+
+import {
+  activateArrival
+} from "./parent_arrival.js";
+
+
+/* ==================================================
+   START PARENT APP
+   ================================================== */
+
+applyTimeAtmosphere();
+
+buildCards();
+
+activateCarousel();
+
+activateSheet();
+
+activateNavigation();
+
+activateArrival();
