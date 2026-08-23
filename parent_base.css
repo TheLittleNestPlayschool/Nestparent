@@ -1,0 +1,69 @@
+/* ==================================================
+   ROOT
+   ================================================== */
+
+:root{
+  --ink:#26322f;
+
+  --time-c1:#fff7dc;
+  --time-c2:#f6e7c9;
+  --time-c3:#e7efe0;
+  --time-c4:#fffaf1;
+
+  --ease:cubic-bezier(.22,.75,.2,1);
+}
+
+
+/* ==================================================
+   RESET
+   ================================================== */
+
+*{
+  box-sizing:border-box;
+}
+
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+}
+
+
+body{
+  min-height:100dvh;
+
+  overflow:hidden;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color:var(--ink);
+
+  background:#eef4f1;
+
+  -webkit-font-smoothing:antialiased;
+}
+
+
+/* ==================================================
+   APP
+   ================================================== */
+
+.app{
+  position:relative;
+
+  min-height:100dvh;
+
+  overflow:hidden;
+
+  isolation:isolate;
+
+  background:
+    var(
+      --time-c4,
+      #f3f5f1
+    );
+}
