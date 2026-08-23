@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#eef4f1" />
+  <title>The Little Nest — Parent Experience Prototype</title>
+
+  <style>
+    :root{
+      --ink:#26322f;
+      --muted:#72807b;
+      --glass:rgba(255,255,255,.58);
+      --glass-strong:rgba(255,255,255,.78);
+      --line:rgba(63,82,75,.10);
+      --shadow:0 24px 70px rgba(56,77,68,.16);
+      --shadow-soft:0 12px 36px rgba(56,77,68,.10);
+      --radius-xl:34px;
+      --radius-lg:26px;
+      --radius-md:20px;
+      --ease:cubic-bezier(.22,.75,.2,1);
+    }
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      margin:0;
+      width:100%;
+      min-height:100%;
+      background:#edf3f0;
+      color:var(--ink);
+      font-family:Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow:hidden;
+    }
+
+    button{
+      font:inherit;
+      color:inherit;
+    }
+
+    .app{
+      position:relative;
+      min-height:100dvh;
+      overflow:hidden;
+      isolation:isolate;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(255,255,255,.88), transparent 31%),
+        radial-gradient(circle at 82% 22%, rgba(216,232,226,.76), transparent 34%),
+        radial-gradient(circle at 50% 95%, rgba(246,231,211,.48), transparent 34%),
+        linear-gradient(160deg,#f5f8f6 0%,#e9f1ed 50%,#edf2ef 100%);
+    }
+
+    .ambient,
+    .ambient::before,
+    .ambient::after{
+      position:absolute;
+      content:"";
+      border-radius:50%;
+      filter:blur(8px);
+      pointer-events:none;
+      z-index:-2;
+    }
+
+    .ambient{
+      width:58vw;
+      height:58vw;
+      left:-18vw;
+      top:42vh;
+      background:rgba(190,217,208,.22);
+      animation:driftA 18s ease-in-out infinite alternate;
+    }
+
+    .ambient::before{
+      width:48vw;
+      height:48vw;
+      left:82vw;
+      top:-42vh;
+      background:rgba(255,255,255,.52);
+      animation:driftB 22s ease-in-out infinite alternate;
+    }
+
+    .ambient::after{
+      width:42vw;
+      height:42vw;
+      left:48vw;
+      top:34vh;
+      background:rgba(235,218,197,.15);
+      animation:driftC 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes driftA{
+      from{transform:translate3d(0,0,0) scale(1)}
+      to{transform:translate3d(8vw,-4vh,0) scale(1.12)}
+    }
+    @keyframes driftB{
+      from{transform:translate3d(0,0,0) scale(.95)}
+      to{transform:translate3d(-12vw,8vh,0) scale(1.1)}
+    }
+    @keyframes driftC{
+      from{transform:translate3d(0,0,0) scale(1)}
+      to{transform:translate3d(-7vw,-6vh,0) scale(1.16)}
+    }
+
+    .grain{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.16;
+      background-image:
+        radial-gradient(rgba(49,68,61,.16) .55px, transparent .55px);
+      background-size:6px 6px;
+      mask-image:linear-gradient(to bottom,rgba(0,0,0,.28),transparent 65%);
+      z-index:-1;
+    }
+
+    .topbar{
+      position:absolute;
+      inset:
+        max(20px,env(safe-area-inset-top))
+        22px auto 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      z-index:20;
+    }
+
+    .identity{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+      user-select:none;
+    }
+
+    .eyebrow{
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.17em;
+      text-transform:uppercase;
+      color:rgba(38,50,47,.44);
+    }
+
+    .hello{
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:22px;
+      line-height:1.05;
+      font-weight:400;
+      letter-spacing:-.025em;
+    }
+
+    .profile{
+      width:42px;
+      height:42px;
+      border:0;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:rgba(255,255,255,.48);
+      backdrop-filter:blur(18px);
+      box-shadow:0 8px 26px rgba(60,79,71,.09);
+      cursor:pointer;
+      transition:transform .25s var(--ease), background .25s var(--ease);
+    }
+
+    .profile:active{
+      transform:scale(.94);
+      background:rgba(255,255,255,.76);
+    }
+
+    .profile-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:rgba(69,95,85,.72);
+      box-shadow:0 0 0 5px rgba(69,95,85,.08);
+    }
+
+    .experience-shell{
+      min-height:100dvh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:
+        max(92px,calc(env(safe-area-inset-top) + 72px))
+        0
+        max(94px,calc(env(safe-area-inset-bottom) + 78px));
+    }
+
+    .intro{
+      padding:0 26px;
+      margin-bottom:22px;
+      z-index:4;
+      transition:opacity .5s var(--ease), transform .5s var(--ease);
+    }
+
+    .intro-kicker{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .intro-title{
+      max-width:330px;
+      margin:0;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:34px;
+      line-height:1.04;
+      font-weight:400;
+      letter-spacing:-.035em;
+    }
+
+    .carousel-wrap{
+      position:relative;
+      width:100%;
+      min-height:min(58vh,560px);
+      display:flex;
+      align-items:center;
+      touch-action:pan-y;
+    }
+
+    .carousel{
+      position:relative;
+      width:100%;
+      height:min(55vh,530px);
+      min-height:430px;
+      perspective:1200px;
+      transform-style:preserve-3d;
+    }
+
+    .experience{
+      position:absolute;
+      top:50%;
+      left:50%;
+      width:min(78vw,390px);
+      height:100%;
+      transform-origin:center center;
+      transition:
+        transform .72s var(--ease),
+        opacity .62s var(--ease),
+        filter .72s var(--ease);
+      will-change:transform,opacity,filter;
+      cursor:grab;
+      user-select:none;
+    }
+
+    .experience:active{
+      cursor:grabbing;
+    }
+
+    .card{
+      position:relative;
+      width:100%;
+      height:100%;
+      border-radius:var(--radius-xl);
+      overflow:hidden;
+      background:rgba(255,255,255,.5);
+      backdrop-filter:blur(18px);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.7);
+      transition:
+        transform .34s var(--ease),
+        box-shadow .34s var(--ease);
+    }
+
+    .experience[data-pos="0"] .card:hover{
+      transform:translateY(-2px) scale(1.006);
+      box-shadow:0 30px 82px rgba(56,77,68,.18);
+    }
+
+    .photo{
+      position:absolute;
+      inset:0;
+      background-position:center;
+      background-size:cover;
+      transform:scale(1.025);
+      animation:photoBreathe 11s ease-in-out infinite alternate;
+    }
+
+    @keyframes photoBreathe{
+      from{transform:scale(1.025)}
+      to{transform:scale(1.055)}
+    }
+
+    .photo::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(to bottom,
+          rgba(10,20,16,.02) 30%,
+          rgba(18,27,23,.08) 53%,
+          rgba(23,31,28,.72) 100%);
+    }
+
+    .content{
+      position:absolute;
+      inset:auto 0 0 0;
+      padding:54px 24px 24px;
+      color:white;
+      z-index:2;
+    }
+
+    .moment-label{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:11px;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.13em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.78);
+    }
+
+    .moment-label::before{
+      content:"";
+      width:18px;
+      height:1px;
+      background:rgba(255,255,255,.58);
+    }
+
+    .moment-title{
+      margin:0 0 10px;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:31px;
+      line-height:1.03;
+      font-weight:400;
+      letter-spacing:-.03em;
+      text-shadow:0 1px 20px rgba(0,0,0,.12);
+    }
+
+    .moment-copy{
+      margin:0;
+      font-size:14px;
+      line-height:1.55;
+      color:rgba(255,255,255,.86);
+      max-width:310px;
+    }
+
+    .learn-row{
+      display:flex;
+      gap:7px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .learn-pill{
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.12);
+      backdrop-filter:blur(12px);
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:11px;
+      color:rgba(255,255,255,.88);
+    }
+
+    .hint{
+      position:absolute;
+      left:50%;
+      bottom:24px;
+      transform:translateX(-50%);
+      display:flex;
+      align-items:center;
+      gap:9px;
+      font-size:11px;
+      color:rgba(50,65,59,.44);
+      letter-spacing:.04em;
+      z-index:8;
+      transition:opacity .4s ease;
+      pointer-events:none;
+    }
+
+    .hint-line{
+      width:24px;
+      height:1px;
+      background:rgba(50,65,59,.24);
+    }
+
+    .nav-orb{
+      position:absolute;
+      left:50%;
+      bottom:max(18px,env(safe-area-inset-bottom));
+      transform:translateX(-50%);
+      width:50px;
+      height:50px;
+      border:0;
+      border-radius:50%;
+      background:rgba(255,255,255,.54);
+      backdrop-filter:blur(18px);
+      box-shadow:0 12px 32px rgba(48,67,59,.12);
+      z-index:30;
+      cursor:pointer;
+      transition:
+        transform .32s var(--ease),
+        background .32s var(--ease),
+        box-shadow .32s var(--ease);
+    }
+
+    .nav-orb::before,
+    .nav-orb::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      width:15px;
+      height:1.5px;
+      border-radius:99px;
+      background:rgba(44,61,54,.62);
+      transform:translateX(-50%);
+      transition:transform .35s var(--ease), top .35s var(--ease);
+    }
+
+    .nav-orb::before{top:21px}
+    .nav-orb::after{top:28px}
+
+    .nav-orb:active{
+      transform:translateX(-50%) scale(.93);
+    }
+
+    .nav-orb.open{
+      background:rgba(255,255,255,.8);
+      box-shadow:0 18px 44px rgba(48,67,59,.16);
+    }
+
+    .nav-orb.open::before{
+      top:25px;
+      transform:translateX(-50%) rotate(45deg);
+    }
+
+    .nav-orb.open::after{
+      top:25px;
+      transform:translateX(-50%) rotate(-45deg);
+    }
+
+    .nav-panel{
+      position:absolute;
+      left:50%;
+      bottom:max(80px,calc(env(safe-area-inset-bottom) + 65px));
+      width:min(88vw,380px);
+      transform:translate(-50%,18px) scale(.96);
+      opacity:0;
+      pointer-events:none;
+      padding:10px;
+      border-radius:28px;
+      background:rgba(246,249,247,.72);
+      backdrop-filter:blur(26px);
+      border:1px solid rgba(255,255,255,.76);
+      box-shadow:0 25px 70px rgba(56,77,68,.16);
+      z-index:29;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:6px;
+      transition:
+        opacity .35s var(--ease),
+        transform .35s var(--ease);
+    }
+
+    .nav-panel.open{
+      opacity:1;
+      pointer-events:auto;
+      transform:translate(-50%,0) scale(1);
+    }
+
+    .nav-item{
+      border:0;
+      background:transparent;
+      border-radius:20px;
+      padding:12px 5px 10px;
+      cursor:pointer;
+      color:rgba(38,50,47,.65);
+      transition:
+        background .25s var(--ease),
+        transform .25s var(--ease),
+        color .25s var(--ease);
+    }
+
+    .nav-item:active{
+      transform:scale(.94);
+    }
+
+    .nav-item.active{
+      background:rgba(255,255,255,.72);
+      color:var(--ink);
+    }
+
+    .nav-icon{
+      display:block;
+      font-size:17px;
+      margin-bottom:5px;
+    }
+
+    .nav-text{
+      display:block;
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.04em;
+    }
+
+    .wash{
+      position:absolute;
+      inset:0;
+      background:rgba(236,243,239,.38);
+      backdrop-filter:blur(0px);
+      opacity:0;
+      pointer-events:none;
+      z-index:24;
+      transition:
+        opacity .42s var(--ease),
+        backdrop-filter .42s var(--ease);
+    }
+
+    .wash.open{
+      opacity:1;
+      pointer-events:auto;
+      backdrop-filter:blur(8px);
+    }
+
+    .deep-sheet{
+      position:absolute;
+      inset:auto 14px max(14px,env(safe-area-inset-bottom)) 14px;
+      min-height:52dvh;
+      max-height:72dvh;
+      overflow:auto;
+      transform:translateY(calc(100% + 40px));
+      opacity:.3;
+      border-radius:34px;
+      background:rgba(250,252,251,.88);
+      backdrop-filter:blur(30px);
+      border:1px solid rgba(255,255,255,.8);
+      box-shadow:0 -18px 70px rgba(45,65,57,.16);
+      z-index:40;
+      transition:
+        transform .52s var(--ease),
+        opacity .52s var(--ease);
+      padding:12px 22px 28px;
+      overscroll-behavior:contain;
+    }
+
+    .deep-sheet.open{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .sheet-handle{
+      width:40px;
+      height:4px;
+      border-radius:99px;
+      margin:2px auto 20px;
+      background:rgba(45,65,57,.14);
+    }
+
+    .sheet-kicker{
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:rgba(38,50,47,.42);
+      margin-bottom:9px;
+    }
+
+    .sheet-title{
+      margin:0 0 10px;
+      font-family:Georgia, "Times New Roman", serif;
+      font-weight:400;
+      font-size:29px;
+      line-height:1.08;
+      letter-spacing:-.025em;
+    }
+
+    .sheet-copy{
+      margin:0 0 22px;
+      color:var(--muted);
+      line-height:1.62;
+      font-size:14px;
+    }
+
+    .learning-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .learning-item{
+      display:flex;
+      align-items:center;
+      gap:13px;
+      padding:14px 15px;
+      border-radius:20px;
+      background:rgba(255,255,255,.62);
+      border:1px solid rgba(55,75,67,.07);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .learning-symbol{
+      flex:0 0 39px;
+      width:39px;
+      height:39px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:rgba(221,233,228,.66);
+      font-size:18px;
+    }
+
+    .learning-name{
+      font-size:13px;
+      font-weight:750;
+      margin-bottom:3px;
+    }
+
+    .learning-detail{
+      font-size:12px;
+      line-height:1.4;
+      color:var(--muted);
+    }
+
+    .sheet-close{
+      width:100%;
+      margin-top:18px;
+      border:0;
+      border-radius:18px;
+      padding:14px 16px;
+      background:rgba(223,234,229,.75);
+      cursor:pointer;
+      font-weight:750;
+      transition:transform .25s var(--ease), background .25s var(--ease);
+    }
+
+    .sheet-close:active{
+      transform:scale(.98);
+      background:rgba(213,228,220,.9);
+    }
+
+    @media (min-width:700px){
+      .experience-shell{
+        max-width:760px;
+        margin:0 auto;
+      }
+
+      .topbar{
+        left:50%;
+        right:auto;
+        width:min(720px,calc(100% - 48px));
+        transform:translateX(-50%);
+      }
+
+      .intro{
+        padding:0 44px;
+      }
+
+      .intro-title{
+        font-size:42px;
+        max-width:440px;
+      }
+
+      .carousel{
+        height:min(60vh,600px);
+      }
+
+      .experience{
+        width:min(54vw,430px);
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      *,*::before,*::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        scroll-behavior:auto !important;
+        transition-duration:.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app" id="app">
+    <div class="ambient"></div>
+    <div class="grain"></div>
+
+    <header class="topbar">
+      <div class="identity">
+        <span class="eyebrow">The Little Nest</span>
+        <span class="hello">Good morning, Mom</span>
+      </div>
+      <button class="profile" aria-label="Profile">
+        <span class="profile-dot"></span>
+      </button>
+    </header>
+
+    <section class="experience-shell">
+      <div class="intro">
+        <div class="intro-kicker">From Mia's morning</div>
+        <h1 class="intro-title">A few little moments are waiting for you.</h1>
+      </div>
+
+      <div class="carousel-wrap">
+        <div class="carousel" id="carousel"></div>
+      </div>
+    </section>
+
+    <div class="hint" id="hint">
+      <span class="hint-line"></span>
+      <span>swipe to wander</span>
+      <span class="hint-line"></span>
+    </div>
+
+    <div class="wash" id="wash"></div>
+
+    <nav class="nav-panel" id="navPanel" aria-label="Parent navigation">
+      <button class="nav-item active">
+        <span class="nav-icon">⌂</span>
+        <span class="nav-text">Nest</span>
+      </button>
+      <button class="nav-item">
+        <span class="nav-icon">♡</span>
+        <span class="nav-text">Memories</span>
+      </button>
+      <button class="nav-item">
+        <span class="nav-icon">✦</span>
+        <span class="nav-text">Journey</span>
+      </button>
+      <button class="nav-item">
+        <span class="nav-icon">•••</span>
+        <span class="nav-text">More</span>
+      </button>
+    </nav>
+
+    <button class="nav-orb" id="navOrb" aria-label="Open navigation"></button>
+
+    <section class="deep-sheet" id="deepSheet" aria-hidden="true">
+      <div class="sheet-handle"></div>
+      <div class="sheet-kicker">Inside this moment</div>
+      <h2 class="sheet-title" id="sheetTitle">What Mia was exploring</h2>
+      <p class="sheet-copy" id="sheetCopy"></p>
+      <div class="learning-list" id="learningList"></div>
+      <button class="sheet-close" id="sheetClose">Back to the moment</button>
+    </section>
+  </main>
+
+  <script>
+    const experiences = [
+      {
+        title: "Look at that concentration.",
+        label: "A little moment",
+        copy: "Mia stayed with the activity, trying again and again until the pieces sat just where she wanted them.",
+        photo: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=86",
+        categories: ["Thinking", "Fine Motor", "Confidence"],
+        deeper: "Today Mia worked with shape, position and careful hand movements. What looks like simple play is giving her repeated chances to notice, adjust and try again.",
+        learning: [
+          ["🧠","Thinking & Discovery","Noticing where pieces fit and changing approach when they do not."],
+          ["🤲","Fine Motor","Using controlled hand and finger movements to place and adjust."],
+          ["🌱","Confidence","Staying with a small challenge long enough to work through it."]
+        ]
+      },
+      {
+        title: "Learning beside a friend.",
+        label: "Together today",
+        copy: "A shared activity became a small lesson in watching, waiting, responding and enjoying something together.",
+        photo: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1200&q=86",
+        categories: ["Social", "Communication"],
+        deeper: "Moments beside other children help Mia practice the quiet building blocks of relationships: noticing others, taking turns and expressing what she wants.",
+        learning: [
+          ["💛","Social & Emotional","Sharing space and attention with another child."],
+          ["💬","Communication","Using words, expressions and gestures to connect."],
+          ["👀","Awareness","Watching what another child is doing and responding."]
+        ]
+      },
+      {
+        title: "Something she made herself.",
+        label: "Made by Mia",
+        copy: "Today there was color, choice and a little bit of mess — exactly the kind of learning we love.",
+        photo: "https://images.unsplash.com/photo-1598880940080-ff9a29891b85?auto=format&fit=crop&w=1200&q=86",
+        categories: ["Creativity", "Sensory", "Fine Motor"],
+        deeper: "Creative work gives Mia room to make decisions without needing one correct answer. She gets to explore materials, movement and her own ideas.",
+        learning: [
+          ["🎨","Creativity","Making choices about color, placement and expression."],
+          ["✨","Sensory Exploration","Experiencing texture, movement and visual change."],
+          ["🤲","Fine Motor","Building control through grasping, pressing and moving tools."]
+        ]
+      },
+      {
+        title: "A body made for moving.",
+        label: "Movement",
+        copy: "Mia climbed, balanced and moved through the session with the kind of full-body practice young children need.",
+        photo: "https://images.unsplash.com/photo-1560785496-3c9d27877182?auto=format&fit=crop&w=1200&q=86",
+        categories: ["Movement", "Balance", "Confidence"],
+        deeper: "Big movement helps children understand their bodies in space. Today gave Mia chances to balance, coordinate and decide how to move safely.",
+        learning: [
+          ["🏃","Gross Motor","Using large muscles through climbing and movement."],
+          ["⚖️","Balance","Adjusting body position while moving through space."],
+          ["🌿","Body Awareness","Learning what her body can do and how it feels."]
+        ]
+      }
+    ];
+
+    const carousel = document.getElementById("carousel");
+    const hint = document.getElementById("hint");
+    const deepSheet = document.getElementById("deepSheet");
+    const sheetTitle = document.getElementById("sheetTitle");
+    const sheetCopy = document.getElementById("sheetCopy");
+    const learningList = document.getElementById("learningList");
+    const sheetClose = document.getElementById("sheetClose");
+    const wash = document.getElementById("wash");
+    const navOrb = document.getElementById("navOrb");
+    const navPanel = document.getElementById("navPanel");
+
+    let activeIndex = 0;
+    let startX = 0;
+    let deltaX = 0;
+    let dragging = false;
+    let hasInteracted = false;
+
+    function buildCards(){
+      experiences.forEach((item,index)=>{
+        const article = document.createElement("article");
+        article.className = "experience";
+        article.dataset.index = index;
+
+        article.innerHTML = `
+          <div class="card">
+            <div class="photo" style="background-image:url('${item.photo}')"></div>
+            <div class="content">
+              <div class="moment-label">${item.label}</div>
+              <h2 class="moment-title">${item.title}</h2>
+              <p class="moment-copy">${item.copy}</p>
+              <div class="learn-row">
+                ${item.categories.map(c=>`<span class="learn-pill">${c}</span>`).join("")}
+              </div>
+            </div>
+          </div>
+        `;
+
+        article.addEventListener("click",()=>{
+          if(Math.abs(deltaX) < 8 && Number(article.dataset.index) === activeIndex){
+            openDeep(activeIndex);
+          }
+        });
+
+        carousel.appendChild(article);
+      });
+
+      renderPositions();
+    }
+
+    function renderPositions(){
+      const cards = [...document.querySelectorAll(".experience")];
+
+      cards.forEach((card,index)=>{
+        let offset = index - activeIndex;
+
+        if(offset < -2 || offset > 2){
+          card.style.opacity = "0";
+          card.style.pointerEvents = "none";
+          card.style.transform = `translate(-50%,-50%) translateX(${offset*64}%) scale(.74)`;
+          card.style.filter = "blur(9px)";
+          card.dataset.pos = offset;
+          return;
+        }
+
+        const x = offset * 73;
+        const scale = offset === 0 ? 1 : .86;
+        const rotate = offset * -2.6;
+        const z = offset === 0 ? 0 : -90;
+        const y = Math.abs(offset) * 10;
+        const opacity = offset === 0 ? 1 : .46;
+
+        card.style.opacity = opacity;
+        card.style.pointerEvents = offset === 0 ? "auto" : "none";
+        card.style.filter = offset === 0 ? "blur(0px)" : "blur(1.4px)";
+        card.style.transform =
+          `translate(-50%,-50%) translate3d(${x}%,${y}px,${z}px) rotate(${rotate}deg) scale(${scale})`;
+        card.style.zIndex = 10 - Math.abs(offset);
+        card.dataset.pos = offset;
+      });
+    }
+
+    function move(direction){
+      const next = Math.min(
+        experiences.length - 1,
+        Math.max(0, activeIndex + direction)
+      );
+
+      if(next !== activeIndex){
+        activeIndex = next;
+        renderPositions();
+        hideHint();
+      }
+    }
+
+    function hideHint(){
+      if(hasInteracted) return;
+      hasInteracted = true;
+      hint.style.opacity = "0";
+    }
+
+    function pointerDown(e){
+      if(deepSheet.classList.contains("open")) return;
+      dragging = true;
+      startX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+      deltaX = 0;
+    }
+
+    function pointerMove(e){
+      if(!dragging) return;
+      const x = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+      deltaX = x - startX;
+    }
+
+    function pointerUp(){
+      if(!dragging) return;
+      dragging = false;
+
+      if(deltaX < -52) move(1);
+      else if(deltaX > 52) move(-1);
+
+      setTimeout(()=>deltaX=0,0);
+    }
+
+    carousel.addEventListener("pointerdown",pointerDown);
+    window.addEventListener("pointermove",pointerMove);
+    window.addEventListener("pointerup",pointerUp);
+
+    function openDeep(index){
+      const item = experiences[index];
+
+      sheetTitle.textContent = "What Mia was exploring";
+      sheetCopy.textContent = item.deeper;
+      learningList.innerHTML = item.learning.map(row=>`
+        <div class="learning-item">
+          <div class="learning-symbol">${row[0]}</div>
+          <div>
+            <div class="learning-name">${row[1]}</div>
+            <div class="learning-detail">${row[2]}</div>
+          </div>
+        </div>
+      `).join("");
+
+      wash.classList.add("open");
+      deepSheet.classList.add("open");
+      deepSheet.setAttribute("aria-hidden","false");
+      hideHint();
+    }
+
+    function closeDeep(){
+      deepSheet.classList.remove("open");
+      deepSheet.setAttribute("aria-hidden","true");
+
+      if(!navPanel.classList.contains("open")){
+        wash.classList.remove("open");
+      }
+    }
+
+    sheetClose.addEventListener("click",closeDeep);
+
+    navOrb.addEventListener("click",()=>{
+      const opening = !navPanel.classList.contains("open");
+
+      navPanel.classList.toggle("open",opening);
+      navOrb.classList.toggle("open",opening);
+      wash.classList.toggle("open",opening);
+      hideHint();
+    });
+
+    wash.addEventListener("click",()=>{
+      closeDeep();
+      navPanel.classList.remove("open");
+      navOrb.classList.remove("open");
+      wash.classList.remove("open");
+    });
+
+    document.querySelectorAll(".nav-item").forEach(item=>{
+      item.addEventListener("click",()=>{
+        document.querySelectorAll(".nav-item").forEach(i=>i.classList.remove("active"));
+        item.classList.add("active");
+
+        item.animate(
+          [
+            {transform:"scale(.94)"},
+            {transform:"scale(1.04)"},
+            {transform:"scale(1)"}
+          ],
+          {duration:320,easing:"cubic-bezier(.22,.75,.2,1)"}
+        );
+      });
+    });
+
+    buildCards();
+  </script>
+</body>
+</html>
