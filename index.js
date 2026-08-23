@@ -24,9 +24,7 @@ import {
 } from "./parent_arrival.js";
 
 
-/* ==================================================
-   START PARENT APP
-   ================================================== */
+/*   start parent app*/
 
 applyTimeAtmosphere();
 
