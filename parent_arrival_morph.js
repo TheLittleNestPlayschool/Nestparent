@@ -47,29 +47,66 @@ function getCurvePoint(
 }
 
 
-/*   smooth scale*/
+/*   smooth progress*/
 
-function getScaleAtPoint(
-  finalScale,
+function getSmoothAmount(
   amount
 ){
 
-  const smoothAmount =
+  return (
     amount *
     amount *
     (
       3 -
       2 *
       amount
+    )
+  );
+
+}
+
+
+/*   gradual scale settle*/
+
+function getScaleAtPoint(
+  startScale,
+  finalScale,
+  amount
+){
+
+  /*
+    Hold more of the enlarged feeling
+    through the early part of the curve,
+    then settle more noticeably later.
+  */
+
+  const delayedAmount =
+    Math.max(
+      0,
+      (
+        amount -
+        .16
+      )
+      /
+      .84
+    );
+
+
+  const smoothAmount =
+    getSmoothAmount(
+      Math.min(
+        1,
+        delayedAmount
+      )
     );
 
 
   return (
-    1
+    startScale
     +
     (
       finalScale -
-      1
+      startScale
     )
     *
     smoothAmount
@@ -83,6 +120,7 @@ function getScaleAtPoint(
 function buildCurveFrames(
   moveX,
   moveY,
+  startScale,
   finalScale
 ){
 
@@ -117,7 +155,7 @@ function buildCurveFrames(
 
 
   const steps =
-    18;
+    22;
 
 
   for(
@@ -144,6 +182,7 @@ function buildCurveFrames(
 
     const scale =
       getScaleAtPoint(
+        startScale,
         finalScale,
         amount
       );
@@ -177,7 +216,8 @@ function buildCurveFrames(
 
 function moveTextToTarget(
   source,
-  target
+  target,
+  startScale
 ){
 
   if(
@@ -221,6 +261,7 @@ function moveTextToTarget(
     buildCurveFrames(
       moveX,
       moveY,
+      startScale,
       finalScale
     );
 
@@ -228,7 +269,7 @@ function moveTextToTarget(
   return source.animate(
     frames,
     {
-      duration:3150,
+      duration:3250,
 
       easing:
         "cubic-bezier(.20,.54,.16,1)",
@@ -249,24 +290,28 @@ export function morphArrivalText({
   arrivalMessage,
   headerEyebrow,
   headerGreeting,
-  headerMessage
+  headerMessage,
+  startScale=1
 }){
 
   return [
 
     moveTextToTarget(
       arrivalEyebrow,
-      headerEyebrow
+      headerEyebrow,
+      startScale
     ),
 
     moveTextToTarget(
       arrivalGreeting,
-      headerGreeting
+      headerGreeting,
+      startScale
     ),
 
     moveTextToTarget(
       arrivalMessage,
-      headerMessage
+      headerMessage,
+      startScale
     )
 
   ].filter(
