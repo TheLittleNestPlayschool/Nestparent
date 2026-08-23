@@ -150,7 +150,7 @@ export function closeNestStage({
       }
 
     },
-    1250
+    1500
   );
 
 }
@@ -161,5 +161,14 @@ export function closeNestStage({
 export function isNestStageOpen(){
 
   return nestOpen;
+
+}
+
+
+/*   current nest card*/
+
+export function getNestCard(){
+
+  return nestCard;
 
 }
