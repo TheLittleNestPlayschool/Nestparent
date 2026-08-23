@@ -160,9 +160,10 @@ function createArrivalStars(){
       [
         2,
         5,
-        9,
-        13,
-        17
+        8,
+        11,
+        15,
+        18
       ]
     );
 
@@ -190,7 +191,7 @@ function createArrivalStars(){
       ){
 
         star.classList.add(
-          "is-silver"
+          "is-ice"
         );
 
       }
@@ -210,7 +211,7 @@ function createArrivalStars(){
 
 
       let size =
-        2.3;
+        3;
 
 
       if(
@@ -220,7 +221,7 @@ function createArrivalStars(){
       ){
 
         size =
-          4.4;
+          5.5;
 
       }
 
@@ -232,7 +233,7 @@ function createArrivalStars(){
       ){
 
         size =
-          3.2;
+          4;
 
       }
 
@@ -244,7 +245,7 @@ function createArrivalStars(){
       ){
 
         size =
-          2.7;
+          3.5;
 
       }
 
@@ -256,25 +257,25 @@ function createArrivalStars(){
           ?
             1
           :
-            .68
+            .74
             +
             (
               index %
               3
             )
             *
-            .10;
+            .09;
 
 
       const speed =
-        2100
+        1900
         +
         (
           index %
           6
         )
         *
-        430;
+        420;
 
 
       const delay =
@@ -283,7 +284,7 @@ function createArrivalStars(){
           8
         )
         *
-        -370;
+        -340;
 
 
       const leaveDelay =
