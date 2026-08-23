@@ -40,6 +40,8 @@
 }
 
 
+/*   regular stars*/
+
 .arrival-star{
   position:absolute;
 
@@ -53,8 +55,8 @@
 
   background:
     rgba(
-      72,
-      146,
+      174,
+      218,
       255,
       1
     );
@@ -62,24 +64,24 @@
   box-shadow:
     0 0 3px
     rgba(
-      94,
-      164,
+      221,
+      239,
       255,
       1
     ),
     0 0 8px
     rgba(
-      91,
-      165,
+      157,
+      208,
       255,
-      .95
+      .92
     ),
     0 0 18px
     rgba(
-      75,
-      142,
+      116,
+      185,
       255,
-      .68
+      .52
     );
 
   opacity:var(--star-opacity);
@@ -100,11 +102,13 @@
 }
 
 
+/*   icy variation*/
+
 .arrival-star.is-ice{
   background:
     rgba(
-      167,
-      214,
+      205,
+      233,
       255,
       1
     );
@@ -112,24 +116,24 @@
   box-shadow:
     0 0 3px
     rgba(
-      203,
-      232,
+      240,
+      248,
       255,
       1
     ),
     0 0 9px
     rgba(
-      146,
-      204,
+      177,
+      220,
       255,
-      .98
+      .95
     ),
-    0 0 20px
+    0 0 18px
     rgba(
-      91,
-      166,
+      126,
+      191,
       255,
-      .72
+      .50
     );
 }
 
@@ -346,8 +350,7 @@
 
 
   53%{
-    opacity:
-      1;
+    opacity:1;
 
     transform:
       scale(1.62);
