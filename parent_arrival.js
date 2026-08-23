@@ -134,32 +134,6 @@ function stopArrivalBreath(){
 }
 
 
-/*   tap bloom*/
-
-function playTapBloom(){
-
-  if(
-    !arrivalScreen
-  ){
-    return;
-  }
-
-
-  arrivalScreen.classList.remove(
-    "is-tapped"
-  );
-
-
-  void arrivalScreen.offsetWidth;
-
-
-  arrivalScreen.classList.add(
-    "is-tapped"
-  );
-
-}
-
-
 /*   tap response*/
 
 function playTapResponse(){
@@ -171,59 +145,38 @@ function playTapResponse(){
   }
 
 
-  playTapBloom();
+  if(
+    arrivalScreen
+  ){
+
+    arrivalScreen.classList.add(
+      "is-launching"
+    );
+
+  }
 
 
   const animation =
     arrivalCopy.animate(
       [
         {
-          offset:0,
-
           transform:
-            "translateY(-2vh) scale(1)",
-
-          filter:
-            "brightness(1)"
+            "translateY(-2vh) scale(1)"
         },
 
         {
-          offset:.38,
-
           transform:
-            "translateY(-2vh) scale(1.038)",
-
-          filter:
-            "brightness(1.035)"
-        },
-
-        {
-          offset:.72,
-
-          transform:
-            "translateY(-2vh) scale(1.018)",
-
-          filter:
-            "brightness(1.018)"
-        },
-
-        {
-          offset:1,
-
-          transform:
-            "translateY(-2vh) scale(1.01)",
-
-          filter:
-            "brightness(1)"
+            "translateY(-2vh) scale(1.052)"
         }
       ],
       {
-        duration:540,
+        duration:340,
 
         easing:
-          "cubic-bezier(.22,.72,.18,1)",
+          "cubic-bezier(.20,.72,.18,1)",
 
-        fill:"forwards"
+        fill:
+          "forwards"
       }
     );
 
@@ -231,6 +184,61 @@ function playTapResponse(){
   return animation.finished
     .catch(
       ()=>{}
+    );
+
+}
+
+
+/*   prepare enlarged text for morph*/
+
+function prepareMorphState(){
+
+  if(
+    !arrivalCopy
+  ){
+    return;
+  }
+
+
+  /*
+    Remove the group scale and transfer
+    that enlarged feeling to the text
+    elements themselves.
+
+    This lets each line travel to its
+    exact final destination independently.
+  */
+
+  arrivalCopy
+    .getAnimations()
+    .forEach(
+      animation=>{
+
+        animation.cancel();
+
+      }
+    );
+
+
+  arrivalCopy.style.transform =
+    "translateY(-2vh)";
+
+
+  [
+    arrivalEyebrow,
+    arrivalGreeting,
+    arrivalMessage
+  ]
+    .filter(
+      Boolean
+    )
+    .forEach(
+      element=>{
+
+        element.style.transform =
+          "scale(1.052)";
+
+      }
     );
 
 }
@@ -261,7 +269,8 @@ function beginMorph(){
               arrivalMessage,
               headerEyebrow,
               headerGreeting,
-              headerMessage
+              headerMessage,
+              startScale:1.052
             });
 
 
@@ -334,14 +343,7 @@ async function enterParentWorld(){
   await playTapResponse();
 
 
-  if(
-    arrivalCopy
-  ){
-
-    arrivalCopy.style.transform =
-      "translateY(-2vh) scale(1.01)";
-
-  }
+  prepareMorphState();
 
 
   beginMorph();
