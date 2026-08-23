@@ -294,6 +294,24 @@
           rgba(23,31,28,.72) 100%);
     }
 
+
+    .type-mark{
+      position:absolute;
+      top:18px;
+      right:18px;
+      z-index:3;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.18);
+      backdrop-filter:blur(14px);
+      color:rgba(255,255,255,.82);
+      font-size:10px;
+      font-weight:750;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
     .content{
       position:absolute;
       inset:auto 0 0 0;
@@ -690,8 +708,8 @@
 
     <section class="experience-shell">
       <div class="intro">
-        <div class="intro-kicker">From Mia's morning</div>
-        <h1 class="intro-title">A few little moments are waiting for you.</h1>
+        <div class="intro-kicker">Mia’s Little Nest world</div>
+        <h1 class="intro-title">Her moments, learning and growth — gently brought together.</h1>
       </div>
 
       <div class="carousel-wrap">
@@ -741,55 +759,90 @@
   <script>
     const experiences = [
       {
-        title: "Look at that concentration.",
-        label: "A little moment",
-        copy: "Mia stayed with the activity, trying again and again until the pieces sat just where she wanted them.",
+        type: "memory",
+        title: "A little piece of her morning.",
+        label: "Memory from today",
+        copy: "A quiet glimpse from Mia's Little Nest day.",
         photo: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=86",
-        categories: ["Thinking", "Fine Motor", "Confidence"],
-        deeper: "Today Mia worked with shape, position and careful hand movements. What looks like simple play is giving her repeated chances to notice, adjust and try again.",
+        categories: ["Today's memory", "Teacher shared"],
+        deeper: "This is the richest kind of experience: something actually captured from Mia's day. When a teacher adds a note, quote or observation, it can live here. When they do not, the photo can simply remain a truthful little window into the session.",
         learning: [
-          ["🧠","Thinking & Discovery","Noticing where pieces fit and changing approach when they do not."],
-          ["🤲","Fine Motor","Using controlled hand and finger movements to place and adjust."],
-          ["🌱","Confidence","Staying with a small challenge long enough to work through it."]
+          ["📷","A real moment","Shared from today's class rather than generated from curriculum data."],
+          ["💛","Personal to Mia","Child-specific content always takes priority when it exists."],
+          ["🌿","Quietly connected","The learning behind the session can sit underneath without overpowering the memory."]
         ]
       },
       {
-        title: "Learning beside a friend.",
-        label: "Together today",
-        copy: "A shared activity became a small lesson in watching, waiting, responding and enjoying something together.",
-        photo: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1200&q=86",
-        categories: ["Social", "Communication"],
-        deeper: "Moments beside other children help Mia practice the quiet building blocks of relationships: noticing others, taking turns and expressing what she wants.",
+        type: "session",
+        title: "Inside today's Little Nest session.",
+        label: "What Mia explored",
+        copy: "Letter M, circle recognition, listening, movement and hands-on practice all came together today.",
+        photo: "https://images.unsplash.com/photo-1602030028438-4cf153cbae9e?auto=format&fit=crop&w=1200&q=86",
+        categories: ["Letter M", "Shapes", "Movement"],
+        deeper: "Even when no teacher note is entered, we know what session Mia attended. The session itself gives us a truthful story about the experiences and learning opportunities that were offered that day.",
         learning: [
-          ["💛","Social & Emotional","Sharing space and attention with another child."],
-          ["💬","Communication","Using words, expressions and gestures to connect."],
-          ["👀","Awareness","Watching what another child is doing and responding."]
+          ["🔤","Early Literacy","Recognizing and working with Letter M through the planned session activities."],
+          ["⭕","Early Numeracy & Concepts","Exploring circle recognition and foundational shape ideas."],
+          ["👂","Receptive Language","Listening to instructions and responding during guided activities."],
+          ["🏃","Gross Motor","Physical coordination and movement were intentionally part of today's session."]
         ]
       },
       {
-        title: "Something she made herself.",
-        label: "Made by Mia",
-        copy: "Today there was color, choice and a little bit of mess — exactly the kind of learning we love.",
+        type: "learning",
+        title: "Little hands were busy today.",
+        label: "Learning beneath the play",
+        copy: "Fine motor development was one of the strongest ingredients in today's session.",
         photo: "https://images.unsplash.com/photo-1598880940080-ff9a29891b85?auto=format&fit=crop&w=1200&q=86",
-        categories: ["Creativity", "Sensory", "Fine Motor"],
-        deeper: "Creative work gives Mia room to make decisions without needing one correct answer. She gets to explore materials, movement and her own ideas.",
+        categories: ["Fine Motor · strong", "Personal · strong", "Gross Motor"],
+        deeper: "The numbers behind the session stay invisible to the parent. Instead, their relative weights help the Stage Engine understand what deserves emphasis. Today's strongest developmental ingredients become the story.",
         learning: [
-          ["🎨","Creativity","Making choices about color, placement and expression."],
-          ["✨","Sensory Exploration","Experiencing texture, movement and visual change."],
-          ["🤲","Fine Motor","Building control through grasping, pressing and moving tools."]
+          ["🤲","Fine Motor · 1.0","The session strongly emphasized pencil grip, controlled movement and hands-on precision."],
+          ["🌱","Personal · 0.9","The session strongly supported independence, routines and personal development."],
+          ["🏃","Gross Motor · 0.7","Movement and physical coordination were a meaningful part of the session."],
+          ["🎨","Creative Arts · 0.4","Creative expression was present, but it stays quieter in today's hierarchy."]
         ]
       },
       {
-        title: "A body made for moving.",
-        label: "Movement",
-        copy: "Mia climbed, balanced and moved through the session with the kind of full-body practice young children need.",
-        photo: "https://images.unsplash.com/photo-1560785496-3c9d27877182?auto=format&fit=crop&w=1200&q=86",
-        categories: ["Movement", "Balance", "Confidence"],
-        deeper: "Big movement helps children understand their bodies in space. Today gave Mia chances to balance, coordinate and decide how to move safely.",
+        type: "week",
+        title: "A week of little discoveries.",
+        label: "Mia's week",
+        copy: "Across three sessions, a few areas kept returning — busy hands, growing independence and lots of movement.",
+        photo: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1200&q=86",
+        categories: ["Busy hands", "Independence", "Movement"],
+        deeper: "A weekly story lets us create something meaningful even when individual sessions are sparse. The Stage Engine can combine the weighted learning data from every session Mia attended and bring the strongest themes forward.",
         learning: [
-          ["🏃","Gross Motor","Using large muscles through climbing and movement."],
-          ["⚖️","Balance","Adjusting body position while moving through space."],
-          ["🌿","Body Awareness","Learning what her body can do and how it feels."]
+          ["🤲","Busy hands","Fine-motor opportunities appeared repeatedly across this week's sessions."],
+          ["🌿","Growing independence","Personal development was consistently woven into the week's activities."],
+          ["🏃","Lots of movement","Gross-motor practice returned across multiple classroom experiences."],
+          ["💬","Listening & language","Language experiences quietly supported the week as a whole."]
+        ]
+      },
+      {
+        type: "award",
+        title: "Something has been growing.",
+        label: "A Little Nest celebration",
+        copy: "Mia's recent sessions have added up to a special developmental milestone.",
+        photo: "https://images.unsplash.com/photo-1560785496-3c9d27877182?auto=format&fit=crop&w=1200&q=86",
+        categories: ["Curious Hands Award", "Milestone"],
+        deeper: "Awards can emerge from accumulated category weights rather than teacher input. The celebration is supported by the actual sessions that contributed to it, while the underlying score remains quietly behind the experience.",
+        learning: [
+          ["✦","Curious Hands","Repeated opportunities to grasp, trace, place, create and control small movements have reached a celebration point."],
+          ["🪴","Built over time","This did not come from one class. It reflects repeated developmental exposure across Mia's journey."],
+          ["💛","A celebration, not a score","Parents experience the meaning of the milestone without needing to see counters or percentages."]
+        ]
+      },
+      {
+        type: "next",
+        title: "A little something for home.",
+        label: "Continue the connection",
+        copy: "Today's session can become a tiny conversation or playful moment at home — without turning home into another classroom.",
+        photo: "https://images.unsplash.com/photo-1607453998774-d533f65dac99?auto=format&fit=crop&w=1200&q=86",
+        categories: ["Home connection", "Optional"],
+        deeper: "The session_details table already contains home-time activities and descriptions of what comes next. These can become occasional, gentle bridges between school and family rather than homework.",
+        learning: [
+          ["🏡","At home","Try a simple version of today's planned home-time activity when it feels natural."],
+          ["💬","Conversation starter","Ask Mia what she remembers most about today's movement or Letter M activity."],
+          ["→","Coming next","A quiet preview can build familiarity with what the next Little Nest session will explore."]
         ]
       }
     ];
@@ -820,6 +873,14 @@
         article.innerHTML = `
           <div class="card">
             <div class="photo" style="background-image:url('${item.photo}')"></div>
+            <div class="type-mark">${({
+              memory:"Moment",
+              session:"Session",
+              learning:"Learning",
+              week:"Week",
+              award:"Celebration",
+              next:"Home"
+            })[item.type] || "Story"}</div>
             <div class="content">
               <div class="moment-label">${item.label}</div>
               <h2 class="moment-title">${item.title}</h2>
@@ -924,7 +985,16 @@
     function openDeep(index){
       const item = experiences[index];
 
-      sheetTitle.textContent = "What Mia was exploring";
+      const titles = {
+        memory: "Inside this little moment",
+        session: "What today's session contained",
+        learning: "What was developing today",
+        week: "What kept returning this week",
+        award: "Why this celebration appeared",
+        next: "Bring a little of it home"
+      };
+
+      sheetTitle.textContent = titles[item.type] || "A little deeper";
       sheetCopy.textContent = item.deeper;
       learningList.innerHTML = item.learning.map(row=>`
         <div class="learning-item">
