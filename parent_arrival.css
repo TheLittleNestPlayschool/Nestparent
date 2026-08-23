@@ -23,13 +23,7 @@
 
   visibility:visible;
 
-  transform:
-    translateY(0);
-
-  transition:
-    opacity .9s ease,
-    transform 1.15s var(--ease),
-    visibility 0s linear 1.15s;
+  pointer-events:auto;
 }
 
 
@@ -40,14 +34,16 @@
       420px
     );
 
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
   text-align:center;
 
   transform:
     translateY(-2vh);
-
-  transition:
-    transform 1.15s var(--ease),
-    opacity .9s ease;
 }
 
 
@@ -56,7 +52,9 @@
    ================================================== */
 
 .arrival-eyebrow{
-  display:block;
+  display:inline-block;
+
+  width:max-content;
 
   margin-bottom:12px;
 
@@ -75,10 +73,17 @@
       47,
       .42
     );
+
+  transform-origin:
+    left top;
 }
 
 
 .arrival-greeting{
+  display:inline-block;
+
+  width:max-content;
+
   margin:0;
 
   font-family:
@@ -95,10 +100,19 @@
   letter-spacing:-.035em;
 
   color:var(--ink);
+
+  transform-origin:
+    left top;
 }
 
 
 .arrival-message{
+  display:inline-block;
+
+  width:max-content;
+
+  max-width:90vw;
+
   margin:
     11px
     0
@@ -115,64 +129,161 @@
       47,
       .54
     );
+
+  transform-origin:
+    left top;
 }
 
 
 /* ==================================================
-   APP CONTENT HIDDEN DURING ARRIVAL
+   APP CONTENT BEFORE ENTRY
    ================================================== */
 
 .app-content{
   opacity:0;
 
-  transform:
-    translateY(26px);
-
-  filter:
-    blur(8px);
-
   pointer-events:none;
 }
 
 
+/* ==================================================
+   HEADER DURING TRANSITION
+   ================================================== */
+
 .topbar.app-content{
-  transition:
-    opacity .75s ease .35s,
-    transform 1s var(--ease) .25s,
-    filter .8s ease .25s;
+  transform:
+    translateY(0);
+
+  filter:none;
 }
 
 
-.experience-shell.app-content{
+/*
+  The permanent header text stays invisible
+  while the centered copy physically moves
+  into its position.
+*/
+
+.topbar .identity{
+  opacity:0;
+}
+
+
+/*
+  Profile arrives separately and quietly.
+*/
+
+.profile{
+  opacity:0;
+
+  transform:
+    scale(.86);
+
   transition:
-    opacity 1s ease .48s,
-    transform 1.05s var(--ease) .4s,
-    filter .95s ease .4s;
+    opacity 1.4s ease 1s,
+    transform 1.5s var(--ease) 1s;
+}
+
+
+/* ==================================================
+   EXPERIENCE DURING TRANSITION
+   ================================================== */
+
+.experience-shell.app-content{
+  opacity:0;
+
+  transform:
+    translateY(38px)
+    scale(.985);
+
+  filter:
+    blur(9px);
+
+  transition:
+    opacity 2.4s ease .55s,
+    transform 2.4s var(--ease) .55s,
+    filter 2.2s ease .55s;
 }
 
 
 .hint.app-content{
+  opacity:0;
+
   transition:
-    opacity .75s ease .9s,
-    transform .75s var(--ease) .9s,
-    filter .75s ease .9s;
+    opacity 1.5s ease 1.8s;
 }
 
 
 .nav-orb.app-content{
+  opacity:0;
+
+  transform:
+    translateX(-50%)
+    translateY(16px)
+    scale(.9);
+
   transition:
-    opacity .75s ease .85s,
-    transform .75s var(--ease) .85s,
-    filter .75s ease .85s,
+    opacity 1.5s ease 1.65s,
+    transform 1.7s var(--ease) 1.65s,
     background .32s var(--ease),
     box-shadow .32s var(--ease);
 }
 
 
-.nav-panel.app-content{
-  transition:
-    opacity .35s var(--ease),
-    transform .35s var(--ease);
+/* ==================================================
+   ENTERING STATE
+   ================================================== */
+
+/*
+  Cards begin appearing while the greeting
+  is making its slow journey upward.
+*/
+
+.app.is-entering .experience-shell.app-content{
+  opacity:1;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+  filter:
+    blur(0);
+}
+
+
+/*
+  Make the header container available so its
+  position can be used, but keep the actual
+  duplicate words invisible.
+*/
+
+.app.is-entering .topbar.app-content{
+  opacity:1;
+
+  pointer-events:none;
+}
+
+
+.app.is-entering .profile{
+  opacity:1;
+
+  transform:
+    scale(1);
+}
+
+
+.app.is-entering .hint.app-content{
+  opacity:1;
+}
+
+
+.app.is-entering .nav-orb.app-content{
+  opacity:1;
+
+  transform:
+    translateX(-50%)
+    translateY(0)
+    scale(1);
 }
 
 
@@ -180,33 +291,30 @@
    READY STATE
    ================================================== */
 
+/*
+  Once the moving text has reached the exact
+  header location, the real header takes over.
+*/
+
+.app.is-ready .topbar .identity{
+  opacity:1;
+}
+
+
+/*
+  Arrival copy has now served its purpose.
+*/
+
 .app.is-ready .arrival-screen{
   opacity:0;
 
   visibility:hidden;
 
-  transform:
-    translateY(-70px);
-}
-
-
-.app.is-ready .arrival-copy{
-  opacity:0;
-
-  transform:
-    translateY(-36px);
+  pointer-events:none;
 }
 
 
 .app.is-ready .app-content{
-  opacity:1;
-
-  transform:
-    translateY(0);
-
-  filter:
-    blur(0);
-
   pointer-events:auto;
 }
 
@@ -253,10 +361,8 @@
 
 @media (prefers-reduced-motion:reduce){
 
-  .arrival-screen,
-  .arrival-copy,
-  .topbar.app-content,
   .experience-shell.app-content,
+  .profile,
   .hint.app-content,
   .nav-orb.app-content{
     transition-duration:.01ms !important;
