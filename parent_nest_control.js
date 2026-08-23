@@ -27,9 +27,7 @@ let nestBusy =
 
 /*   release busy state*/
 
-function releaseBusy(
-  delay=1500
-){
+function releaseBusy(){
 
   window.setTimeout(
     ()=>{
@@ -38,7 +36,7 @@ function releaseBusy(
         false;
 
     },
-    delay
+    420
   );
 
 }
@@ -133,13 +131,6 @@ function returnFromMemories(){
     true;
 
 
-  /*
-    The Nest remains open.
-
-    Only Memories leaves and the
-    Nest card returns to center.
-  */
-
   closeMemories();
 
 
@@ -152,13 +143,6 @@ function returnFromMemories(){
 
 function handleNestOrb(){
 
-  /*
-    Deeper stages take priority.
-
-    From Memories, the orb means:
-    return to the Little Nest hub.
-  */
-
   if(
     isMemoriesStageOpen()
   ){
@@ -170,11 +154,6 @@ function handleNestOrb(){
   }
 
 
-  /*
-    From the Nest hub, the orb means:
-    return to Mia's main stage.
-  */
-
   if(
     isNestStageOpen()
   ){
@@ -185,11 +164,6 @@ function handleNestOrb(){
 
   }
 
-
-  /*
-    From Mia's main stage, the orb
-    opens the Little Nest hub.
-  */
 
   openNest();
 
