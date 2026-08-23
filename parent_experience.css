@@ -65,6 +65,8 @@
 }
 
 
+/*   experience*/
+
 .experience{
   position:absolute;
 
@@ -100,6 +102,29 @@
     transform,
     opacity,
     filter;
+}
+
+
+/*   previous stage card*/
+
+.experience.is-stage-back{
+  pointer-events:auto !important;
+
+  cursor:pointer;
+}
+
+
+.experience.is-stage-back .card{
+  cursor:pointer;
+}
+
+
+/*   returning card comes over outgoing card*/
+
+.experience.is-returning-front{
+  z-index:40 !important;
+
+  pointer-events:none !important;
 }
 
 
@@ -162,7 +187,8 @@
 
   background-position:center;
 
-  transform:scale(1.025);
+  transform:
+    scale(1.025);
 }
 
 
