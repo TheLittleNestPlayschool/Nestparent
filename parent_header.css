@@ -95,8 +95,8 @@
 
   place-items:center;
 
-  width:46px;
-  height:46px;
+  width:47px;
+  height:47px;
 
   padding:0;
 
@@ -106,7 +106,7 @@
       255,
       255,
       255,
-      .72
+      .74
     );
 
   border-radius:50%;
@@ -116,7 +116,7 @@
       255,
       255,
       255,
-      .62
+      .66
     );
 
   backdrop-filter:
@@ -147,187 +147,67 @@
 }
 
 
-/*   nest symbol*/
+/*   little nest symbol*/
 
-.nest-symbol{
+.little-nest{
   position:relative;
 
   display:block;
 
-  width:30px;
-  height:27px;
+  width:31px;
+  height:29px;
 
   transition:
     transform .28s var(--ease);
 }
 
 
-.nest-orb:active .nest-symbol{
+.nest-orb:active .little-nest{
   transform:
     scale(1.06);
 }
 
 
-/*   nest bowl*/
+/*   branches*/
 
-.nest-bowl{
+.nest-branch{
   position:absolute;
 
-  left:50%;
-  bottom:3px;
+  bottom:10px;
 
-  width:25px;
-  height:11px;
-
-  border:
-    2px solid
-    rgba(
-      82,
-      112,
-      96,
-      .82
-    );
-
-  border-top:0;
-
-  border-radius:
-    0
-    0
-    50%
-    50%;
-
-  transform:
-    translateX(-50%);
-
-  box-shadow:
-    inset 0 -2px 0
-    rgba(
-      82,
-      112,
-      96,
-      .08
-    );
-
-  animation:
-    nestBreathe
-    5.4s
-    ease-in-out
-    infinite;
-}
-
-
-/*   crossed nest twigs*/
-
-.nest-twig{
-  position:absolute;
-
-  left:50%;
-  bottom:8px;
-
-  width:22px;
-  height:1.6px;
+  width:14px;
+  height:1.5px;
 
   border-radius:999px;
 
   background:
-    rgba(
-      91,
-      121,
-      106,
-      .72
-    );
+    #8b6c43;
 
-  transform-origin:center;
+  transform-origin:
+    center;
 }
 
 
-.nest-twig-a{
-  transform:
-    translateX(-50%)
-    rotate(14deg);
-}
-
-
-.nest-twig-b{
-  transform:
-    translateX(-50%)
-    rotate(-16deg);
-}
-
-
-.nest-twig-c{
-  width:18px;
-
-  bottom:5px;
-
-  opacity:.58;
+.nest-branch-left{
+  left:2px;
 
   transform:
-    translateX(-50%)
-    rotate(4deg);
+    rotate(-58deg);
 }
 
 
-/*   child egg*/
-
-.nest-egg{
-  position:absolute;
-
-  left:50%;
-  bottom:10px;
-
-  z-index:2;
-
-  width:7px;
-  height:9px;
-
-  border-radius:
-    50%
-    50%
-    46%
-    46%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #d9bd82,
-      #b99056
-    );
-
-  box-shadow:
-    0 2px 5px
-    rgba(
-      125,
-      95,
-      52,
-      .16
-    ),
-    0 0 0 3px
-    rgba(
-      211,
-      182,
-      119,
-      .07
-    );
+.nest-branch-right{
+  right:2px;
 
   transform:
-    translateX(-50%);
-
-  animation:
-    nestEggFloat
-    4.8s
-    ease-in-out
-    infinite;
+    rotate(58deg);
 }
 
 
-/*   little leaf*/
+/*   leaves*/
 
 .nest-leaf{
   position:absolute;
-
-  right:2px;
-  bottom:13px;
 
   width:7px;
   height:4px;
@@ -339,56 +219,201 @@
     0;
 
   background:
-    rgba(
-      103,
-      138,
-      111,
-      .82
-    );
-
-  transform:
-    rotate(-31deg);
+    #7f9b63;
 
   transform-origin:
     left center;
+}
+
+
+.nest-leaf-left-a{
+  left:2px;
+  top:6px;
+
+  transform:
+    rotate(-48deg);
+}
+
+
+.nest-leaf-left-b{
+  left:6px;
+  top:2px;
+
+  transform:
+    rotate(-18deg)
+    scale(.86);
+}
+
+
+.nest-leaf-right-a{
+  right:1px;
+  top:6px;
+
+  transform:
+    rotate(138deg);
+}
+
+
+.nest-leaf-right-b{
+  right:6px;
+  top:2px;
+
+  transform:
+    rotate(165deg)
+    scale(.86);
+}
+
+
+/*   nest body*/
+
+.nest-body{
+  position:absolute;
+
+  left:50%;
+  bottom:3px;
+
+  width:23px;
+  height:11px;
+
+  overflow:hidden;
+
+  border-radius:
+    5px
+    5px
+    12px
+    12px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #aa8350,
+      #89663f
+    );
+
+  box-shadow:
+    inset 0 2px 2px
+    rgba(
+      255,
+      255,
+      255,
+      .16
+    ),
+    0 1px 2px
+    rgba(
+      73,
+      53,
+      32,
+      .14
+    );
+
+  transform:
+    translateX(-50%);
 
   animation:
-    nestLeafMove
-    5.6s
+    littleNestBreathe
+    5.4s
     ease-in-out
     infinite;
 }
 
 
-.nest-leaf::after{
-  content:"";
+/*   nest weave*/
 
+.nest-weave{
   position:absolute;
 
-  left:-4px;
-  top:2px;
+  left:-3px;
 
-  width:7px;
+  width:29px;
   height:1px;
 
   border-radius:999px;
 
   background:
     rgba(
-      91,
-      121,
-      106,
-      .62
+      102,
+      73,
+      42,
+      .55
     );
-
-  transform:
-    rotate(18deg);
 }
 
 
-/*   nest idle life*/
+.nest-weave-a{
+  top:3px;
 
-@keyframes nestBreathe{
+  transform:
+    rotate(9deg);
+}
+
+
+.nest-weave-b{
+  top:6px;
+
+  transform:
+    rotate(-8deg);
+}
+
+
+.nest-weave-c{
+  top:8px;
+
+  transform:
+    rotate(5deg);
+
+  opacity:.72;
+}
+
+
+/*   egg*/
+
+.nest-egg{
+  position:absolute;
+
+  z-index:3;
+
+  left:50%;
+  bottom:9px;
+
+  width:7px;
+  height:9px;
+
+  border-radius:
+    52%
+    52%
+    46%
+    46%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f1d99d,
+      #d7b875
+    );
+
+  box-shadow:
+    0 1px 3px
+    rgba(
+      112,
+      83,
+      44,
+      .16
+    );
+
+  transform:
+    translateX(-50%);
+
+  animation:
+    littleEggFloat
+    4.8s
+    ease-in-out
+    infinite;
+}
+
+
+/*   idle movement*/
+
+@keyframes littleNestBreathe{
 
   0%,
   100%{
@@ -401,13 +426,13 @@
   50%{
     transform:
       translateX(-50%)
-      scaleX(1.045);
+      scaleX(1.035);
   }
 
 }
 
 
-@keyframes nestEggFloat{
+@keyframes littleEggFloat{
 
   0%,
   100%{
@@ -420,24 +445,61 @@
   50%{
     transform:
       translateX(-50%)
-      translateY(-1.2px);
+      translateY(-1px);
   }
 
 }
 
 
-@keyframes nestLeafMove{
+/*   leaf movement*/
+
+.nest-leaf-left-a{
+  animation:
+    leafLeftMove
+    5.6s
+    ease-in-out
+    infinite;
+}
+
+
+.nest-leaf-right-a{
+  animation:
+    leafRightMove
+    5.9s
+    ease-in-out
+    infinite;
+}
+
+
+@keyframes leafLeftMove{
 
   0%,
   100%{
     transform:
-      rotate(-31deg);
+      rotate(-48deg);
   }
 
 
   50%{
     transform:
-      rotate(-24deg);
+      rotate(-42deg);
+  }
+
+}
+
+
+@keyframes leafRightMove{
+
+  0%,
+  100%{
+    transform:
+      rotate(138deg);
+  }
+
+
+  50%{
+    transform:
+      rotate(132deg);
   }
 
 }
@@ -447,7 +509,7 @@
 
 @media (prefers-reduced-motion:reduce){
 
-  .nest-bowl,
+  .nest-body,
   .nest-egg,
   .nest-leaf{
     animation:none;
