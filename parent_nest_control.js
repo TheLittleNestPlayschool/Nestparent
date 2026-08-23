@@ -5,6 +5,16 @@ import {
 } from "./parent_carousel.js";
 
 
+import {
+  isMemoriesStageOpen
+} from "./parent_memories_stage.js";
+
+
+import {
+  closeMemories
+} from "./parent_stage_router.js";
+
+
 const nestOrb =
   document.getElementById(
     "nestOrb"
@@ -13,6 +23,25 @@ const nestOrb =
 
 let nestBusy =
   false;
+
+
+/*   release busy state*/
+
+function releaseBusy(
+  delay=1500
+){
+
+  window.setTimeout(
+    ()=>{
+
+      nestBusy =
+        false;
+
+    },
+    delay
+  );
+
+}
 
 
 /*   open nest*/
@@ -46,15 +75,7 @@ function openNest(){
   openNestStage();
 
 
-  window.setTimeout(
-    ()=>{
-
-      nestBusy =
-        false;
-
-    },
-    1300
-  );
+  releaseBusy();
 
 }
 
@@ -90,22 +111,69 @@ function closeNest(){
   closeNestStage();
 
 
-  window.setTimeout(
-    ()=>{
-
-      nestBusy =
-        false;
-
-    },
-    1300
-  );
+  releaseBusy();
 
 }
 
 
-/*   toggle nest*/
+/*   return from memories*/
 
-function toggleNest(){
+function returnFromMemories(){
+
+  if(
+    nestBusy
+    ||
+    !isMemoriesStageOpen()
+  ){
+    return;
+  }
+
+
+  nestBusy =
+    true;
+
+
+  /*
+    The Nest remains open.
+
+    Only Memories leaves and the
+    Nest card returns to center.
+  */
+
+  closeMemories();
+
+
+  releaseBusy();
+
+}
+
+
+/*   handle orb*/
+
+function handleNestOrb(){
+
+  /*
+    Deeper stages take priority.
+
+    From Memories, the orb means:
+    return to the Little Nest hub.
+  */
+
+  if(
+    isMemoriesStageOpen()
+  ){
+
+    returnFromMemories();
+
+    return;
+
+  }
+
+
+  /*
+    From the Nest hub, the orb means:
+    return to Mia's main stage.
+  */
 
   if(
     isNestStageOpen()
@@ -118,41 +186,12 @@ function toggleNest(){
   }
 
 
-  openNest();
-
-}
-
-
-/*   destination events*/
-
-function handleDestination(
-  event
-){
-
-  const destination =
-    event.detail
-      ?.destination;
-
-
-  if(
-    !destination
-  ){
-    return;
-  }
-
-
   /*
-    Destinations intentionally do nothing
-    beyond identifying themselves for now.
-
-    Their individual experiences will be
-    connected next.
+    From Mia's main stage, the orb
+    opens the Little Nest hub.
   */
 
-  console.log(
-    "Nest destination:",
-    destination
-  );
+  openNest();
 
 }
 
@@ -170,13 +209,7 @@ export function activateNestControl(){
 
   nestOrb.addEventListener(
     "click",
-    toggleNest
-  );
-
-
-  window.addEventListener(
-    "parent:nest-destination",
-    handleDestination
+    handleNestOrb
   );
 
 }
