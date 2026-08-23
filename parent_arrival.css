@@ -42,6 +42,40 @@
 
   transform:
     translateY(-2vh);
+
+  animation:
+    arrivalBreath
+    2.8s
+    cubic-bezier(.22,.72,.18,1)
+    .35s
+    1;
+}
+
+
+/*   one slow opening breath*/
+
+@keyframes arrivalBreath{
+
+  0%{
+    transform:
+      translateY(-2vh)
+      scale(1);
+  }
+
+
+  42%{
+    transform:
+      translateY(-2vh)
+      scale(1.018);
+  }
+
+
+  100%{
+    transform:
+      translateY(-2vh)
+      scale(1);
+  }
+
 }
 
 
@@ -72,6 +106,9 @@
 
   transform-origin:
     left top;
+
+  will-change:
+    transform;
 }
 
 
@@ -99,6 +136,9 @@
 
   transform-origin:
     left top;
+
+  will-change:
+    transform;
 }
 
 
@@ -128,6 +168,9 @@
 
   transform-origin:
     left top;
+
+  will-change:
+    transform;
 }
 
 
@@ -167,7 +210,7 @@
 }
 
 
-/*   experience before morph completes*/
+/*   experience waits until morph completes*/
 
 .experience-shell.app-content{
   opacity:0;
@@ -336,6 +379,11 @@
 /*   reduced motion*/
 
 @media (prefers-reduced-motion:reduce){
+
+  .arrival-copy{
+    animation:none;
+  }
+
 
   .experience-shell.app-content,
   .profile,
