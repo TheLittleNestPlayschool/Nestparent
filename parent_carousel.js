@@ -26,12 +26,6 @@ const deepSheet =
   );
 
 
-const nestOrb =
-  document.getElementById(
-    "nestOrb"
-  );
-
-
 let activeIndex =
   0;
 
@@ -64,7 +58,9 @@ let nestCard =
 
 export function buildCards(){
 
-  if(!carousel){
+  if(
+    !carousel
+  ){
     return;
   }
 
@@ -176,7 +172,9 @@ export function buildCards(){
 
 
           if(
-            Math.abs(deltaX) <
+            Math.abs(
+              deltaX
+            ) <
             8
             &&
             Number(
@@ -213,12 +211,20 @@ export function buildCards(){
 
 
   renderPositions();
+
 }
 
 
-/*   position normal cards*/
+/*   position cards*/
 
 function renderPositions(){
+
+  if(
+    !carousel
+  ){
+    return;
+  }
+
 
   const cards = [
     ...carousel.querySelectorAll(
@@ -237,12 +243,14 @@ function renderPositions(){
         nestOpen
       ){
 
-        renderNestPosition(
+        renderNestModePosition(
           card,
           index
         );
 
+
         return;
+
       }
 
 
@@ -262,16 +270,21 @@ function renderPositions(){
 }
 
 
-/*   nest mode positions*/
+/*   position cards while nest is open*/
 
-function renderNestPosition(
+function renderNestModePosition(
   card,
   index
 ){
 
+  const relativeIndex =
+    index -
+    activeIndex;
+
+
   if(
-    index <
-    activeIndex
+    relativeIndex <
+    0
   ){
 
     card.style.opacity =
@@ -288,18 +301,37 @@ function renderNestPosition(
 
     card.style.transform = `
       translate(-50%,-50%)
-      translateX(-55%)
-      scale(.76)
+      translate3d(
+        -64%,
+        10px,
+        -120px
+      )
+      rotate(2.6deg)
+      scale(.78)
     `;
 
 
+    card.style.zIndex =
+      "5";
+
+
+    card.dataset.pos =
+      -1;
+
+
     return;
+
   }
 
 
+  /*
+    Current card becomes position 1.
+
+    The next existing card becomes position 2.
+  */
+
   const offset =
-    index -
-    activeIndex +
+    relativeIndex +
     1;
 
 
@@ -311,7 +343,7 @@ function renderNestPosition(
 }
 
 
-/*   render card offset*/
+/*   render one card position*/
 
 function renderCardOffset(
   card,
@@ -319,9 +351,11 @@ function renderCardOffset(
 ){
 
   if(
-    offset < -2
+    offset <
+    -2
     ||
-    offset > 2
+    offset >
+    2
   ){
 
     card.style.opacity =
@@ -345,11 +379,16 @@ function renderCardOffset(
       "blur(9px)";
 
 
+    card.style.zIndex =
+      "4";
+
+
     card.dataset.pos =
       offset;
 
 
     return;
+
   }
 
 
@@ -449,9 +488,9 @@ function renderCardOffset(
 }
 
 
-/*   open nest card*/
+/*   open nest stage*/
 
-function openNestCard(){
+export function openNestStage(){
 
   if(
     nestOpen
@@ -469,19 +508,10 @@ function openNestCard(){
   hideHint();
 
 
-  if(
-    nestOrb
-  ){
-
-    nestOrb.classList.add(
-      "is-open"
-    );
-
-  }
-
-
-  renderPositions();
-
+  /*
+    Build the Nest card before moving
+    the existing stage.
+  */
 
   nestCard =
     createNestCard();
@@ -492,6 +522,26 @@ function openNestCard(){
   );
 
 
+  /*
+    Force its starting state to exist
+    before the stage begins moving.
+  */
+
+  void nestCard.offsetWidth;
+
+
+  /*
+    Existing center card now moves
+    into the right-hand position.
+  */
+
+  renderPositions();
+
+
+  /*
+    Nest card becomes the new center.
+  */
+
   requestAnimationFrame(
     ()=>{
 
@@ -499,20 +549,92 @@ function openNestCard(){
         ()=>{
 
           if(
-            nestCard
+            !nestCard
           ){
-
-            nestCard.classList.add(
-              "is-visible"
-            );
-
+            return;
           }
+
+
+          nestCard.classList.add(
+            "is-visible"
+          );
 
         }
       );
 
     }
   );
+
+}
+
+
+/*   close nest stage*/
+
+export function closeNestStage(){
+
+  if(
+    !nestOpen
+  ){
+    return;
+  }
+
+
+  nestOpen =
+    false;
+
+
+  if(
+    nestCard
+  ){
+
+    nestCard.classList.remove(
+      "is-visible"
+    );
+
+  }
+
+
+  /*
+    Bring the original experience
+    back into the center.
+  */
+
+  renderPositions();
+
+
+  const cardToRemove =
+    nestCard;
+
+
+  nestCard =
+    null;
+
+
+  window.setTimeout(
+    ()=>{
+
+      if(
+        cardToRemove
+        &&
+        cardToRemove.parentNode
+      ){
+
+        cardToRemove.remove();
+
+      }
+
+    },
+    1250
+  );
+
+}
+
+
+/*   nest state*/
+
+export function isNestStageOpen(){
+
+  return nestOpen;
 
 }
 
@@ -579,7 +701,9 @@ export function hideHint(){
     true;
 
 
-  if(hint){
+  if(
+    hint
+  ){
 
     hint.style.opacity =
       "0";
@@ -744,17 +868,5 @@ export function activateCarousel(){
     "pointerup",
     pointerUp
   );
-
-
-  if(
-    nestOrb
-  ){
-
-    nestOrb.addEventListener(
-      "click",
-      openNestCard
-    );
-
-  }
 
 }
