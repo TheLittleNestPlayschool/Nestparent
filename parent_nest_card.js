@@ -1,0 +1,169 @@
+/*   create nest card*/
+
+export function createNestCard(){
+
+  const article =
+    document.createElement(
+      "article"
+    );
+
+
+  article.className =
+    "experience nest-experience";
+
+
+  article.dataset.type =
+    "nest";
+
+
+  article.innerHTML = `
+    <div class="nest-stage-card">
+
+      <div class="nest-card-heading">
+
+        <span class="nest-card-kicker">
+          Your Little Nest
+        </span>
+
+        <h2 class="nest-card-title">
+          Where would you like to wander?
+        </h2>
+
+        <p class="nest-card-copy">
+          Everything around Mia's experience,
+          quietly gathered in one place.
+        </p>
+
+      </div>
+
+
+      <div class="nest-destinations">
+
+        <button
+          class="nest-destination"
+          type="button"
+          data-destination="memories"
+        >
+
+          <span class="nest-destination-icon">
+            ♡
+          </span>
+
+          <span class="nest-destination-title">
+            Memories
+          </span>
+
+          <span class="nest-destination-copy">
+            Photos, videos and moments
+          </span>
+
+        </button>
+
+
+        <button
+          class="nest-destination"
+          type="button"
+          data-destination="journey"
+        >
+
+          <span class="nest-destination-icon">
+            ✦
+          </span>
+
+          <span class="nest-destination-title">
+            Journey
+          </span>
+
+          <span class="nest-destination-copy">
+            See how Mia is growing
+          </span>
+
+        </button>
+
+
+        <button
+          class="nest-destination"
+          type="button"
+          data-destination="home"
+        >
+
+          <span class="nest-destination-icon">
+            ⌂
+          </span>
+
+          <span class="nest-destination-title">
+            Home
+          </span>
+
+          <span class="nest-destination-copy">
+            Little things to share together
+          </span>
+
+        </button>
+
+
+        <button
+          class="nest-destination"
+          type="button"
+          data-destination="more"
+        >
+
+          <span class="nest-destination-icon">
+            •••
+          </span>
+
+          <span class="nest-destination-title">
+            More
+          </span>
+
+          <span class="nest-destination-copy">
+            Family and account options
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+
+  article
+    .querySelectorAll(
+      ".nest-destination"
+    )
+    .forEach(
+      button=>{
+
+        button.addEventListener(
+          "click",
+          event=>{
+
+            event.stopPropagation();
+
+
+            const destination =
+              button.dataset.destination;
+
+
+            window.dispatchEvent(
+              new CustomEvent(
+                "parent:nest-destination",
+                {
+                  detail:{
+                    destination
+                  }
+                }
+              )
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  return article;
+
+}
