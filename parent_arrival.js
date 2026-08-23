@@ -65,13 +65,7 @@ let arrivalDone =
   false;
 
 
-let arrivalTimer =
-  null;
-
-
-/* ==================================================
-   SYNC ARRIVAL COPY
-   ================================================== */
+/*   sync arrival copy*/
 
 function syncArrivalCopy(){
 
@@ -101,9 +95,83 @@ function syncArrivalCopy(){
 }
 
 
-/* ==================================================
-   CREATE TEXT MOVE
-   ================================================== */
+/*   stop opening breath*/
+
+function stopArrivalBreath(){
+
+  if(
+    !arrivalCopy
+  ){
+    return;
+  }
+
+
+  const animations =
+    arrivalCopy.getAnimations();
+
+
+  animations.forEach(
+    animation=>{
+
+      animation.cancel();
+
+    }
+  );
+
+
+  arrivalCopy.style.transform =
+    "translateY(-2vh)";
+
+}
+
+
+/*   tap response*/
+
+function playTapResponse(){
+
+  if(
+    !arrivalCopy
+  ){
+    return Promise.resolve();
+  }
+
+
+  const animation =
+    arrivalCopy.animate(
+      [
+        {
+          transform:
+            "translateY(-2vh) scale(1)"
+        },
+
+        {
+          transform:
+            "translateY(-2vh) scale(1.018)"
+        },
+
+        {
+          transform:
+            "translateY(-2vh) scale(1)"
+        }
+      ],
+      {
+        duration:260,
+
+        easing:
+          "cubic-bezier(.22,.72,.18,1)"
+      }
+    );
+
+
+  return animation.finished
+    .catch(
+      ()=>{}
+    );
+
+}
+
+
+/*   curved text movement*/
 
 function moveTextToTarget(
   source,
@@ -138,13 +206,7 @@ function moveTextToTarget(
     sourceRect.top;
 
 
-  /*
-    Use the height difference to create a
-    natural uniform shrink while the words
-    travel toward the header.
-  */
-
-  const scale =
+  const finalScale =
     sourceRect.height > 0
       ?
         targetRect.height /
@@ -153,16 +215,140 @@ function moveTextToTarget(
         1;
 
 
+  const curveRight =
+    Math.min(
+      64,
+      window.innerWidth *
+      .10
+    );
+
+
+  const firstX =
+    curveRight;
+
+
+  const firstY =
+    moveY *
+    .22;
+
+
+  const secondX =
+    moveX *
+    .46
+    +
+    curveRight *
+    .55;
+
+
+  const secondY =
+    moveY *
+    .62;
+
+
+  const thirdX =
+    moveX *
+    .82
+    +
+    curveRight *
+    .12;
+
+
+  const thirdY =
+    moveY *
+    .88;
+
+
+  const firstScale =
+    1 +
+    (
+      finalScale -
+      1
+    )
+    *
+    .20;
+
+
+  const secondScale =
+    1 +
+    (
+      finalScale -
+      1
+    )
+    *
+    .58;
+
+
+  const thirdScale =
+    1 +
+    (
+      finalScale -
+      1
+    )
+    *
+    .86;
+
+
   return source.animate(
     [
       {
-        transform:
-          "translate3d(0,0,0) scale(1)",
+        offset:0,
 
-        opacity:1
+        transform:
+          `
+            translate3d(
+              0,
+              0,
+              0
+            )
+            scale(1)
+          `
       },
 
       {
+        offset:.24,
+
+        transform:
+          `
+            translate3d(
+              ${firstX}px,
+              ${firstY}px,
+              0
+            )
+            scale(${firstScale})
+          `
+      },
+
+      {
+        offset:.57,
+
+        transform:
+          `
+            translate3d(
+              ${secondX}px,
+              ${secondY}px,
+              0
+            )
+            scale(${secondScale})
+          `
+      },
+
+      {
+        offset:.82,
+
+        transform:
+          `
+            translate3d(
+              ${thirdX}px,
+              ${thirdY}px,
+              0
+            )
+            scale(${thirdScale})
+          `
+      },
+
+      {
+        offset:1,
+
         transform:
           `
             translate3d(
@@ -170,17 +356,15 @@ function moveTextToTarget(
               ${moveY}px,
               0
             )
-            scale(${scale})
-          `,
-
-        opacity:1
+            scale(${finalScale})
+          `
       }
     ],
     {
       duration:
         options.duration
         ??
-        1900,
+        2500,
 
       delay:
         options.delay
@@ -188,7 +372,7 @@ function moveTextToTarget(
         0,
 
       easing:
-        "cubic-bezier(.22,.72,.18,1)",
+        "cubic-bezier(.20,.68,.18,1)",
 
       fill:
         "forwards"
@@ -198,57 +382,14 @@ function moveTextToTarget(
 }
 
 
-/* ==================================================
-   ENTER PARENT WORLD
-   ================================================== */
+/*   begin curved morph*/
 
-function enterParentWorld(){
-
-  if(
-    arrivalDone
-    ||
-    !appRoot
-    ||
-    !arrivalScreen
-  ){
-    return;
-  }
-
-
-  arrivalDone =
-    true;
-
-
-  if(arrivalTimer){
-
-    clearTimeout(
-      arrivalTimer
-    );
-
-
-    arrivalTimer =
-      null;
-
-  }
-
-
-  /*
-    Expose the final interface positions.
-
-    Header words remain invisible because CSS
-    keeps .identity at opacity 0.
-  */
+function beginMorph(){
 
   appRoot.classList.add(
     "is-entering"
   );
 
-
-  /*
-    Wait one browser frame so the destination
-    elements have their final layout positions
-    before measuring them.
-  */
 
   requestAnimationFrame(
     ()=>{
@@ -262,7 +403,7 @@ function enterParentWorld(){
               arrivalEyebrow,
               headerEyebrow,
               {
-                duration:1900,
+                duration:2450,
                 delay:0
               }
             ),
@@ -271,7 +412,7 @@ function enterParentWorld(){
               arrivalGreeting,
               headerGreeting,
               {
-                duration:1950,
+                duration:2500,
                 delay:35
               }
             ),
@@ -280,7 +421,7 @@ function enterParentWorld(){
               arrivalMessage,
               headerMessage,
               {
-                duration:2000,
+                duration:2550,
                 delay:70
               }
             )
@@ -289,12 +430,6 @@ function enterParentWorld(){
             Boolean
           );
 
-
-          /*
-            Wait until every part of the greeting
-            has physically arrived at its final
-            destination.
-          */
 
           Promise
             .all(
@@ -309,13 +444,6 @@ function enterParentWorld(){
             .then(
               ()=>{
 
-                /*
-                  The moving copy is now directly
-                  over the permanent header.
-
-                  Swap them on the same frame.
-                */
-
                 appRoot.classList.add(
                   "is-ready"
                 );
@@ -326,11 +454,6 @@ function enterParentWorld(){
                   "true"
                 );
 
-
-                /*
-                  Clean up animation transforms
-                  after the arrival screen is gone.
-                */
 
                 animations.forEach(
                   animation=>{
@@ -352,9 +475,37 @@ function enterParentWorld(){
 }
 
 
-/* ==================================================
-   START ARRIVAL
-   ================================================== */
+/*   enter parent world*/
+
+async function enterParentWorld(){
+
+  if(
+    arrivalDone
+    ||
+    !appRoot
+    ||
+    !arrivalScreen
+  ){
+    return;
+  }
+
+
+  arrivalDone =
+    true;
+
+
+  stopArrivalBreath();
+
+
+  await playTapResponse();
+
+
+  beginMorph();
+
+}
+
+
+/*   activate arrival*/
 
 export function activateArrival(){
 
@@ -369,22 +520,6 @@ export function activateArrival(){
 
   syncArrivalCopy();
 
-
-  /*
-    Give the parent time to simply arrive
-    before anything starts moving.
-  */
-
-  arrivalTimer =
-    window.setTimeout(
-      enterParentWorld,
-      3200
-    );
-
-
-  /*
-    Tapping lets them enter immediately.
-  */
 
   arrivalScreen.addEventListener(
     "pointerup",
