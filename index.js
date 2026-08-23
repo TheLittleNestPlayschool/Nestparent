@@ -29,6 +29,11 @@ import {
 } from "./parent_nest_control.js";
 
 
+import {
+  activateStageRouter
+} from "./parent_stage_router.js";
+
+
 /*   start parent app*/
 
 applyTimeAtmosphere();
@@ -44,3 +49,5 @@ activateNavigation();
 activateArrival();
 
 activateNestControl();
+
+activateStageRouter();
