@@ -92,9 +92,9 @@
   transform-origin:center;
 
   transition:
-    transform 1.18s cubic-bezier(.20,.62,.18,1),
-    opacity .85s ease,
-    filter .85s ease;
+    transform 1.45s cubic-bezier(.20,.62,.18,1),
+    opacity 1.05s ease,
+    filter 1.05s ease;
 
   will-change:
     transform,
