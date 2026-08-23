@@ -16,6 +16,10 @@ let memoriesCard =
   null;
 
 
+let currentNestCard =
+  null;
+
+
 /*   open memories stage*/
 
 export function openMemoriesStage({
@@ -38,6 +42,10 @@ export function openMemoriesStage({
     true;
 
 
+  currentNestCard =
+    nestCard;
+
+
   memoriesCard =
     createMemoriesCard();
 
@@ -50,7 +58,7 @@ export function openMemoriesStage({
   void memoriesCard.offsetWidth;
 
 
-  /*   move nest card to the right*/
+  /*   move nest card to previous position*/
 
   renderCardOffset(
     nestCard,
@@ -58,7 +66,24 @@ export function openMemoriesStage({
   );
 
 
-  /*   bring memories card into center*/
+  nestCard.classList.add(
+    "is-stage-back"
+  );
+
+
+  nestCard.style.pointerEvents =
+    "auto";
+
+
+  /*   tapping previous card returns one level*/
+
+  nestCard.addEventListener(
+    "click",
+    handleNestCardBack
+  );
+
+
+  /*   bring memories into center*/
 
   requestAnimationFrame(
     ()=>{
@@ -86,11 +111,28 @@ export function openMemoriesStage({
 }
 
 
+/*   previous card tap*/
+
+function handleNestCardBack(
+  event
+){
+
+  event.stopPropagation();
+
+
+  closeMemoriesStage({
+    nestCard:
+      currentNestCard
+  });
+
+}
+
+
 /*   close memories stage*/
 
 export function closeMemoriesStage({
   nestCard
-}){
+} = {}){
 
   if(
     !memoriesOpen
@@ -101,6 +143,12 @@ export function closeMemoriesStage({
 
   memoriesOpen =
     false;
+
+
+  const previousNestCard =
+    nestCard
+    ||
+    currentNestCard;
 
 
   if(
@@ -115,13 +163,28 @@ export function closeMemoriesStage({
 
 
   if(
-    nestCard
+    previousNestCard
   ){
 
+    previousNestCard.classList.remove(
+      "is-stage-back"
+    );
+
+
+    previousNestCard.removeEventListener(
+      "click",
+      handleNestCardBack
+    );
+
+
     renderCardOffset(
-      nestCard,
+      previousNestCard,
       0
     );
+
+
+    previousNestCard.style.pointerEvents =
+      "auto";
 
   }
 
@@ -131,6 +194,10 @@ export function closeMemoriesStage({
 
 
   memoriesCard =
+    null;
+
+
+  currentNestCard =
     null;
 
 
