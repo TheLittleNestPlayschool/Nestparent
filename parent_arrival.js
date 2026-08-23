@@ -127,21 +127,44 @@ function createArrivalStars(){
 
 
   const starPositions = [
-    [11,16],
-    [28,24],
-    [72,15],
-    [88,29],
-    [16,43],
-    [82,47],
-    [8,67],
-    [25,76],
-    [74,70],
-    [91,79],
-    [40,12],
-    [61,83],
-    [14,88],
-    [87,60]
+    [8,13],
+    [20,22],
+    [36,11],
+    [55,18],
+    [73,12],
+    [90,20],
+
+    [12,36],
+    [30,31],
+    [69,33],
+    [87,40],
+
+    [6,55],
+    [22,62],
+    [79,56],
+    [93,64],
+
+    [14,76],
+    [34,82],
+    [61,74],
+    [84,83],
+
+    [9,91],
+    [48,91],
+    [72,92]
   ];
+
+
+  const featureStars =
+    new Set(
+      [
+        2,
+        5,
+        9,
+        13,
+        17
+      ]
+    );
 
 
   starPositions.forEach(
@@ -173,60 +196,103 @@ function createArrivalStars(){
       }
 
 
-      const size =
+      if(
+        featureStars.has(
+          index
+        )
+      ){
+
+        star.classList.add(
+          "is-feature"
+        );
+
+      }
+
+
+      let size =
+        2.3;
+
+
+      if(
+        featureStars.has(
+          index
+        )
+      ){
+
+        size =
+          4.4;
+
+      }
+
+
+      else if(
         index %
-        5 ===
+        4 ===
         0
-          ?
-            3
-          :
-          index %
-          3 ===
-          0
-            ?
-              2
-            :
-              1.5;
+      ){
+
+        size =
+          3.2;
+
+      }
+
+
+      else if(
+        index %
+        3 ===
+        0
+      ){
+
+        size =
+          2.7;
+
+      }
 
 
       const opacity =
-        .42
-        +
-        (
-          index %
-          4
+        featureStars.has(
+          index
         )
-        *
-        .11;
+          ?
+            1
+          :
+            .68
+            +
+            (
+              index %
+              3
+            )
+            *
+            .10;
 
 
       const speed =
-        2600
+        2100
         +
         (
           index %
-          5
+          6
         )
         *
-        570;
+        430;
 
 
       const delay =
         (
           index %
-          7
+          8
         )
         *
-        -430;
+        -370;
 
 
       const leaveDelay =
         (
           index *
-          83
+          67
         )
         %
-        620;
+        720;
 
 
       star.style.setProperty(
@@ -318,7 +384,7 @@ function releaseArrivalStars(){
       }
 
     },
-    1650
+    1850
   );
 
 }
@@ -571,7 +637,8 @@ function buildCurveFrames(
   };
 
 
-  const frames = [];
+  const frames =
+    [];
 
 
   const steps =
@@ -579,8 +646,10 @@ function buildCurveFrames(
 
 
   for(
-    let step = 0;
-    step <= steps;
+    let step =
+      0;
+    step <=
+      steps;
     step++
   ){
 
