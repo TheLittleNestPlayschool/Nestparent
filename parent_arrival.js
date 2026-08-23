@@ -125,6 +125,32 @@ function stopArrivalBreath(){
 }
 
 
+/*   tap bloom*/
+
+function playTapBloom(){
+
+  if(
+    !arrivalScreen
+  ){
+    return;
+  }
+
+
+  arrivalScreen.classList.remove(
+    "is-tapped"
+  );
+
+
+  void arrivalScreen.offsetWidth;
+
+
+  arrivalScreen.classList.add(
+    "is-tapped"
+  );
+
+}
+
+
 /*   tap response*/
 
 function playTapResponse(){
@@ -136,29 +162,60 @@ function playTapResponse(){
   }
 
 
+  playTapBloom();
+
+
   const animation =
     arrivalCopy.animate(
       [
         {
+          offset:0,
+
           transform:
-            "translateY(-2vh) scale(1)"
+            "translateY(-2vh) scale(1)",
+
+          filter:
+            "brightness(1)"
         },
 
         {
+          offset:.38,
+
           transform:
-            "translateY(-2vh) scale(1.014)"
+            "translateY(-2vh) scale(1.038)",
+
+          filter:
+            "brightness(1.035)"
         },
 
         {
+          offset:.72,
+
           transform:
-            "translateY(-2vh) scale(1)"
+            "translateY(-2vh) scale(1.018)",
+
+          filter:
+            "brightness(1.018)"
+        },
+
+        {
+          offset:1,
+
+          transform:
+            "translateY(-2vh) scale(1.01)",
+
+          filter:
+            "brightness(1)"
         }
       ],
       {
-        duration:320,
+        duration:540,
 
         easing:
-          "cubic-bezier(.22,.72,.18,1)"
+          "cubic-bezier(.22,.72,.18,1)",
+
+        fill:
+          "forwards"
       }
     );
 
@@ -269,14 +326,6 @@ function buildCurveFrames(
     y:moveY
   };
 
-
-  /*
-    The control point sits above and to the
-    right of the starting position.
-
-    This creates one broad continuous curve
-    rather than a series of directional turns.
-  */
 
   const rightDrift =
     Math.min(
@@ -521,6 +570,14 @@ async function enterParentWorld(){
 
 
   await playTapResponse();
+
+
+  if(arrivalCopy){
+
+    arrivalCopy.style.transform =
+      "translateY(-2vh) scale(1.01)";
+
+  }
 
 
   beginMorph();
