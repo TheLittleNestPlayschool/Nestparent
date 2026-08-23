@@ -10,6 +10,20 @@ const arrivalScreen =
   );
 
 
+const arrivalCopy =
+  arrivalScreen
+    ?.querySelector(
+      ".arrival-copy"
+    );
+
+
+const arrivalEyebrow =
+  arrivalScreen
+    ?.querySelector(
+      ".arrival-eyebrow"
+    );
+
+
 const arrivalGreeting =
   document.getElementById(
     "arrivalGreeting"
@@ -19,6 +33,31 @@ const arrivalGreeting =
 const arrivalMessage =
   document.getElementById(
     "arrivalMessage"
+  );
+
+
+const headerIdentity =
+  document.querySelector(
+    ".topbar .identity"
+  );
+
+
+const headerEyebrow =
+  headerIdentity
+    ?.querySelector(
+      ".eyebrow"
+    );
+
+
+const headerGreeting =
+  document.getElementById(
+    "timeGreeting"
+  );
+
+
+const headerMessage =
+  document.getElementById(
+    "timeMessage"
   );
 
 
@@ -36,40 +75,125 @@ let arrivalTimer =
 
 function syncArrivalCopy(){
 
-  const greeting =
-    document
-      .getElementById(
-        "timeGreeting"
-      )
-      ?.textContent
-    ||
-    "Good morning, Mom";
-
-
-  const message =
-    document
-      .getElementById(
-        "timeMessage"
-      )
-      ?.textContent
-    ||
-    "Mia's morning is waiting for you.";
-
-
-  if(arrivalGreeting){
+  if(
+    arrivalGreeting
+    &&
+    headerGreeting
+  ){
 
     arrivalGreeting.textContent =
-      greeting;
+      headerGreeting.textContent;
 
   }
 
 
-  if(arrivalMessage){
+  if(
+    arrivalMessage
+    &&
+    headerMessage
+  ){
 
     arrivalMessage.textContent =
-      message;
+      headerMessage.textContent;
 
   }
+
+}
+
+
+/* ==================================================
+   CREATE TEXT MOVE
+   ================================================== */
+
+function moveTextToTarget(
+  source,
+  target,
+  options={}
+){
+
+  if(
+    !source
+    ||
+    !target
+  ){
+    return null;
+  }
+
+
+  const sourceRect =
+    source.getBoundingClientRect();
+
+
+  const targetRect =
+    target.getBoundingClientRect();
+
+
+  const moveX =
+    targetRect.left -
+    sourceRect.left;
+
+
+  const moveY =
+    targetRect.top -
+    sourceRect.top;
+
+
+  /*
+    Use the height difference to create a
+    natural uniform shrink while the words
+    travel toward the header.
+  */
+
+  const scale =
+    sourceRect.height > 0
+      ?
+        targetRect.height /
+        sourceRect.height
+      :
+        1;
+
+
+  return source.animate(
+    [
+      {
+        transform:
+          "translate3d(0,0,0) scale(1)",
+
+        opacity:1
+      },
+
+      {
+        transform:
+          `
+            translate3d(
+              ${moveX}px,
+              ${moveY}px,
+              0
+            )
+            scale(${scale})
+          `,
+
+        opacity:1
+      }
+    ],
+    {
+      duration:
+        options.duration
+        ??
+        1900,
+
+      delay:
+        options.delay
+        ??
+        0,
+
+      easing:
+        "cubic-bezier(.22,.72,.18,1)",
+
+      fill:
+        "forwards"
+    }
+  );
 
 }
 
@@ -80,7 +204,13 @@ function syncArrivalCopy(){
 
 function enterParentWorld(){
 
-  if(arrivalDone){
+  if(
+    arrivalDone
+    ||
+    !appRoot
+    ||
+    !arrivalScreen
+  ){
     return;
   }
 
@@ -102,29 +232,121 @@ function enterParentWorld(){
   }
 
 
-  if(appRoot){
+  /*
+    Expose the final interface positions.
 
-    appRoot.classList.add(
-      "is-ready"
-    );
+    Header words remain invisible because CSS
+    keeps .identity at opacity 0.
+  */
 
-  }
+  appRoot.classList.add(
+    "is-entering"
+  );
 
 
-  window.setTimeout(
+  /*
+    Wait one browser frame so the destination
+    elements have their final layout positions
+    before measuring them.
+  */
+
+  requestAnimationFrame(
     ()=>{
 
-      if(arrivalScreen){
+      requestAnimationFrame(
+        ()=>{
 
-        arrivalScreen.setAttribute(
-          "aria-hidden",
-          "true"
-        );
+          const animations = [
 
-      }
+            moveTextToTarget(
+              arrivalEyebrow,
+              headerEyebrow,
+              {
+                duration:1900,
+                delay:0
+              }
+            ),
 
-    },
-    1200
+            moveTextToTarget(
+              arrivalGreeting,
+              headerGreeting,
+              {
+                duration:1950,
+                delay:35
+              }
+            ),
+
+            moveTextToTarget(
+              arrivalMessage,
+              headerMessage,
+              {
+                duration:2000,
+                delay:70
+              }
+            )
+
+          ].filter(
+            Boolean
+          );
+
+
+          /*
+            Wait until every part of the greeting
+            has physically arrived at its final
+            destination.
+          */
+
+          Promise
+            .all(
+              animations.map(
+                animation=>
+                  animation.finished
+                    .catch(
+                      ()=>{}
+                    )
+              )
+            )
+            .then(
+              ()=>{
+
+                /*
+                  The moving copy is now directly
+                  over the permanent header.
+
+                  Swap them on the same frame.
+                */
+
+                appRoot.classList.add(
+                  "is-ready"
+                );
+
+
+                arrivalScreen.setAttribute(
+                  "aria-hidden",
+                  "true"
+                );
+
+
+                /*
+                  Clean up animation transforms
+                  after the arrival screen is gone.
+                */
+
+                animations.forEach(
+                  animation=>{
+
+                    animation.cancel();
+
+                  }
+                );
+
+              }
+            );
+
+        }
+      );
+
+    }
   );
 
 }
@@ -148,12 +370,21 @@ export function activateArrival(){
   syncArrivalCopy();
 
 
+  /*
+    Give the parent time to simply arrive
+    before anything starts moving.
+  */
+
   arrivalTimer =
     window.setTimeout(
       enterParentWorld,
       3200
     );
 
+
+  /*
+    Tapping lets them enter immediately.
+  */
 
   arrivalScreen.addEventListener(
     "pointerup",
