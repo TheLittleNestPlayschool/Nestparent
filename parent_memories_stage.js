@@ -174,7 +174,7 @@ export function closeMemoriesStage({
     currentNestCard;
 
 
-  /*   memories begins leaving first*/
+  /*   memories fades underneath*/
 
   if(
     cardToRemove
@@ -189,10 +189,14 @@ export function closeMemoriesStage({
       "is-leaving"
     );
 
+
+    cardToRemove.style.pointerEvents =
+      "none";
+
   }
 
 
-  /*   disable previous-card behavior while returning*/
+  /*   stop previous-card behavior*/
 
   if(
     previousNestCard
@@ -204,6 +208,16 @@ export function closeMemoriesStage({
     );
 
 
+    previousNestCard.classList.remove(
+      "is-stage-back"
+    );
+
+
+    previousNestCard.classList.add(
+      "is-returning-front"
+    );
+
+
     previousNestCard.style.pointerEvents =
       "none";
 
@@ -211,10 +225,9 @@ export function closeMemoriesStage({
 
 
   /*
-    Give Memories a small head start.
-
-    Then let the Nest card begin its
-    relaxed glide back into the center.
+    The Nest begins coming forward
+    almost immediately, over the
+    fading Memories card.
   */
 
   closeTimer =
@@ -229,32 +242,19 @@ export function closeMemoriesStage({
           previousNestCard
         ){
 
-          previousNestCard.classList.remove(
-            "is-stage-back"
-          );
-
-
           renderCardOffset(
             previousNestCard,
             0
           );
 
-
-          previousNestCard.style.pointerEvents =
-            "auto";
-
         }
 
       },
-      220
+      110
     );
 
 
-  /*
-    Memories stays above the returning
-    Nest card while fading, then leaves
-    the stage once it is no longer useful.
-  */
+  /*   remove memories after fade*/
 
   window.setTimeout(
     ()=>{
@@ -270,7 +270,31 @@ export function closeMemoriesStage({
       }
 
     },
-    1450
+    1050
+  );
+
+
+  /*   release foreground state*/
+
+  window.setTimeout(
+    ()=>{
+
+      if(
+        previousNestCard
+      ){
+
+        previousNestCard.classList.remove(
+          "is-returning-front"
+        );
+
+
+        previousNestCard.style.pointerEvents =
+          "auto";
+
+      }
+
+    },
+    1700
   );
 
 
