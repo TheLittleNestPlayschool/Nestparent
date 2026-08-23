@@ -1,7 +1,7 @@
 const experiences = [
   {
     type: "sessionlklklklkl",
-    title: "Mia just finished Session 1.",
+    title: "Mia just finished Session 1 ssssss.",
     label: "Today at The Little Nest",
     copy: "Letter A, Number 1, movement, listening and self-expression were all part of her morning.",
     photo: "https://images.unsplash.com/photo-1602030028438-4cf153cbae9e?auto=format&fit=crop&w=1200&q=86",
@@ -16,7 +16,7 @@ const experiences = [
   },
   {
     type: "learning",
-    title: "Little hands had a lot to do.",
+    title: "Little hands had a lot to do sssssss.",
     label: "Strongest learning ingredient",
     copy: "Fine motor development carries one of the strongest weights in Session 1.",
     photo: "https://images.unsplash.com/photo-1598880940080-ff9a29891b85?auto=format&fit=crop&w=1200&q=86",
@@ -31,7 +31,7 @@ const experiences = [
   },
   {
     type: "activity",
-    title: "Learning through movement.",
+    title: "Learning through movement ssssss.",
     label: "One part of Session 1",
     copy: "The Name Movement Game gives children a chance to move, participate and connect their bodies with the group experience.",
     photo: "https://images.unsplash.com/photo-1560785496-3c9d27877182?auto=format&fit=crop&w=1200&q=86",
@@ -45,7 +45,7 @@ const experiences = [
   },
   {
     type: "personal",
-    title: "There was also room for Mia to be Mia.",
+    title: "There was also room for Mia to be Mia sssssss.",
     label: "Personal development",
     copy: "Session 1 gives strong weight to self-expression, participation and personal awareness.",
     photo: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1200&q=86",
@@ -59,7 +59,7 @@ const experiences = [
   },
   {
     type: "world",
-    title: "A small piece of her world.",
+    title: "A small piece of her world sssssss.",
     label: "My World",
     copy: "Session 1 also includes exploration beyond letters and numbers, with a lighter My World contribution.",
     photo: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=86",
