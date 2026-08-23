@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <main class="app" id="app">
+  <main class="app arrival" id="app">
     <div class="time-atmosphere" aria-hidden="true">
       <span class="color-field field-a"></span>
       <span class="color-field field-b"></span>
@@ -20,7 +20,7 @@
     </div>
     <div class="grain"></div>
 
-    <header class="topbar">
+    <header class="topbar" id="topbar">
       <div class="identity">
         <span class="eyebrow">The Little Nest</span>
         <span class="hello" id="timeGreeting">Good morning, Mom</span>
@@ -31,7 +31,7 @@
       </button>
     </header>
 
-    <section class="experience-shell">
+    <section class="experience-shell" id="experienceShell">
       <div class="intro intro-quiet" aria-hidden="true"></div>
 
       <div class="carousel-wrap">
@@ -432,6 +432,50 @@
     }
 
     applyTimeAtmosphere();
+
+    
+    const appRoot=document.getElementById("app");
+    const topbar=document.getElementById("topbar");
+    let arrivalDone=false;
+    let arrivalTimer=null;
+
+    function enterParentWorld(){
+      if(arrivalDone) return;
+      arrivalDone=true;
+
+      if(arrivalTimer){
+        clearTimeout(arrivalTimer);
+        arrivalTimer=null;
+      }
+
+      appRoot.classList.add("entering");
+
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          appRoot.classList.remove("arrival");
+          appRoot.classList.add("ready");
+        });
+      });
+
+      window.setTimeout(()=>{
+        appRoot.classList.remove("entering");
+      },1400);
+    }
+
+    function beginArrival(){
+      arrivalTimer=window.setTimeout(enterParentWorld,3200);
+
+      appRoot.addEventListener("pointerup",(event)=>{
+        if(arrivalDone) return;
+
+        const target=event.target;
+        if(target.closest("button")) return;
+
+        enterParentWorld();
+      },{passive:true});
+    }
+
+    beginArrival();
 
         buildCards();
   </script>
