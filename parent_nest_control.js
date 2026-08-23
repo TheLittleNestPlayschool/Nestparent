@@ -170,6 +170,22 @@ function handleNestOrb(){
 }
 
 
+/*   handle main stage return*/
+
+function handleMainStageReturn(){
+
+  if(
+    !isNestStageOpen()
+  ){
+    return;
+  }
+
+
+  closeNest();
+
+}
+
+
 /*   activate nest control*/
 
 export function activateNestControl(){
@@ -184,6 +200,12 @@ export function activateNestControl(){
   nestOrb.addEventListener(
     "click",
     handleNestOrb
+  );
+
+
+  window.addEventListener(
+    "parent:return-main-stage",
+    handleMainStageReturn
   );
 
 }
