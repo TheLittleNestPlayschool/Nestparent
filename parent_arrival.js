@@ -155,15 +155,17 @@ function createArrivalStars(){
   ];
 
 
+  /*   keep stronger twinkles around the outside only*/
+
   const featureStars =
     new Set(
       [
-        2,
+        0,
         5,
-        8,
-        11,
-        15,
-        18
+        10,
+        13,
+        18,
+        20
       ]
     );
 
@@ -184,17 +186,11 @@ function createArrivalStars(){
         "arrival-star";
 
 
-      if(
-        index %
-        3 ===
-        1
-      ){
+      /*   all stars use the lighter icy blue*/
 
-        star.classList.add(
-          "is-ice"
-        );
-
-      }
+      star.classList.add(
+        "is-ice"
+      );
 
 
       if(
