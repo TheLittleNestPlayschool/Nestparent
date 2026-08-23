@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <main class="app arrival" id="app">
+  <main class="app" id="app">
     <div class="time-atmosphere" aria-hidden="true">
       <span class="color-field field-a"></span>
       <span class="color-field field-b"></span>
@@ -20,7 +20,16 @@
     </div>
     <div class="grain"></div>
 
-    <header class="topbar" id="topbar">
+    
+    <section class="arrival-screen" id="arrivalScreen" aria-label="Welcome">
+      <div class="arrival-copy">
+        <span class="arrival-eyebrow">The Little Nest</span>
+        <h1 class="arrival-greeting" id="arrivalGreeting">Good morning, Mom</h1>
+        <p class="arrival-message" id="arrivalMessage">Mia's morning is waiting for you.</p>
+      </div>
+    </section>
+
+<header class="topbar app-content" id="topbar">
       <div class="identity">
         <span class="eyebrow">The Little Nest</span>
         <span class="hello" id="timeGreeting">Good morning, Mom</span>
@@ -31,7 +40,7 @@
       </button>
     </header>
 
-    <section class="experience-shell" id="experienceShell">
+    <section class="experience-shell app-content" id="experienceShell">
       <div class="intro intro-quiet" aria-hidden="true"></div>
 
       <div class="carousel-wrap">
@@ -39,7 +48,7 @@
       </div>
     </section>
 
-    <div class="hint" id="hint">
+    <div class="hint app-content" id="hint">
       <span class="hint-line"></span>
       <span>swipe to wander</span>
       <span class="hint-line"></span>
@@ -47,7 +56,7 @@
 
     <div class="wash" id="wash"></div>
 
-    <nav class="nav-panel" id="navPanel" aria-label="Parent navigation">
+    <nav class="nav-panel app-content" id="navPanel" aria-label="Parent navigation">
       <button class="nav-item active">
         <span class="nav-icon">⌂</span>
         <span class="nav-text">Nest</span>
@@ -66,7 +75,7 @@
       </button>
     </nav>
 
-    <button class="nav-orb" id="navOrb" aria-label="Open navigation"></button>
+    <button class="nav-orb app-content" id="navOrb" aria-label="Open navigation"></button>
 
     <section class="deep-sheet" id="deepSheet" aria-hidden="true">
       <div class="sheet-handle"></div>
