@@ -71,13 +71,55 @@ export const memoryChapters = [
 
   {
     id:
-      "first-days",
+      "earlier",
 
     title:
-      "First Days",
+      "Earlier Memories",
 
     copy:
-      "Where her Little Nest story began",
+      "Wander further back through Mia's story",
+
+    count:
+      36
+  }
+
+];
+
+
+/*   special memory collections*/
+
+export const memoryCollections = [
+
+  {
+    id:
+      "recognition",
+
+    title:
+      "Recognition Days",
+
+    symbol:
+      "✦",
+
+    available:
+      true,
+
+    count:
+      24
+  },
+
+
+  {
+    id:
+      "birthdays",
+
+    title:
+      "Birthdays",
+
+    symbol:
+      "♡",
+
+    available:
+      true,
 
     count:
       18
