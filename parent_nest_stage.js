@@ -16,6 +16,10 @@ let nestCard =
   null;
 
 
+let returnTimer =
+  null;
+
+
 /*   open nest stage*/
 
 export function openNestStage({
@@ -27,9 +31,26 @@ export function openNestStage({
   if(
     nestOpen
     ||
+    nestCard
+    ||
     !carousel
   ){
     return;
+  }
+
+
+  if(
+    returnTimer
+  ){
+
+    clearTimeout(
+      returnTimer
+    );
+
+
+    returnTimer =
+      null;
+
   }
 
 
@@ -59,12 +80,16 @@ export function openNestStage({
   void nestCard.offsetWidth;
 
 
+  /*   move current Mia card to the right*/
+
   renderCardPositions({
     carousel,
     activeIndex,
     nestOpen:true
   });
 
+
+  /*   bring Nest card into center*/
 
   requestAnimationFrame(
     ()=>{
@@ -101,6 +126,8 @@ export function closeNestStage({
 
   if(
     !nestOpen
+    ||
+    !carousel
   ){
     return;
   }
@@ -110,31 +137,62 @@ export function closeNestStage({
     false;
 
 
-  if(
-    nestCard
-  ){
-
-    nestCard.classList.remove(
-      "is-visible"
-    );
-
-  }
-
-
-  renderCardPositions({
-    carousel,
-    activeIndex,
-    nestOpen:false
-  });
-
-
   const cardToRemove =
     nestCard;
 
 
-  nestCard =
-    null;
+  /*   Nest begins leaving first*/
 
+  if(
+    cardToRemove
+  ){
+
+    cardToRemove.classList.remove(
+      "is-visible"
+    );
+
+
+    cardToRemove.classList.add(
+      "is-leaving"
+    );
+
+
+    cardToRemove.style.pointerEvents =
+      "none";
+
+  }
+
+
+  /*
+    Give the Nest card a small head start.
+
+    Mia then begins her relaxed glide
+    back toward the center.
+  */
+
+  returnTimer =
+    window.setTimeout(
+      ()=>{
+
+        returnTimer =
+          null;
+
+
+        renderCardPositions({
+          carousel,
+          activeIndex,
+          nestOpen:false
+        });
+
+      },
+      220
+    );
+
+
+  /*
+    Keep the outgoing Nest card alive
+    long enough to finish its exit.
+  */
 
   window.setTimeout(
     ()=>{
@@ -149,8 +207,19 @@ export function closeNestStage({
 
       }
 
+
+      if(
+        nestCard ===
+        cardToRemove
+      ){
+
+        nestCard =
+          null;
+
+      }
+
     },
-    1500
+    1450
   );
 
 }
