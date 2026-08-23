@@ -146,7 +146,7 @@ function playTapResponse(){
 
         {
           transform:
-            "translateY(-2vh) scale(1.018)"
+            "translateY(-2vh) scale(1.014)"
         },
 
         {
@@ -155,7 +155,7 @@ function playTapResponse(){
         }
       ],
       {
-        duration:260,
+        duration:320,
 
         easing:
           "cubic-bezier(.22,.72,.18,1)"
@@ -171,12 +171,190 @@ function playTapResponse(){
 }
 
 
+/*   quadratic curve point*/
+
+function getCurvePoint(
+  start,
+  control,
+  end,
+  amount
+){
+
+  const inverse =
+    1 - amount;
+
+
+  return {
+
+    x:
+      inverse *
+      inverse *
+      start.x
+      +
+      2 *
+      inverse *
+      amount *
+      control.x
+      +
+      amount *
+      amount *
+      end.x,
+
+    y:
+      inverse *
+      inverse *
+      start.y
+      +
+      2 *
+      inverse *
+      amount *
+      control.y
+      +
+      amount *
+      amount *
+      end.y
+
+  };
+
+}
+
+
+/*   smooth scale*/
+
+function getScaleAtPoint(
+  finalScale,
+  amount
+){
+
+  const smoothAmount =
+    amount *
+    amount *
+    (
+      3 -
+      2 *
+      amount
+    );
+
+
+  return (
+    1
+    +
+    (
+      finalScale -
+      1
+    )
+    *
+    smoothAmount
+  );
+
+}
+
+
+/*   build flowing curve*/
+
+function buildCurveFrames(
+  moveX,
+  moveY,
+  finalScale
+){
+
+  const start = {
+    x:0,
+    y:0
+  };
+
+
+  const end = {
+    x:moveX,
+    y:moveY
+  };
+
+
+  /*
+    The control point sits above and to the
+    right of the starting position.
+
+    This creates one broad continuous curve
+    rather than a series of directional turns.
+  */
+
+  const rightDrift =
+    Math.min(
+      78,
+      window.innerWidth *
+      .12
+    );
+
+
+  const control = {
+    x:rightDrift,
+    y:moveY * .48
+  };
+
+
+  const frames = [];
+
+
+  const steps =
+    18;
+
+
+  for(
+    let step = 0;
+    step <= steps;
+    step++
+  ){
+
+    const amount =
+      step /
+      steps;
+
+
+    const point =
+      getCurvePoint(
+        start,
+        control,
+        end,
+        amount
+      );
+
+
+    const scale =
+      getScaleAtPoint(
+        finalScale,
+        amount
+      );
+
+
+    frames.push(
+      {
+        offset:amount,
+
+        transform:
+          `
+            translate3d(
+              ${point.x}px,
+              ${point.y}px,
+              0
+            )
+            scale(${scale})
+          `
+      }
+    );
+
+  }
+
+
+  return frames;
+
+}
+
+
 /*   curved text movement*/
 
 function moveTextToTarget(
   source,
-  target,
-  options={}
+  target
 ){
 
   if(
@@ -215,164 +393,21 @@ function moveTextToTarget(
         1;
 
 
-  const curveRight =
-    Math.min(
-      64,
-      window.innerWidth *
-      .10
+  const frames =
+    buildCurveFrames(
+      moveX,
+      moveY,
+      finalScale
     );
 
 
-  const firstX =
-    curveRight;
-
-
-  const firstY =
-    moveY *
-    .22;
-
-
-  const secondX =
-    moveX *
-    .46
-    +
-    curveRight *
-    .55;
-
-
-  const secondY =
-    moveY *
-    .62;
-
-
-  const thirdX =
-    moveX *
-    .82
-    +
-    curveRight *
-    .12;
-
-
-  const thirdY =
-    moveY *
-    .88;
-
-
-  const firstScale =
-    1 +
-    (
-      finalScale -
-      1
-    )
-    *
-    .20;
-
-
-  const secondScale =
-    1 +
-    (
-      finalScale -
-      1
-    )
-    *
-    .58;
-
-
-  const thirdScale =
-    1 +
-    (
-      finalScale -
-      1
-    )
-    *
-    .86;
-
-
   return source.animate(
-    [
-      {
-        offset:0,
-
-        transform:
-          `
-            translate3d(
-              0,
-              0,
-              0
-            )
-            scale(1)
-          `
-      },
-
-      {
-        offset:.24,
-
-        transform:
-          `
-            translate3d(
-              ${firstX}px,
-              ${firstY}px,
-              0
-            )
-            scale(${firstScale})
-          `
-      },
-
-      {
-        offset:.57,
-
-        transform:
-          `
-            translate3d(
-              ${secondX}px,
-              ${secondY}px,
-              0
-            )
-            scale(${secondScale})
-          `
-      },
-
-      {
-        offset:.82,
-
-        transform:
-          `
-            translate3d(
-              ${thirdX}px,
-              ${thirdY}px,
-              0
-            )
-            scale(${thirdScale})
-          `
-      },
-
-      {
-        offset:1,
-
-        transform:
-          `
-            translate3d(
-              ${moveX}px,
-              ${moveY}px,
-              0
-            )
-            scale(${finalScale})
-          `
-      }
-    ],
+    frames,
     {
-      duration:
-        options.duration
-        ??
-        2500,
-
-      delay:
-        options.delay
-        ??
-        0,
+      duration:3150,
 
       easing:
-        "cubic-bezier(.20,.68,.18,1)",
+        "cubic-bezier(.20,.54,.16,1)",
 
       fill:
         "forwards"
@@ -401,29 +436,17 @@ function beginMorph(){
 
             moveTextToTarget(
               arrivalEyebrow,
-              headerEyebrow,
-              {
-                duration:2450,
-                delay:0
-              }
+              headerEyebrow
             ),
 
             moveTextToTarget(
               arrivalGreeting,
-              headerGreeting,
-              {
-                duration:2500,
-                delay:35
-              }
+              headerGreeting
             ),
 
             moveTextToTarget(
               arrivalMessage,
-              headerMessage,
-              {
-                duration:2550,
-                delay:70
-              }
+              headerMessage
             )
 
           ].filter(
