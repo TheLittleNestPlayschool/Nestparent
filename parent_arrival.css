@@ -53,8 +53,8 @@
 
   background:
     rgba(
-      255,
-      255,
+      72,
+      146,
       255,
       1
     );
@@ -62,30 +62,30 @@
   box-shadow:
     0 0 3px
     rgba(
-      255,
-      255,
+      94,
+      164,
       255,
       1
     ),
     0 0 8px
     rgba(
+      91,
+      165,
       255,
-      255,
-      255,
-      .90
+      .95
     ),
-    0 0 16px
+    0 0 18px
     rgba(
-      204,
-      218,
-      222,
-      .62
+      75,
+      142,
+      255,
+      .68
     );
 
   opacity:var(--star-opacity);
 
   transform:
-    scale(.8);
+    scale(.78);
 
   animation:
     starBlink
@@ -100,41 +100,41 @@
 }
 
 
-.arrival-star.is-silver{
+.arrival-star.is-ice{
   background:
     rgba(
-      215,
-      225,
-      229,
+      167,
+      214,
+      255,
       1
     );
 
   box-shadow:
     0 0 3px
     rgba(
-      235,
-      242,
-      244,
+      203,
+      232,
+      255,
       1
     ),
     0 0 9px
     rgba(
-      210,
-      223,
-      227,
-      .95
+      146,
+      204,
+      255,
+      .98
     ),
-    0 0 18px
+    0 0 20px
     rgba(
-      184,
-      202,
-      208,
-      .68
+      91,
+      166,
+      255,
+      .72
     );
 }
 
 
-/*   star flare*/
+/*   horizontal shimmer*/
 
 .arrival-star::after{
   content:"";
@@ -146,7 +146,7 @@
 
   width:
     calc(
-      var(--star-size) * 5
+      var(--star-size) * 5.5
     );
 
   height:1px;
@@ -154,11 +154,28 @@
   border-radius:999px;
 
   background:
-    rgba(
-      255,
-      255,
-      255,
-      .82
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(
+        194,
+        225,
+        255,
+        .92
+      ),
+      rgba(
+        255,
+        255,
+        255,
+        1
+      ),
+      rgba(
+        194,
+        225,
+        255,
+        .92
+      ),
+      transparent
     );
 
   transform:
@@ -167,9 +184,11 @@
       -50%
     );
 
-  opacity:.72;
+  opacity:.78;
 }
 
+
+/*   vertical shimmer*/
 
 .arrival-star::before{
   content:"";
@@ -183,17 +202,34 @@
 
   height:
     calc(
-      var(--star-size) * 5
+      var(--star-size) * 5.5
     );
 
   border-radius:999px;
 
   background:
-    rgba(
-      255,
-      255,
-      255,
-      .74
+    linear-gradient(
+      180deg,
+      transparent,
+      rgba(
+        194,
+        225,
+        255,
+        .88
+      ),
+      rgba(
+        255,
+        255,
+        255,
+        1
+      ),
+      rgba(
+        194,
+        225,
+        255,
+        .88
+      ),
+      transparent
     );
 
   transform:
@@ -202,34 +238,49 @@
       -50%
     );
 
-  opacity:.66;
+  opacity:.72;
 }
 
 
-/*   larger feature twinkles*/
+/*   feature stars*/
 
 .arrival-star.is-feature{
+  background:
+    rgba(
+      38,
+      122,
+      255,
+      1
+    );
+
   box-shadow:
     0 0 4px
     rgba(
-      255,
-      255,
+      91,
+      168,
       255,
       1
     ),
     0 0 12px
     rgba(
-      255,
-      255,
+      82,
+      158,
       255,
       1
     ),
-    0 0 25px
+    0 0 28px
     rgba(
-      195,
-      214,
-      220,
-      .82
+      61,
+      136,
+      255,
+      .88
+    ),
+    0 0 40px
+    rgba(
+      114,
+      184,
+      255,
+      .32
     );
 }
 
@@ -237,20 +288,24 @@
 .arrival-star.is-feature::after{
   width:
     calc(
-      var(--star-size) * 7
+      var(--star-size) * 8
     );
 
-  opacity:.95;
+  height:1.4px;
+
+  opacity:1;
 }
 
 
 .arrival-star.is-feature::before{
   height:
     calc(
-      var(--star-size) * 7
+      var(--star-size) * 8
     );
 
-  opacity:.90;
+  width:1.4px;
+
+  opacity:.96;
 }
 
 
@@ -266,34 +321,43 @@
       );
 
     transform:
-      scale(.72);
+      scale(.68);
   }
 
 
-  30%{
+  24%{
     opacity:
       calc(
-        var(--star-opacity) * .66
+        var(--star-opacity) * .62
       );
 
     transform:
-      scale(.88);
+      scale(.84);
   }
 
 
-  46%{
+  43%{
     opacity:
       var(--star-opacity);
 
     transform:
-      scale(1.35);
+      scale(1.42);
   }
 
 
-  60%{
+  53%{
+    opacity:
+      1;
+
+    transform:
+      scale(1.62);
+  }
+
+
+  65%{
     opacity:
       calc(
-        var(--star-opacity) * .82
+        var(--star-opacity) * .78
       );
 
     transform:
@@ -301,14 +365,14 @@
   }
 
 
-  77%{
+  82%{
     opacity:
       calc(
-        var(--star-opacity) * .58
+        var(--star-opacity) * .52
       );
 
     transform:
-      scale(.82);
+      scale(.76);
   }
 
 }
@@ -319,7 +383,7 @@
 .arrival-stars.is-leaving .arrival-star{
   animation:
     starLeave
-    1050ms
+    1100ms
     var(--ease)
     var(--leave-delay)
     forwards;
@@ -337,12 +401,11 @@
   }
 
 
-  30%{
-    opacity:
-      1;
+  28%{
+    opacity:1;
 
     transform:
-      scale(1.4);
+      scale(1.55);
   }
 
 
@@ -350,7 +413,7 @@
     opacity:0;
 
     transform:
-      scale(.12);
+      scale(.08);
   }
 
 }
@@ -389,19 +452,26 @@
       )
       0%,
       rgba(
+        202,
+        228,
         255,
-        255,
-        255,
-        .34
+        .38
       )
-      38%,
+      34%,
+      rgba(
+        151,
+        201,
+        255,
+        .16
+      )
+      52%,
       rgba(
         255,
         255,
         255,
         0
       )
-      72%
+      74%
     );
 
   filter:
@@ -444,7 +514,7 @@
 
 
   26%{
-    opacity:.90;
+    opacity:.92;
 
     transform:
       translate(
