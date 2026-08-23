@@ -24,6 +24,11 @@ import {
 } from "./parent_arrival.js";
 
 
+import {
+  activateNestControl
+} from "./parent_nest_control.js";
+
+
 /*   start parent app*/
 
 applyTimeAtmosphere();
@@ -37,3 +42,5 @@ activateSheet();
 activateNavigation();
 
 activateArrival();
+
+activateNestControl();
