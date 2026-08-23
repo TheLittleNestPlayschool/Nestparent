@@ -1,0 +1,545 @@
+/*   nest stage card*/
+
+.nest-experience{
+  opacity:0;
+
+  pointer-events:none;
+
+  filter:
+    blur(8px);
+
+  transform:
+    translate(-50%,-50%)
+    translateY(34px)
+    scale(.96);
+
+  z-index:20;
+
+  transition:
+    opacity 1.15s ease,
+    transform 1.25s var(--ease),
+    filter 1.1s ease;
+}
+
+
+.nest-experience.is-visible{
+  opacity:1;
+
+  pointer-events:auto;
+
+  filter:
+    blur(0);
+
+  transform:
+    translate(-50%,-50%)
+    translateY(0)
+    scale(1);
+}
+
+
+/*   nest card surface*/
+
+.nest-stage-card{
+  position:relative;
+
+  width:100%;
+  height:100%;
+
+  display:flex;
+
+  flex-direction:column;
+
+  padding:
+    28px
+    24px
+    24px;
+
+  overflow:hidden;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      .76
+    );
+
+  border-radius:34px;
+
+  background:
+    linear-gradient(
+      155deg,
+      rgba(
+        255,
+        255,
+        255,
+        .72
+      ),
+      rgba(
+        239,
+        246,
+        240,
+        .57
+      )
+    );
+
+  backdrop-filter:
+    blur(28px)
+    saturate(1.05);
+
+  -webkit-backdrop-filter:
+    blur(28px)
+    saturate(1.05);
+
+  box-shadow:
+    0 25px 70px
+    rgba(
+      38,
+      54,
+      48,
+      .12
+    );
+}
+
+
+/*   soft card atmosphere*/
+
+.nest-stage-card::before{
+  content:"";
+
+  position:absolute;
+
+  width:240px;
+  height:240px;
+
+  right:-90px;
+  top:-90px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(
+        213,
+        231,
+        214,
+        .72
+      ),
+      rgba(
+        213,
+        231,
+        214,
+        0
+      )
+      72%
+    );
+
+  pointer-events:none;
+}
+
+
+.nest-stage-card::after{
+  content:"";
+
+  position:absolute;
+
+  width:210px;
+  height:210px;
+
+  left:-90px;
+  bottom:-95px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(
+        246,
+        224,
+        185,
+        .48
+      ),
+      rgba(
+        246,
+        224,
+        185,
+        0
+      )
+      72%
+    );
+
+  pointer-events:none;
+}
+
+
+/*   nest card heading*/
+
+.nest-card-heading{
+  position:relative;
+
+  z-index:2;
+}
+
+
+.nest-card-kicker{
+  display:block;
+
+  margin-bottom:9px;
+
+  font-size:10px;
+
+  font-weight:700;
+
+  letter-spacing:.14em;
+
+  text-transform:uppercase;
+
+  color:
+    rgba(
+      38,
+      50,
+      47,
+      .42
+    );
+}
+
+
+.nest-card-title{
+  margin:0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      29px,
+      7vw,
+      36px
+    );
+
+  line-height:1;
+
+  font-weight:400;
+
+  letter-spacing:-.035em;
+
+  color:var(--ink);
+}
+
+
+.nest-card-copy{
+  max-width:300px;
+
+  margin:
+    11px
+    0
+    0;
+
+  font-size:12px;
+
+  line-height:1.55;
+
+  color:
+    rgba(
+      38,
+      50,
+      47,
+      .55
+    );
+}
+
+
+/*   destination grid*/
+
+.nest-destinations{
+  position:relative;
+
+  z-index:2;
+
+  flex:1;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
+
+  gap:11px;
+
+  align-content:center;
+
+  margin-top:18px;
+}
+
+
+/*   destination*/
+
+.nest-destination{
+  position:relative;
+
+  min-width:0;
+  min-height:122px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:flex-start;
+
+  justify-content:flex-end;
+
+  padding:17px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      .82
+    );
+
+  border-radius:23px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .50
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(
+      255,
+      255,
+      255,
+      .72
+    ),
+    0 10px 28px
+    rgba(
+      57,
+      77,
+      68,
+      .06
+    );
+
+  color:var(--ink);
+
+  text-align:left;
+
+  cursor:pointer;
+
+  overflow:hidden;
+
+  transition:
+    transform .32s var(--ease),
+    background .32s ease,
+    box-shadow .32s ease;
+
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+
+.nest-destination::before{
+  content:"";
+
+  position:absolute;
+
+  width:82px;
+  height:82px;
+
+  right:-28px;
+  top:-30px;
+
+  border-radius:50%;
+
+  background:
+    rgba(
+      210,
+      229,
+      218,
+      .36
+    );
+
+  transition:
+    transform .45s var(--ease);
+}
+
+
+.nest-destination:active{
+  transform:
+    scale(.97);
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .68
+    );
+}
+
+
+.nest-destination:active::before{
+  transform:
+    scale(1.25);
+}
+
+
+/*   destination icon*/
+
+.nest-destination-icon{
+  position:absolute;
+
+  left:16px;
+  top:16px;
+
+  display:grid;
+
+  place-items:center;
+
+  width:35px;
+  height:35px;
+
+  border-radius:13px;
+
+  background:
+    rgba(
+      100,
+      132,
+      116,
+      .09
+    );
+
+  font-size:17px;
+
+  line-height:1;
+}
+
+
+/*   destination text*/
+
+.nest-destination-title{
+  position:relative;
+
+  z-index:1;
+
+  display:block;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:18px;
+
+  line-height:1.05;
+
+  letter-spacing:-.02em;
+}
+
+
+.nest-destination-copy{
+  position:relative;
+
+  z-index:1;
+
+  display:block;
+
+  margin-top:5px;
+
+  font-size:10px;
+
+  line-height:1.4;
+
+  color:
+    rgba(
+      38,
+      50,
+      47,
+      .48
+    );
+}
+
+
+/*   orb open response*/
+
+.nest-orb.is-open{
+  transform:
+    scale(1.045);
+}
+
+
+.nest-orb.is-open .little-nest{
+  transform:
+    scale(1.08);
+}
+
+
+.nest-orb.is-open .nest-leaf-left-a{
+  transform:
+    rotate(-60deg);
+}
+
+
+.nest-orb.is-open .nest-leaf-right-a{
+  transform:
+    rotate(150deg);
+}
+
+
+.nest-orb.is-open .nest-egg{
+  transform:
+    translateX(-50%)
+    translateY(-2px);
+}
+
+
+/*   responsive*/
+
+@media (max-width:420px){
+
+  .nest-stage-card{
+    padding:
+      25px
+      21px
+      21px;
+  }
+
+
+  .nest-destinations{
+    gap:9px;
+  }
+
+
+  .nest-destination{
+    min-height:112px;
+
+    padding:15px;
+  }
+
+
+  .nest-destination-icon{
+    left:14px;
+    top:14px;
+
+    width:32px;
+    height:32px;
+  }
+
+
+  .nest-destination-title{
+    font-size:17px;
+  }
+
+}
