@@ -37,7 +37,7 @@
 }
 
 
-/*   nest leaving underneath*/
+/*   nest fading underneath*/
 
 .nest-experience.is-leaving-under{
   opacity:0;
@@ -47,21 +47,21 @@
   z-index:19;
 
   filter:
-    blur(4px);
+    blur(3px);
 
   transform:
     translate(-50%,-50%)
     translate3d(
-      -8px,
-      12px,
+      -6px,
+      10px,
       -30px
     )
-    scale(.985);
+    scale(.988);
 
   transition:
-    opacity .82s ease,
-    transform 1.05s cubic-bezier(.20,.62,.18,1),
-    filter .82s ease;
+    opacity .58s ease,
+    transform 1.15s cubic-bezier(.20,.62,.18,1),
+    filter .72s ease;
 }
 
 
