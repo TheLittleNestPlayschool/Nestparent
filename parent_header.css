@@ -1,0 +1,183 @@
+/* ==================================================
+   HEADER
+   ================================================== */
+
+.topbar{
+  position:absolute;
+
+  top:
+    max(
+      22px,
+      env(safe-area-inset-top)
+    );
+
+  left:23px;
+  right:22px;
+
+  z-index:20;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+}
+
+
+.identity{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:3px;
+
+  max-width:310px;
+
+  user-select:none;
+}
+
+
+.eyebrow{
+  font-size:10px;
+
+  font-weight:700;
+
+  letter-spacing:.18em;
+
+  text-transform:uppercase;
+
+  color:
+    rgba(
+      38,
+      50,
+      47,
+      .44
+    );
+}
+
+
+.hello{
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:24px;
+
+  line-height:1.06;
+
+  font-weight:400;
+
+  letter-spacing:-.028em;
+}
+
+
+.subhello{
+  margin-top:5px;
+
+  font-size:13px;
+
+  line-height:1.4;
+
+  color:
+    rgba(
+      38,
+      50,
+      47,
+      .52
+    );
+}
+
+
+/* ==================================================
+   PROFILE BUTTON
+   ================================================== */
+
+.profile{
+  position:relative;
+
+  display:grid;
+
+  place-items:center;
+
+  width:43px;
+  height:43px;
+
+  padding:0;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      .62
+    );
+
+  border-radius:50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .5
+    );
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+
+  box-shadow:
+    0 8px 28px
+    rgba(
+      43,
+      61,
+      54,
+      .08
+    );
+
+  cursor:pointer;
+}
+
+
+.profile-dot{
+  position:relative;
+
+  width:18px;
+  height:18px;
+
+  border-radius:50%;
+
+  background:
+    rgba(
+      84,
+      116,
+      103,
+      .13
+    );
+}
+
+
+.profile-dot::after{
+  content:"";
+
+  position:absolute;
+
+  width:7px;
+  height:7px;
+
+  left:50%;
+  top:50%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  border-radius:50%;
+
+  background:#6e8f81;
+}
