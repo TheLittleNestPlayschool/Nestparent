@@ -65,6 +65,10 @@ let arrivalDone =
   false;
 
 
+let starsContainer =
+  null;
+
+
 /*   sync arrival copy*/
 
 function syncArrivalCopy(){
@@ -91,6 +95,231 @@ function syncArrivalCopy(){
       headerMessage.textContent;
 
   }
+
+}
+
+
+/*   create stars*/
+
+function createArrivalStars(){
+
+  if(
+    !arrivalScreen
+  ){
+    return;
+  }
+
+
+  starsContainer =
+    document.createElement(
+      "div"
+    );
+
+
+  starsContainer.className =
+    "arrival-stars";
+
+
+  starsContainer.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  const starPositions = [
+    [11,16],
+    [28,24],
+    [72,15],
+    [88,29],
+    [16,43],
+    [82,47],
+    [8,67],
+    [25,76],
+    [74,70],
+    [91,79],
+    [40,12],
+    [61,83],
+    [14,88],
+    [87,60]
+  ];
+
+
+  starPositions.forEach(
+    (
+      position,
+      index
+    )=>{
+
+      const star =
+        document.createElement(
+          "span"
+        );
+
+
+      star.className =
+        "arrival-star";
+
+
+      if(
+        index %
+        3 ===
+        1
+      ){
+
+        star.classList.add(
+          "is-silver"
+        );
+
+      }
+
+
+      const size =
+        index %
+        5 ===
+        0
+          ?
+            3
+          :
+          index %
+          3 ===
+          0
+            ?
+              2
+            :
+              1.5;
+
+
+      const opacity =
+        .42
+        +
+        (
+          index %
+          4
+        )
+        *
+        .11;
+
+
+      const speed =
+        2600
+        +
+        (
+          index %
+          5
+        )
+        *
+        570;
+
+
+      const delay =
+        (
+          index %
+          7
+        )
+        *
+        -430;
+
+
+      const leaveDelay =
+        (
+          index *
+          83
+        )
+        %
+        620;
+
+
+      star.style.setProperty(
+        "--star-x",
+        `${position[0]}%`
+      );
+
+
+      star.style.setProperty(
+        "--star-y",
+        `${position[1]}%`
+      );
+
+
+      star.style.setProperty(
+        "--star-size",
+        `${size}px`
+      );
+
+
+      star.style.setProperty(
+        "--star-opacity",
+        opacity
+      );
+
+
+      star.style.setProperty(
+        "--star-speed",
+        `${speed}ms`
+      );
+
+
+      star.style.setProperty(
+        "--star-delay",
+        `${delay}ms`
+      );
+
+
+      star.style.setProperty(
+        "--leave-delay",
+        `${leaveDelay}ms`
+      );
+
+
+      starsContainer.appendChild(
+        star
+      );
+
+    }
+  );
+
+
+  arrivalScreen.insertBefore(
+    starsContainer,
+    arrivalCopy
+  );
+
+}
+
+
+/*   remove stars*/
+
+function releaseArrivalStars(){
+
+  if(
+    !starsContainer
+  ){
+    return;
+  }
+
+
+  starsContainer.classList.add(
+    "is-leaving"
+  );
+
+
+  window.setTimeout(
+    ()=>{
+
+      if(
+        starsContainer
+      ){
+
+        starsContainer.remove();
+
+        starsContainer =
+          null;
+
+      }
+
+    },
+    1650
+  );
 
 }
 
@@ -238,7 +467,8 @@ function getCurvePoint(
 ){
 
   const inverse =
-    1 - amount;
+    1 -
+    amount;
 
 
   return {
@@ -434,7 +664,8 @@ function moveTextToTarget(
 
 
   const finalScale =
-    sourceRect.height > 0
+    sourceRect.height >
+    0
       ?
         targetRect.height /
         sourceRect.height
@@ -473,6 +704,9 @@ function beginMorph(){
   appRoot.classList.add(
     "is-entering"
   );
+
+
+  releaseArrivalStars();
 
 
   requestAnimationFrame(
@@ -572,7 +806,9 @@ async function enterParentWorld(){
   await playTapResponse();
 
 
-  if(arrivalCopy){
+  if(
+    arrivalCopy
+  ){
 
     arrivalCopy.style.transform =
       "translateY(-2vh) scale(1.01)";
@@ -599,6 +835,9 @@ export function activateArrival(){
 
 
   syncArrivalCopy();
+
+
+  createArrivalStars();
 
 
   arrivalScreen.addEventListener(
