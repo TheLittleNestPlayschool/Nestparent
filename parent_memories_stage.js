@@ -20,6 +20,10 @@ let currentNestCard =
   null;
 
 
+let closeTimer =
+  null;
+
+
 /*   open memories stage*/
 
 export function openMemoriesStage({
@@ -35,6 +39,21 @@ export function openMemoriesStage({
     !nestCard
   ){
     return;
+  }
+
+
+  if(
+    closeTimer
+  ){
+
+    clearTimeout(
+      closeTimer
+    );
+
+
+    closeTimer =
+      null;
+
   }
 
 
@@ -145,31 +164,39 @@ export function closeMemoriesStage({
     false;
 
 
+  const cardToRemove =
+    memoriesCard;
+
+
   const previousNestCard =
     nestCard
     ||
     currentNestCard;
 
 
+  /*   memories begins leaving first*/
+
   if(
-    memoriesCard
+    cardToRemove
   ){
 
-    memoriesCard.classList.remove(
+    cardToRemove.classList.remove(
       "is-visible"
+    );
+
+
+    cardToRemove.classList.add(
+      "is-leaving"
     );
 
   }
 
 
+  /*   disable previous-card behavior while returning*/
+
   if(
     previousNestCard
   ){
-
-    previousNestCard.classList.remove(
-      "is-stage-back"
-    );
-
 
     previousNestCard.removeEventListener(
       "click",
@@ -177,29 +204,57 @@ export function closeMemoriesStage({
     );
 
 
-    renderCardOffset(
-      previousNestCard,
-      0
-    );
-
-
     previousNestCard.style.pointerEvents =
-      "auto";
+      "none";
 
   }
 
 
-  const cardToRemove =
-    memoriesCard;
+  /*
+    Give Memories a small head start.
+
+    Then let the Nest card begin its
+    relaxed glide back into the center.
+  */
+
+  closeTimer =
+    window.setTimeout(
+      ()=>{
+
+        closeTimer =
+          null;
 
 
-  memoriesCard =
-    null;
+        if(
+          previousNestCard
+        ){
+
+          previousNestCard.classList.remove(
+            "is-stage-back"
+          );
 
 
-  currentNestCard =
-    null;
+          renderCardOffset(
+            previousNestCard,
+            0
+          );
 
+
+          previousNestCard.style.pointerEvents =
+            "auto";
+
+        }
+
+      },
+      220
+    );
+
+
+  /*
+    Memories stays above the returning
+    Nest card while fading, then leaves
+    the stage once it is no longer useful.
+  */
 
   window.setTimeout(
     ()=>{
@@ -215,8 +270,16 @@ export function closeMemoriesStage({
       }
 
     },
-    1500
+    1450
   );
+
+
+  memoriesCard =
+    null;
+
+
+  currentNestCard =
+    null;
 
 }
 
