@@ -22,6 +22,258 @@
   visibility:visible;
 
   pointer-events:auto;
+
+  overflow:hidden;
+}
+
+
+/*   arrival stars*/
+
+.arrival-stars{
+  position:absolute;
+
+  inset:0;
+
+  z-index:1;
+
+  pointer-events:none;
+}
+
+
+.arrival-star{
+  position:absolute;
+
+  left:var(--star-x);
+  top:var(--star-y);
+
+  width:var(--star-size);
+  height:var(--star-size);
+
+  border-radius:50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .94
+    );
+
+  box-shadow:
+    0 0 4px
+    rgba(
+      255,
+      255,
+      255,
+      .72
+    ),
+    0 0 9px
+    rgba(
+      218,
+      226,
+      224,
+      .30
+    );
+
+  opacity:var(--star-opacity);
+
+  transform:
+    scale(.8);
+
+  animation:
+    starBlink
+    var(--star-speed)
+    ease-in-out
+    var(--star-delay)
+    infinite;
+}
+
+
+.arrival-star.is-silver{
+  background:
+    rgba(
+      224,
+      230,
+      230,
+      .94
+    );
+
+  box-shadow:
+    0 0 4px
+    rgba(
+      236,
+      241,
+      241,
+      .62
+    ),
+    0 0 8px
+    rgba(
+      191,
+      203,
+      203,
+      .25
+    );
+}
+
+
+/*   slightly brighter star flare*/
+
+.arrival-star::after{
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
+  width:
+    calc(
+      var(--star-size) * 4
+    );
+
+  height:1px;
+
+  border-radius:999px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .36
+    );
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  opacity:.45;
+}
+
+
+.arrival-star:nth-child(3n)::before{
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
+  width:1px;
+
+  height:
+    calc(
+      var(--star-size) * 4
+    );
+
+  border-radius:999px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .30
+    );
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+}
+
+
+@keyframes starBlink{
+
+  0%,
+  100%{
+    opacity:
+      calc(
+        var(--star-opacity) * .35
+      );
+
+    transform:
+      scale(.72);
+  }
+
+
+  38%{
+    opacity:
+      var(--star-opacity);
+
+    transform:
+      scale(1.12);
+  }
+
+
+  57%{
+    opacity:
+      calc(
+        var(--star-opacity) * .54
+      );
+
+    transform:
+      scale(.86);
+  }
+
+
+  76%{
+    opacity:
+      calc(
+        var(--star-opacity) * .86
+      );
+
+    transform:
+      scale(1);
+  }
+
+}
+
+
+/*   stars leave on entry*/
+
+.arrival-stars.is-leaving .arrival-star{
+  animation:
+    starLeave
+    900ms
+    var(--ease)
+    var(--leave-delay)
+    forwards;
+}
+
+
+@keyframes starLeave{
+
+  0%{
+    opacity:
+      var(--star-opacity);
+
+    transform:
+      scale(1);
+  }
+
+
+  35%{
+    opacity:
+      calc(
+        var(--star-opacity) * .65
+      );
+
+    transform:
+      scale(1.22);
+  }
+
+
+  100%{
+    opacity:0;
+
+    transform:
+      scale(.2);
+  }
+
 }
 
 
@@ -34,6 +286,8 @@
 
   left:50%;
   top:50%;
+
+  z-index:1;
 
   width:
     min(
@@ -151,6 +405,8 @@
 
 }
 
+
+/*   arrival copy*/
 
 .arrival-copy{
   position:relative;
@@ -520,8 +776,14 @@
   }
 
 
-  .arrival-screen::before{
+  .arrival-screen::before,
+  .arrival-star{
     animation:none !important;
+  }
+
+
+  .arrival-stars.is-leaving .arrival-star{
+    opacity:0;
   }
 
 
