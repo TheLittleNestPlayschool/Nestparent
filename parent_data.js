@@ -54,3 +54,13 @@ export function getFranchise(){
 export function getStudentMedia(){
   return parentData?.student_medias||[];
 }
+
+/*   get current session details*/
+export function getCurrentSessionDetails(){
+  return parentData?.current_session_details||null;
+}
+
+/*   get signed thumbnails*/
+export function getSignedThumbnails(){
+  return parentData?.signed_thumbnails||[];
+}
