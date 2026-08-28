@@ -4,16 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>The Little Nest - Parent Login</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
 
-    <div class="login-container">
-        <div class="login-card">
-            <h1 class="login-title">The Little Nest Playschool</h1>
-            <p class="login-subtitle">Where Little Success Stories Begin</p>
+    <main class="login-container">
+        <section class="login-card">
+            <div class="login-brand">
+                <div class="login-nest-mark" aria-hidden="true">
+                    <span class="login-egg"></span>
+                    <span class="login-nest-line nest-line-one"></span>
+                    <span class="login-nest-line nest-line-two"></span>
+                    <span class="login-nest-line nest-line-three"></span>
+                </div>
 
-            <h2 class="form-section-title">Welcome Back</h2>
+                <h1 class="login-title">The Little Nest</h1>
+                <p class="login-subtitle">Where Little Success Stories Begin</p>
+            </div>
+
+            <div class="login-welcome">
+                <span class="login-kicker">Welcome Back</span>
+                <h2 class="form-section-title">Come back into The Nest.</h2>
+                <p class="login-copy">A little of their day may be waiting for you.</p>
+            </div>
 
             <div class="login-input-group">
                 <input
@@ -38,12 +51,13 @@
                     type="button"
                     id="loginButton"
                     class="btn-submit"
+                    aria-label="Enter The Nest"
                 >→</button>
             </div>
 
             <div id="errorMessage" class="login-error"></div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
         const XANO_BASE_URL='https://x8ki-letl-twmt.n7.xano.io/api:wtEDiEuV';
@@ -64,102 +78,77 @@
             const button=document.getElementById('loginButton');
 
             errorDiv.textContent='';
+            errorDiv.classList.remove('is-visible');
 
             if(!email||!password){
-                errorDiv.textContent='Please enter your email and password.';
+                showError('Please enter your email and password.');
                 return;
             }
 
             button.disabled=true;
+            button.classList.add('is-loading');
 
             try{
                 const response=await fetch(`${XANO_BASE_URL}/auth/login`,{
                     method:'POST',
-                    headers:{
-                        'Content-Type':'application/json'
-                    },
-                    body:JSON.stringify({
-                        email,
-                        password
-                    })
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({email,password})
                 });
 
                 const data=await response.json();
 
                 if(!response.ok){
-                    throw new Error(
-                        data.message||
-                        'Invalid email or password.'
-                    );
+                    throw new Error(data.message||'Invalid email or password.');
                 }
 
                 if(!data.authToken){
-                    throw new Error(
-                        'Login succeeded but no authentication token was returned.'
-                    );
+                    throw new Error('Login succeeded but no authentication token was returned.');
                 }
 
                 if(!data.parent_id){
-                    throw new Error(
-                        'This account is not connected to a parent.'
-                    );
+                    throw new Error('This account is not connected to a parent.');
                 }
 
                 clearParentAuth();
 
-                localStorage.setItem(
-                    'authToken',
-                    data.authToken
-                );
+                localStorage.setItem('authToken',data.authToken);
 
                 if(data.user?.id){
-                    localStorage.setItem(
-                        'userId',
-                        data.user.id
-                    );
+                    localStorage.setItem('userId',data.user.id);
                 }else if(data.user){
-                    localStorage.setItem(
-                        'userId',
-                        data.user
-                    );
+                    localStorage.setItem('userId',data.user);
                 }
 
-                localStorage.setItem(
-                    'parent_id',
-                    data.parent_id
-                );
+                localStorage.setItem('parent_id',data.parent_id);
 
                 if(data.admin_type_id){
-                    localStorage.setItem(
-                        'admin_type_id',
-                        data.admin_type_id
-                    );
+                    localStorage.setItem('admin_type_id',data.admin_type_id);
                 }
 
                 window.location.href='./index.html';
 
             }catch(error){
-                errorDiv.textContent=error.message;
+                showError(error.message);
                 button.disabled=false;
+                button.classList.remove('is-loading');
             }
         }
 
-        /*   activate*/
-        document
-            .getElementById('loginButton')
-            .addEventListener(
-                'click',
-                handleLogin
-            );
+        /*   show error*/
+        function showError(message){
+            const errorDiv=document.getElementById('errorMessage');
+            errorDiv.textContent=message;
+            errorDiv.classList.add('is-visible');
+        }
 
-        document.addEventListener(
-            'keydown',
-            event=>{
-                if(event.key==='Enter'){
-                    handleLogin();
-                }
+        /*   activate*/
+        document.getElementById('loginButton').addEventListener('click',handleLogin);
+
+        document.addEventListener('keydown',event=>{
+            if(event.key==='Enter'){
+                handleLogin();
             }
-        );
+        });
     </script>
 
 </body>
