@@ -1,68 +1,35 @@
-import {
-  experiences
-} from "./parent_experiences.js";
-
+import{
+  getExperiences
+}from"./parent_experiences.js";
 
 /*   get card type label*/
-
-function getTypeLabel(
-  type
-){
-
+function getTypeLabel(type){
   return ({
-    session:
-      "Story",
-
-    learning:
-      "Learning",
-
-    activity:
-      "Activity",
-
-    personal:
-      "Growth",
-
-    world:
-      "My World",
-
-    home:
-      "Home"
-  })[type]
-  ||
-  "Story";
-
+    session:"Story",
+    learning:"Learning",
+    activity:"Activity",
+    personal:"Growth",
+    world:"My World",
+    home:"Home"
+  })[type]||"Story";
 }
 
-
 /*   create experience card*/
-
 function createExperienceCard(
   item,
   index,
   onOpen
 ){
+  const article=
+    document.createElement("article");
 
-  const article =
-    document.createElement(
-      "article"
-    );
+  article.className="experience";
+  article.dataset.index=index;
 
+  const typeLabel=
+    getTypeLabel(item.type);
 
-  article.className =
-    "experience";
-
-
-  article.dataset.index =
-    index;
-
-
-  const typeLabel =
-    getTypeLabel(
-      item.type
-    );
-
-
-  article.innerHTML = `
+  article.innerHTML=`
     <div class="card">
 
       <div
@@ -112,64 +79,46 @@ function createExperienceCard(
     </div>
   `;
 
-
   article.addEventListener(
     "click",
     ()=>{
-
       if(
-        typeof onOpen ===
+        typeof onOpen===
         "function"
       ){
-
-        onOpen(
-          index
-        );
-
+        onOpen(index);
       }
-
     }
   );
 
-
   return article;
-
 }
 
-
 /*   build experience cards*/
-
 export function buildExperienceCards(
   carousel,
   onOpen
 ){
-
-  if(
-    !carousel
-  ){
+  if(!carousel){
     return;
   }
 
+  const experiences=
+    getExperiences();
 
   experiences.forEach(
     (
       item,
       index
     )=>{
-
-      const card =
+      const card=
         createExperienceCard(
           item,
           index,
           onOpen
         );
 
-
-      carousel.appendChild(
-        card
-      );
-
+      carousel.appendChild(card);
     }
   );
-
 }
