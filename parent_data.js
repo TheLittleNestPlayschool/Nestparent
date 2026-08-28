@@ -18,6 +18,8 @@ export async function loadParentData(){
 
   const data=await response.json();
 
+console.log("PARENT DATA",data);
+  
   if(!response.ok){
     throw new Error(
       data.message||
