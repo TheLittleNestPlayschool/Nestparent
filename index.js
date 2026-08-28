@@ -1,4 +1,6 @@
 import{applyTimeAtmosphere}from"./parent_time.js";
+import{applyParentGreeting}from"./parent_greeting.js";
+import{loadParentData}from"./parent_data.js";
 import{buildCards,activateCarousel}from"./parent_carousel.js";
 import{activateSheet}from"./parent_sheet.js";
 import{activateNavigation}from"./parent_navigation.js";
@@ -10,18 +12,29 @@ import{activateParentAuth}from"./parent_auth.js";
 let appStarted=false;
 
 /*   start parent app*/
-function startParentApp(){
+async function startParentApp(){
   if(appStarted) return;
   appStarted=true;
 
-  applyTimeAtmosphere();
-  buildCards();
-  activateCarousel();
-  activateSheet();
-  activateNavigation();
-  activateArrival();
-  activateNestControl();
-  activateStageRouter();
+  try{
+    await loadParentData();
+
+    applyTimeAtmosphere();
+    applyParentGreeting();
+    buildCards();
+    activateCarousel();
+    activateSheet();
+    activateNavigation();
+    activateArrival();
+    activateNestControl();
+    activateStageRouter();
+  }catch(error){
+    appStarted=false;
+    console.error(
+      "Unable to start Parent App:",
+      error
+    );
+  }
 }
 
 /*   authenticate then start*/
