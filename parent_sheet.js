@@ -1,56 +1,44 @@
-import {
-  experiences
-} from "./parent_experiences.js";
+import{
+  getExperiences
+}from"./parent_experiences.js";
 
-
-const deepSheet =
+const deepSheet=
   document.getElementById(
     "deepSheet"
   );
 
-
-const sheetTitle =
+const sheetTitle=
   document.getElementById(
     "sheetTitle"
   );
 
-
-const sheetCopy =
+const sheetCopy=
   document.getElementById(
     "sheetCopy"
   );
 
-
-const learningList =
+const learningList=
   document.getElementById(
     "learningList"
   );
 
-
-const sheetClose =
+const sheetClose=
   document.getElementById(
     "sheetClose"
   );
 
-
-const wash =
+const wash=
   document.getElementById(
     "wash"
   );
 
-
-const navPanel =
+const navPanel=
   document.getElementById(
     "navPanel"
   );
 
-
-/* ==================================================
-   TITLES
-   ================================================== */
-
-const titles = {
-
+/*   titles*/
+const titles={
   session:
     "What today's session contained",
 
@@ -68,42 +56,31 @@ const titles = {
 
   home:
     "A little bridge back home"
-
 };
 
+/*   open sheet*/
+function openDeep(index){
+  const experiences=
+    getExperiences();
 
-/* ==================================================
-   OPEN SHEET
-   ================================================== */
-
-function openDeep(
-  index
-){
-
-  const item =
+  const item=
     experiences[index];
 
-
   if(
-    !item
-    ||
+    !item||
     !deepSheet
   ){
     return;
   }
 
-
-  sheetTitle.textContent =
-    titles[item.type]
-    ||
+  sheetTitle.textContent=
+    titles[item.type]||
     "A little deeper";
 
-
-  sheetCopy.textContent =
+  sheetCopy.textContent=
     item.deeper;
 
-
-  learningList.innerHTML =
+  learningList.innerHTML=
     item.learning
       .map(
         row=>`
@@ -130,107 +107,74 @@ function openDeep(
       )
       .join("");
 
-
   wash.classList.add(
     "open"
   );
-
 
   deepSheet.classList.add(
     "open"
   );
 
-
   deepSheet.setAttribute(
     "aria-hidden",
     "false"
   );
-
 }
 
-
-/* ==================================================
-   CLOSE SHEET
-   ================================================== */
-
+/*   close sheet*/
 export function closeDeep(){
-
-  if(
-    !deepSheet
-  ){
+  if(!deepSheet){
     return;
   }
-
 
   deepSheet.classList.remove(
     "open"
   );
-
 
   deepSheet.setAttribute(
     "aria-hidden",
     "true"
   );
 
-
   if(
-    !navPanel
-    ||
+    !navPanel||
     !navPanel
       .classList
       .contains(
         "open"
       )
   ){
-
     wash.classList.remove(
       "open"
     );
-
   }
-
 }
 
-
-/* ==================================================
-   ACTIVATE SHEET
-   ================================================== */
-
+/*   activate sheet*/
 export function activateSheet(){
-
   window.addEventListener(
     "parent:open-experience",
     event=>{
-
-      const index =
+      const index=
         event.detail?.index;
 
-
       if(
-        typeof index !==
+        typeof index!==
         "number"
       ){
         return;
       }
 
-
       openDeep(
         index
       );
-
     }
   );
 
-
-  if(
-    sheetClose
-  ){
-
+  if(sheetClose){
     sheetClose.addEventListener(
       "click",
       closeDeep
     );
-
   }
-
 }
