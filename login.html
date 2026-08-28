@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>The Little Nest - Parent Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-card">
+            <h1 class="login-title">The Little Nest Playschool</h1>
+            <p class="login-subtitle">Where Little Success Stories Begin</p>
+
+            <h2 class="form-section-title">Welcome Back</h2>
+
+            <div class="login-input-group">
+                <input
+                    type="email"
+                    id="email"
+                    class="login-input"
+                    placeholder="Email"
+                    autocomplete="email"
+                >
+                <input
+                    type="password"
+                    id="password"
+                    class="login-input"
+                    placeholder="Password"
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <div class="login-action-row">
+                <span class="sign-in-text">Enter The Nest</span>
+                <button
+                    type="button"
+                    id="loginButton"
+                    class="btn-submit"
+                >→</button>
+            </div>
+
+            <div id="errorMessage" class="login-error"></div>
+        </div>
+    </div>
+
+    <script>
+        const XANO_BASE_URL='https://x8ki-letl-twmt.n7.xano.io/api:wtEDiEuV';
+
+        /*   clear parent auth*/
+        function clearParentAuth(){
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('parent_id');
+            localStorage.removeItem('admin_type_id');
+        }
+
+        /*   login*/
+        async function handleLogin(){
+            const email=document.getElementById('email').value.trim();
+            const password=document.getElementById('password').value;
+            const errorDiv=document.getElementById('errorMessage');
+            const button=document.getElementById('loginButton');
+
+            errorDiv.textContent='';
+
+            if(!email||!password){
+                errorDiv.textContent='Please enter your email and password.';
+                return;
+            }
+
+            button.disabled=true;
+
+            try{
+                const response=await fetch(`${XANO_BASE_URL}/auth/login`,{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({
+                        email,
+                        password
+                    })
+                });
+
+                const data=await response.json();
+
+                if(!response.ok){
+                    throw new Error(
+                        data.message||
+                        'Invalid email or password.'
+                    );
+                }
+
+                if(!data.authToken){
+                    throw new Error(
+                        'Login succeeded but no authentication token was returned.'
+                    );
+                }
+
+                if(!data.parent_id){
+                    throw new Error(
+                        'This account is not connected to a parent.'
+                    );
+                }
+
+                clearParentAuth();
+
+                localStorage.setItem(
+                    'authToken',
+                    data.authToken
+                );
+
+                if(data.user?.id){
+                    localStorage.setItem(
+                        'userId',
+                        data.user.id
+                    );
+                }else if(data.user){
+                    localStorage.setItem(
+                        'userId',
+                        data.user
+                    );
+                }
+
+                localStorage.setItem(
+                    'parent_id',
+                    data.parent_id
+                );
+
+                if(data.admin_type_id){
+                    localStorage.setItem(
+                        'admin_type_id',
+                        data.admin_type_id
+                    );
+                }
+
+                window.location.href='./index.html';
+
+            }catch(error){
+                errorDiv.textContent=error.message;
+                button.disabled=false;
+            }
+        }
+
+        /*   activate*/
+        document
+            .getElementById('loginButton')
+            .addEventListener(
+                'click',
+                handleLogin
+            );
+
+        document.addEventListener(
+            'keydown',
+            event=>{
+                if(event.key==='Enter'){
+                    handleLogin();
+                }
+            }
+        );
+    </script>
+
+</body>
+</html>
