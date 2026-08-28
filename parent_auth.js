@@ -1,24 +1,5 @@
 const XANO_BASE_URL='https://x8ki-letl-twmt.n7.xano.io/api:wtEDiEuV';
 
-/*   login*/
-async function login(email,password){
-  const response=await fetch(`${XANO_BASE_URL}/auth/login`,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({email,password})
-  });
-
-  const data=await response.json();
-
-  if(!response.ok){
-    throw new Error(data.message||'Invalid email or password.');
-  }
-
-  localStorage.setItem('authToken',data.authToken);
-
-  return data;
-}
-
 /*   activate*/
 export function activateParentAuth(startApp){
   const login=document.getElementById('parentLogin');
@@ -28,18 +9,11 @@ export function activateParentAuth(startApp){
   const button=document.getElementById('loginButton');
   const error=document.getElementById('loginError');
 
-  if(localStorage.getItem('authToken')){
-    login.classList.remove('is-visible');
-    experience.classList.add('is-visible');
-    startApp();
-    return;
-  }
-
   login.classList.add('is-visible');
 
   async function submit(){
-    error.classList.remove('is-visible');
     error.textContent='';
+    error.classList.remove('is-visible');
 
     if(!email.value.trim()||!password.value){
       error.textContent='Please enter your email and password.';
@@ -47,12 +21,32 @@ export function activateParentAuth(startApp){
       return;
     }
 
-    try{
-      button.disabled=true;
+    button.disabled=true;
 
-      await login(
-        email.value.trim(),
-        password.value
+    try{
+      const response=await fetch(`${XANO_BASE_URL}/auth/login`,{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          email:email.value.trim(),
+          password:password.value
+        })
+      });
+
+      const data=await response.json();
+
+      if(!response.ok){
+        throw new Error(
+          data.message||
+          'Invalid email or password.'
+        );
+      }
+
+      localStorage.setItem(
+        'authToken',
+        data.authToken
       );
 
       login.classList.remove('is-visible');
@@ -67,9 +61,17 @@ export function activateParentAuth(startApp){
     }
   }
 
-  button.addEventListener('click',submit);
+  button.addEventListener(
+    'click',
+    submit
+  );
 
-  password.addEventListener('keydown',event=>{
-    if(event.key==='Enter') submit();
-  });
+  password.addEventListener(
+    'keydown',
+    event=>{
+      if(event.key==='Enter'){
+        submit();
+      }
+    }
+  );
 }
