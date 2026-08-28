@@ -1,251 +1,163 @@
-import {
-  experiences
-} from "./parent_experiences.js";
+import{
+  getExperiences
+}from"./parent_experiences.js";
 
-
-import {
+import{
   buildExperienceCards
-} from "./parent_card_builder.js";
+}from"./parent_card_builder.js";
 
-
-import {
+import{
   renderCardPositions
-} from "./parent_card_positions.js";
+}from"./parent_card_positions.js";
 
-
-import {
+import{
   activateCarouselInput
-} from "./parent_carousel_input.js";
+}from"./parent_carousel_input.js";
 
-
-import {
+import{
   openNestStage as openNestStageView,
   closeNestStage as closeNestStageView,
   isNestStageOpen
-} from "./parent_nest_stage.js";
+}from"./parent_nest_stage.js";
 
-
-const carousel =
+const carousel=
   document.getElementById(
     "carousel"
   );
 
-
-const hint =
+const hint=
   document.getElementById(
     "hint"
   );
 
-
-const deepSheet =
+const deepSheet=
   document.getElementById(
     "deepSheet"
   );
 
-
-let activeIndex =
-  0;
-
-
-let hasInteracted =
-  false;
-
+let activeIndex=0;
+let hasInteracted=false;
 
 /*   build cards*/
-
 export function buildCards(){
-
-  if(
-    !carousel
-  ){
+  if(!carousel){
     return;
   }
-
 
   buildExperienceCards(
     carousel,
     openExperience
   );
 
-
   renderPositions();
-
 }
 
-
 /*   open experience*/
-
-function openExperience(
-  index
-){
-
-  if(
-    isNestStageOpen()
-  ){
+function openExperience(index){
+  if(isNestStageOpen()){
     return;
   }
 
-
-  if(
-    index !==
-    activeIndex
-  ){
+  if(index!==activeIndex){
     return;
   }
-
 
   window.dispatchEvent(
     new CustomEvent(
       "parent:open-experience",
       {
         detail:{
-          index:
-            activeIndex
+          index:activeIndex
         }
       }
     )
   );
-
 }
 
-
 /*   render positions*/
-
 function renderPositions(){
-
   renderCardPositions({
     carousel,
     activeIndex,
     nestOpen:
       isNestStageOpen()
   });
-
 }
 
-
 /*   move*/
-
-function move(
-  direction
-){
-
-  if(
-    isNestStageOpen()
-  ){
+function move(direction){
+  if(isNestStageOpen()){
     return;
   }
 
+  const experiences=
+    getExperiences();
 
-  const next =
+  const next=
     Math.min(
-      experiences.length -
-      1,
-
+      experiences.length-1,
       Math.max(
         0,
-
-        activeIndex +
-        direction
+        activeIndex+direction
       )
     );
 
-
-  if(
-    next ===
-    activeIndex
-  ){
+  if(next===activeIndex){
     return;
   }
 
-
-  activeIndex =
-    next;
-
+  activeIndex=next;
 
   renderPositions();
-
-
   hideHint();
-
 }
 
-
 /*   hide hint*/
-
 export function hideHint(){
-
-  if(
-    hasInteracted
-  ){
+  if(hasInteracted){
     return;
   }
 
+  hasInteracted=true;
 
-  hasInteracted =
-    true;
-
-
-  if(
-    hint
-  ){
-
-    hint.style.opacity =
-      "0";
-
+  if(hint){
+    hint.style.opacity="0";
   }
-
 }
 
-
 /*   open nest stage*/
-
 export function openNestStage(){
-
   openNestStageView({
     carousel,
     activeIndex,
     hideHint
   });
-
 }
 
-
 /*   close nest stage*/
-
 export function closeNestStage(){
-
   closeNestStageView({
     carousel,
     activeIndex
   });
-
 }
 
-
 /*   expose nest state*/
-
-export {
+export{
   isNestStageOpen
 };
 
-
 /*   activate carousel*/
-
 export function activateCarousel(){
-
   activateCarouselInput({
     carousel,
     deepSheet,
 
-    canMove:
-      ()=>{
-
-        return !isNestStageOpen();
-
-      },
+    canMove:()=>{
+      return !isNestStageOpen();
+    },
 
     onMove:
       move
   });
-
 }
