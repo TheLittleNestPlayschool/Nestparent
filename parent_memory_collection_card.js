@@ -2,7 +2,9 @@ import{
   getStudent,
   getStudentMedia,
   getSignedThumbnails,
-  getSignedMediaUrls
+  getSignedMediaUrls,
+  getStudentMediaCollections,
+  getMediaCollectionTypes
 }from"./parent_data.js";
 
 /*   get media date*/
@@ -155,6 +157,54 @@ function getMemoryMedia(){
     );
 }
 
+/*   get special collection media ids*/
+function getSpecialCollectionMediaIds(
+  collectionCode
+){
+  const collectionTypes=
+    getMediaCollectionTypes();
+
+  const collectionLinks=
+    getStudentMediaCollections();
+
+  const collectionType=
+    collectionTypes.find(
+      type=>
+        type.is_active
+        &&
+        String(
+          type.code||
+          ""
+        )
+          .trim()
+          .toLowerCase()===
+        collectionCode
+    );
+
+  if(!collectionType){
+    return new Set();
+  }
+
+  return new Set(
+    collectionLinks
+      .filter(
+        link=>
+          Number(
+            link.media_collection_type_id
+          )===
+          Number(
+            collectionType.id
+          )
+      )
+      .map(
+        link=>
+          Number(
+            link.student_media_id
+          )
+      )
+  );
+}
+
 /*   get collection definition*/
 function getCollectionDefinition(
   collection
@@ -181,7 +231,10 @@ function getCollectionDefinition(
         "This week's little moments",
 
       filter:
-        isThisWeek
+        item=>
+          isThisWeek(
+            item.created_at
+          )
     };
   }
 
@@ -197,7 +250,62 @@ function getCollectionDefinition(
         `${monthName}'s little moments`,
 
       filter:
-        isCurrentMonth
+        item=>
+          isCurrentMonth(
+            item.created_at
+          )
+    };
+  }
+
+  if(
+    collection===
+    "recognition"
+  ){
+    const mediaIds=
+      getSpecialCollectionMediaIds(
+        "recognition"
+      );
+
+    return{
+      kicker:
+        "Recognition Days",
+
+      title:
+        "Recognition Days",
+
+      filter:
+        item=>
+          mediaIds.has(
+            Number(
+              item.id
+            )
+          )
+    };
+  }
+
+  if(
+    collection===
+    "birthday"
+  ){
+    const mediaIds=
+      getSpecialCollectionMediaIds(
+        "birthday"
+      );
+
+    return{
+      kicker:
+        "Birthdays",
+
+      title:
+        "Birthdays",
+
+      filter:
+        item=>
+          mediaIds.has(
+            Number(
+              item.id
+            )
+          )
     };
   }
 
@@ -209,7 +317,10 @@ function getCollectionDefinition(
       "Today's little moments",
 
     filter:
-      isToday
+      item=>
+        isToday(
+          item.created_at
+        )
   };
 }
 
@@ -302,7 +413,7 @@ export function createMemoryCollectionCard(
       .filter(
         item=>
           definition.filter(
-            item.created_at
+            item
           )
       );
 
@@ -330,7 +441,11 @@ export function createMemoryCollectionCard(
           ${
             collection==="today"
               ?`${studentName}'s little moments`
-              :definition.title
+              :collection==="recognition"
+                ?`${studentName}'s Recognition Days`
+                :collection==="birthday"
+                  ?`${studentName}'s Birthdays`
+                  :definition.title
           }
         </h2>
 
