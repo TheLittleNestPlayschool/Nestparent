@@ -49,59 +49,54 @@ export function getParentData(){
 
 /*   get parent*/
 export function getParent(){
-  return(
-    parentData?.parent||
-    null
-  );
+  return parentData?.parent||
+    null;
 }
 
 /*   get student*/
 export function getStudent(){
-  return(
-    parentData?.student||
-    null
-  );
+  return parentData?.student||
+    null;
 }
 
 /*   get franchise*/
 export function getFranchise(){
-  return(
-    parentData?.franchise||
-    null
-  );
+  return parentData?.franchise||
+    null;
 }
 
 /*   get student media*/
 export function getStudentMedia(){
-  return(
-    parentData?.student_medias||
-    []
-  );
+  return parentData?.student_medias||
+    [];
 }
 
 /*   get current session details*/
 export function getCurrentSessionDetails(){
-  return(
-    parentData
-      ?.current_session_details||
-    null
-  );
+  return parentData?.current_session_details||
+    null;
 }
 
 /*   get signed thumbnails*/
 export function getSignedThumbnails(){
-  return(
-    parentData
-      ?.signed_thumbnails||
-    []
-  );
+  return parentData?.signed_thumbnails||
+    [];
 }
 
 /*   get signed media urls*/
 export function getSignedMediaUrls(){
-  return(
-    parentData
-      ?.signed_media_urls||
-    []
-  );
+  return parentData?.signed_media_urls||
+    [];
+}
+
+/*   get student media collections*/
+export function getStudentMediaCollections(){
+  return parentData?.student_media_collections||
+    [];
+}
+
+/*   get media collection types*/
+export function getMediaCollectionTypes(){
+  return parentData?.media_collection_types||
+    [];
 }
