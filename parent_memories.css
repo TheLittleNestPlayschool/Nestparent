@@ -595,7 +595,7 @@
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px;
+  gap:10px;
   padding:11px 12px 11px 15px;
   border:1px solid rgba(255,255,255,.88);
   border-radius:21px;
@@ -632,15 +632,71 @@
   color:rgba(38,50,47,.38);
 }
 
+/*   viewer actions*/
+
+.memory-viewer-actions{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/*   viewer download*/
+
+.memory-viewer-download{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:38px;
+  padding:0 11px;
+  border:1px solid rgba(255,255,255,.92);
+  border-radius:999px;
+  background:rgba(255,255,255,.76);
+  box-shadow:
+    0 7px 20px
+    rgba(38,54,48,.07);
+  color:rgba(31,43,38,.78);
+  font-size:9px;
+  font-weight:700;
+  cursor:pointer;
+  transition:
+    transform .32s cubic-bezier(.20,.62,.18,1),
+    background .32s ease,
+    opacity .32s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.memory-viewer-download:active:not(:disabled){
+  transform:scale(.96);
+  background:white;
+}
+
+.memory-viewer-download:disabled{
+  opacity:.58;
+  cursor:default;
+}
+
+.memory-viewer-download-symbol{
+  display:grid;
+  place-items:center;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:rgba(225,234,228,.72);
+  font-size:12px;
+  line-height:1;
+}
+
 /*   viewer share*/
 
 .memory-viewer-share{
   flex:0 0 auto;
   display:inline-flex;
   align-items:center;
-  gap:7px;
+  gap:6px;
   min-height:38px;
-  padding:0 13px;
+  padding:0 11px;
   border:1px solid rgba(255,255,255,.92);
   border-radius:999px;
   background:rgba(232,242,235,.94);
@@ -765,13 +821,25 @@
     left:10px;
     right:10px;
     bottom:10px;
+    gap:7px;
     padding:9px 9px 9px 12px;
     border-radius:19px;
   }
 
+  .memory-viewer-actions{
+    gap:5px;
+  }
+
+  .memory-viewer-download,
   .memory-viewer-share{
     min-height:36px;
-    padding:0 11px;
+    padding:0 9px;
     font-size:8px;
+  }
+
+  .memory-viewer-download-symbol,
+  .memory-viewer-share-symbol{
+    width:18px;
+    height:18px;
   }
 }
