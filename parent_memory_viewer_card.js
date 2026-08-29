@@ -107,19 +107,54 @@ async function downloadMedia(
   }
 
   try{
+    console.log(
+      "MEMORY DOWNLOAD START",
+      {
+        id:item.id,
+        media_kind:item.media_kind,
+        mime_type:item.mime_type
+      }
+    );
+
     const response=
       await fetch(
-        item.media_url
+        item.media_url,
+        {
+          method:"GET",
+          mode:"cors",
+          cache:"no-store"
+        }
       );
+
+    console.log(
+      "MEMORY DOWNLOAD RESPONSE",
+      {
+        ok:response.ok,
+        status:response.status,
+        type:response.type,
+        contentType:
+          response.headers.get(
+            "content-type"
+          )
+      }
+    );
 
     if(!response.ok){
       throw new Error(
-        "Unable to download media."
+        `Unable to download media. HTTP ${response.status}`
       );
     }
 
     const blob=
       await response.blob();
+
+    console.log(
+      "MEMORY DOWNLOAD BLOB",
+      {
+        size:blob.size,
+        type:blob.type
+      }
+    );
 
     const objectUrl=
       URL.createObjectURL(
@@ -139,6 +174,9 @@ async function downloadMedia(
         item
       );
 
+    link.style.display=
+      "none";
+
     document.body.appendChild(
       link
     );
@@ -153,42 +191,27 @@ async function downloadMedia(
           objectUrl
         );
       },
-      1000
+      1500
+    );
+
+    console.log(
+      "MEMORY DOWNLOAD COMPLETE",
+      getDownloadFilename(
+        item
+      )
     );
   }
 
   catch(error){
     console.error(
       "MEMORY DOWNLOAD ERROR",
-      error
+      error,
+      {
+        id:item?.id,
+        media_kind:item?.media_kind,
+        mime_type:item?.mime_type
+      }
     );
-
-    /*
-      fallback if browser or S3
-      does not allow blob download
-    */
-
-    const link=
-      document.createElement(
-        "a"
-      );
-
-    link.href=
-      item.media_url;
-
-    link.target=
-      "_blank";
-
-    link.rel=
-      "noopener";
-
-    document.body.appendChild(
-      link
-    );
-
-    link.click();
-
-    link.remove();
   }
 
   finally{
@@ -375,6 +398,9 @@ export function createMemoryViewerCard({
       video.className=
         "memory-viewer-video";
 
+      video.crossOrigin=
+        "anonymous";
+
       video.src=
         item.media_url||
         "";
@@ -396,6 +422,18 @@ export function createMemoryViewerCard({
 
       image.className=
         "memory-viewer-image";
+
+      /*
+        Set crossOrigin BEFORE src.
+
+        This makes the initial image
+        request a CORS-aware request so
+        Chrome does not cache a non-CORS
+        version of the same signed URL.
+      */
+
+      image.crossOrigin=
+        "anonymous";
 
       image.src=
         item.media_url||
