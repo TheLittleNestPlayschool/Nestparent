@@ -1,58 +1,76 @@
 import{
   getStudent,
   getStudentMedia,
-  getSignedThumbnails
+  getSignedThumbnails,
+  getSignedMediaUrls
 }from"./parent_data.js";
 
 /*   get media date*/
 function getMediaDate(value){
-  let timestamp=Number(value);
+  let timestamp=
+    Number(value);
 
   if(!timestamp){
     return null;
   }
 
-  if(timestamp<1000000000000){
+  if(
+    timestamp<
+    1000000000000
+  ){
     timestamp*=1000;
   }
 
-  return new Date(timestamp);
+  return new Date(
+    timestamp
+  );
 }
 
 /*   is today*/
 function isToday(value){
-  const date=getMediaDate(value);
+  const date=
+    getMediaDate(value);
 
   if(!date){
     return false;
   }
 
-  const now=new Date();
+  const now=
+    new Date();
 
   return(
-    date.getFullYear()===now.getFullYear() &&
-    date.getMonth()===now.getMonth() &&
-    date.getDate()===now.getDate()
+    date.getFullYear()===
+      now.getFullYear()
+    &&
+    date.getMonth()===
+      now.getMonth()
+    &&
+    date.getDate()===
+      now.getDate()
   );
 }
 
 /*   is this week*/
 function isThisWeek(value){
-  const date=getMediaDate(value);
+  const date=
+    getMediaDate(value);
 
   if(!date){
     return false;
   }
 
-  const now=new Date();
+  const now=
+    new Date();
 
-  const start=new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate()
-  );
+  const start=
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
 
-  const day=start.getDay();
+  const day=
+    start.getDay();
 
   const daysFromMonday=
     day===0
@@ -64,48 +82,73 @@ function isThisWeek(value){
     daysFromMonday
   );
 
-  const end=new Date(start);
+  const end=
+    new Date(
+      start
+    );
 
   end.setDate(
     end.getDate()+7
   );
 
   return(
-    date>=start &&
+    date>=start
+    &&
     date<end
   );
 }
 
 /*   is current month*/
 function isCurrentMonth(value){
-  const date=getMediaDate(value);
+  const date=
+    getMediaDate(value);
 
   if(!date){
     return false;
   }
 
-  const now=new Date();
+  const now=
+    new Date();
 
   return(
-    date.getFullYear()===now.getFullYear() &&
-    date.getMonth()===now.getMonth()
+    date.getFullYear()===
+      now.getFullYear()
+    &&
+    date.getMonth()===
+      now.getMonth()
   );
 }
 
 /*   get memory media*/
 function getMemoryMedia(){
-  const media=getStudentMedia();
-  const thumbnails=getSignedThumbnails();
+  const media=
+    getStudentMedia();
+
+  const thumbnails=
+    getSignedThumbnails();
+
+  const mediaUrls=
+    getSignedMediaUrls();
 
   return media
-    .map((item,index)=>{
-      return{
-        ...item,
-        thumbnail:
-          thumbnails[index]||
-          ""
-      };
-    })
+    .map(
+      (
+        item,
+        index
+      )=>{
+        return{
+          ...item,
+
+          thumbnail:
+            thumbnails[index]||
+            "",
+
+          media_url:
+            mediaUrls[index]||
+            ""
+        };
+      }
+    )
     .filter(
       item=>
         !item.is_deleted
@@ -113,7 +156,9 @@ function getMemoryMedia(){
 }
 
 /*   get collection definition*/
-function getCollectionDefinition(collection){
+function getCollectionDefinition(
+  collection
+){
   const monthName=
     new Intl.DateTimeFormat(
       "en",
@@ -124,31 +169,55 @@ function getCollectionDefinition(collection){
       new Date()
     );
 
-  if(collection==="week"){
+  if(
+    collection===
+    "week"
+  ){
     return{
-      kicker:"This Week",
-      title:"This week's little moments",
-      filter:isThisWeek
+      kicker:
+        "This Week",
+
+      title:
+        "This week's little moments",
+
+      filter:
+        isThisWeek
     };
   }
 
-  if(collection==="month"){
+  if(
+    collection===
+    "month"
+  ){
     return{
-      kicker:monthName,
-      title:`${monthName}'s little moments`,
-      filter:isCurrentMonth
+      kicker:
+        monthName,
+
+      title:
+        `${monthName}'s little moments`,
+
+      filter:
+        isCurrentMonth
     };
   }
 
   return{
-    kicker:"Today",
-    title:"Today's little moments",
-    filter:isToday
+    kicker:
+      "Today",
+
+    title:
+      "Today's little moments",
+
+    filter:
+      isToday
   };
 }
 
 /*   build media item*/
-function buildMediaItem(item,index){
+function buildMediaItem(
+  item,
+  index
+){
   const isVideo=
     item.media_kind===
     "video";
@@ -210,9 +279,13 @@ function buildEmptyState(
 
 /*   create memory collection card*/
 export function createMemoryCollectionCard(
-  collection="today"
+  collection="today",
+  {
+    onMedia
+  }={}
 ){
-  const student=getStudent();
+  const student=
+    getStudent();
 
   const definition=
     getCollectionDefinition(
@@ -310,13 +383,41 @@ export function createMemoryCollectionCard(
 
             const index=
               Number(
-                button.dataset.memoryMediaIndex
+                button
+                  .dataset
+                  .memoryMediaIndex
               );
 
             const selectedMedia=
               media[index];
 
-            if(!selectedMedia){
+            if(
+              !selectedMedia
+            ){
+              return;
+            }
+
+            const payload={
+              media:
+                selectedMedia,
+
+              mediaItems:
+                media,
+
+              index,
+
+              collection
+            };
+
+            const handled=
+              typeof onMedia===
+                "function"
+              &&
+              onMedia(
+                payload
+              )===true;
+
+            if(handled){
               return;
             }
 
@@ -324,10 +425,8 @@ export function createMemoryCollectionCard(
               new CustomEvent(
                 "parent:memory-media",
                 {
-                  detail:{
-                    media:selectedMedia,
-                    collection
-                  }
+                  detail:
+                    payload
                 }
               )
             );
