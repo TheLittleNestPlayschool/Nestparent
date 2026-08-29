@@ -39,10 +39,7 @@ export function openMemoriesStage({
   }
 
   if(closeTimer){
-    clearTimeout(
-      closeTimer
-    );
-
+    clearTimeout(closeTimer);
     closeTimer=null;
   }
 
@@ -52,15 +49,18 @@ export function openMemoriesStage({
 
   memoriesCard=
     createMemoriesCard({
-      onChapter:
-        handleMemoryChapter,
-      onCollection:
-        handleMemoryCollection
+      onChapter:handleMemoryChapter,
+      onCollection:handleMemoryCollection
     });
 
   memoriesCard.addEventListener(
     "click",
     handleMemoriesCardBack
+  );
+
+  currentNestCard.addEventListener(
+    "click",
+    handleNestCardBack
   );
 
   carousel.appendChild(
@@ -88,17 +88,13 @@ export function openMemoriesStage({
     0
   );
 
-  requestAnimationFrame(
-    ()=>{
-      requestAnimationFrame(
-        ()=>{
-          memoriesCard.classList.add(
-            "is-visible"
-          );
-        }
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      memoriesCard.classList.add(
+        "is-visible"
       );
-    }
-  );
+    });
+  });
 }
 
 /*   open collection*/
@@ -106,21 +102,12 @@ function openCollection(
   collection
 ){
   return openMemoryCollectionStage({
-    carousel:
-      currentCarousel,
-
-    nestCard:
-      currentNestCard,
-
+    carousel:currentCarousel,
+    nestCard:currentNestCard,
     memoriesCard,
-
     collection,
-
-    onMedia:
-      handleCollectionMedia,
-
-    onBack:
-      handleCollectionCardBack
+    onMedia:handleCollectionMedia,
+    onBack:handleCollectionCardBack
   });
 }
 
@@ -129,26 +116,17 @@ function handleMemoryChapter(
   chapter
 ){
   if(chapter==="today"){
-    openCollection(
-      "today"
-    );
-
+    openCollection("today");
     return true;
   }
 
   if(chapter==="week"){
-    openCollection(
-      "week"
-    );
-
+    openCollection("week");
     return true;
   }
 
   if(chapter==="august"){
-    openCollection(
-      "month"
-    );
-
+    openCollection("month");
     return true;
   }
 
@@ -159,14 +137,13 @@ function handleMemoryChapter(
 function handleMemoryCollection(
   collection
 ){
-  if(
-    collection===
-    "recognition"
-  ){
-    openCollection(
-      "recognition"
-    );
+  if(collection==="recognition"){
+    openCollection("recognition");
+    return true;
+  }
 
+  if(collection==="birthday"){
+    openCollection("birthday");
     return true;
   }
 
@@ -185,24 +162,13 @@ function handleCollectionMedia(
   }
 
   openMemoryViewerStage({
-    carousel:
-      currentCarousel,
-
-    nestCard:
-      currentNestCard,
-
+    carousel:currentCarousel,
+    nestCard:currentNestCard,
     memoriesCard,
-
     collectionCard,
-
-    mediaItems:
-      payload.mediaItems,
-
-    index:
-      payload.index,
-
-    collection:
-      payload.collection
+    mediaItems:payload.mediaItems,
+    index:payload.index,
+    collection:payload.collection
   });
 
   return true;
@@ -217,11 +183,8 @@ function handleCollectionCardBack(){
   }
 
   closeMemoryViewerStage({
-    nestCard:
-      currentNestCard,
-
+    nestCard:currentNestCard,
     memoriesCard,
-
     collectionCard:
       getMemoryCollectionCard()
   });
@@ -252,14 +215,27 @@ function handleMemoriesCardBack(
     isMemoryCollectionStageOpen()
   ){
     closeMemoryCollectionStage({
-      nestCard:
-        currentNestCard,
-
+      nestCard:currentNestCard,
       memoriesCard
     });
 
     return;
   }
+}
+
+/*   nest card back*/
+function handleNestCardBack(
+  event
+){
+  if(
+    !memoriesOpen||
+    isMemoryCollectionStageOpen()||
+    isMemoryViewerStageOpen()
+  ){
+    return;
+  }
+
+  event.stopPropagation();
 
   closeMemoriesStage();
 }
@@ -274,11 +250,8 @@ export function closeMemoriesStage(){
     isMemoryViewerStageOpen()
   ){
     closeMemoryViewerStage({
-      nestCard:
-        currentNestCard,
-
+      nestCard:currentNestCard,
       memoriesCard,
-
       collectionCard:
         getMemoryCollectionCard()
     });
@@ -290,9 +263,7 @@ export function closeMemoriesStage(){
     isMemoryCollectionStageOpen()
   ){
     closeMemoryCollectionStage({
-      nestCard:
-        currentNestCard,
-
+      nestCard:currentNestCard,
       memoriesCard
     });
 
@@ -303,6 +274,9 @@ export function closeMemoriesStage(){
 
   const cardToRemove=
     memoriesCard;
+
+  const returningNestCard=
+    currentNestCard;
 
   memoriesCard=null;
 
@@ -316,31 +290,36 @@ export function closeMemoriesStage(){
     );
   }
 
-  if(currentNestCard){
-    currentNestCard.classList.remove(
+  if(returningNestCard){
+    returningNestCard.removeEventListener(
+      "click",
+      handleNestCardBack
+    );
+
+    returningNestCard.classList.remove(
       "is-stage-back"
     );
 
     renderCardOffset(
-      currentNestCard,
+      returningNestCard,
       0
     );
 
-    currentNestCard.style.pointerEvents=
+    returningNestCard.style.pointerEvents=
       "auto";
   }
 
   closeTimer=
-    window.setTimeout(
-      ()=>{
-        if(cardToRemove){
-          cardToRemove.remove();
-        }
+    window.setTimeout(()=>{
+      if(cardToRemove){
+        cardToRemove.remove();
+      }
 
-        closeTimer=null;
-      },
-      700
-    );
+      closeTimer=null;
+    },700);
+
+  currentNestCard=null;
+  currentCarousel=null;
 }
 
 /*   memories stage open*/
