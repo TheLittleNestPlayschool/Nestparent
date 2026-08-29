@@ -1,0 +1,341 @@
+/*   memory viewer*/
+
+.memory-viewer-stage-card{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.88);
+  border-radius:34px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(250,249,241,.99),
+      rgba(235,244,237,.98)
+    );
+  box-shadow:
+    0 25px 70px
+    rgba(38,54,48,.14);
+}
+
+/*   viewer media*/
+
+.memory-viewer-media{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(255,255,255,.94),
+      rgba(239,244,238,.88) 62%,
+      rgba(232,239,233,.94)
+    );
+}
+
+.memory-viewer-image,
+.memory-viewer-video{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  background:transparent;
+}
+
+.memory-viewer-image{
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+/*   viewer top*/
+
+.memory-viewer-top{
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:22px 23px 52px;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(244,247,242,.88),
+      rgba(244,247,242,0)
+    );
+}
+
+.memory-viewer-kicker,
+.memory-viewer-counter{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:0 10px;
+  border:1px solid rgba(255,255,255,.82);
+  border-radius:999px;
+  background:rgba(255,255,255,.68);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  box-shadow:
+    0 5px 18px
+    rgba(38,54,48,.07);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(38,50,47,.68);
+}
+
+/*   viewer navigation*/
+
+.memory-viewer-nav{
+  position:absolute;
+  top:50%;
+  z-index:7;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  padding:0 0 3px;
+  border:1px solid rgba(255,255,255,.88);
+  border-radius:50%;
+  transform:translateY(-50%);
+  background:rgba(255,255,255,.74);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:
+    0 8px 24px
+    rgba(38,54,48,.12);
+  color:rgba(38,50,47,.76);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:29px;
+  line-height:1;
+  cursor:pointer;
+  transition:
+    opacity .3s ease,
+    transform .3s ease,
+    background .3s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.memory-viewer-prev{
+  left:15px;
+}
+
+.memory-viewer-next{
+  right:15px;
+}
+
+.memory-viewer-nav:active:not(:disabled){
+  transform:
+    translateY(-50%)
+    scale(.92);
+  background:rgba(255,255,255,.94);
+}
+
+.memory-viewer-nav:disabled{
+  opacity:.20;
+  cursor:default;
+}
+
+/*   viewer bottom*/
+
+.memory-viewer-bottom{
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:14px;
+  z-index:8;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px 12px 11px 15px;
+  border:1px solid rgba(255,255,255,.88);
+  border-radius:21px;
+  background:rgba(248,250,247,.82);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:
+    0 12px 32px
+    rgba(38,54,48,.10);
+}
+
+.memory-viewer-detail{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.memory-viewer-date{
+  overflow:hidden;
+  font-size:10px;
+  font-weight:600;
+  line-height:1.2;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:rgba(38,50,47,.78);
+}
+
+.memory-viewer-kind{
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(38,50,47,.38);
+}
+
+/*   viewer actions*/
+
+.memory-viewer-actions{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/*   viewer download*/
+
+.memory-viewer-download{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:38px;
+  padding:0 11px;
+  border:1px solid rgba(255,255,255,.92);
+  border-radius:999px;
+  background:rgba(255,255,255,.76);
+  box-shadow:
+    0 7px 20px
+    rgba(38,54,48,.07);
+  color:rgba(31,43,38,.78);
+  font-size:9px;
+  font-weight:700;
+  cursor:pointer;
+  transition:
+    transform .32s cubic-bezier(.20,.62,.18,1),
+    background .32s ease,
+    opacity .32s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.memory-viewer-download:active:not(:disabled){
+  transform:scale(.96);
+  background:white;
+}
+
+.memory-viewer-download:disabled{
+  opacity:.58;
+  cursor:default;
+}
+
+.memory-viewer-download-symbol{
+  display:grid;
+  place-items:center;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:rgba(225,234,228,.72);
+  font-size:12px;
+  line-height:1;
+}
+
+/*   viewer share*/
+
+.memory-viewer-share{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:38px;
+  padding:0 11px;
+  border:1px solid rgba(255,255,255,.92);
+  border-radius:999px;
+  background:rgba(232,242,235,.94);
+  box-shadow:
+    0 7px 20px
+    rgba(38,54,48,.08);
+  color:rgba(31,43,38,.88);
+  font-size:9px;
+  font-weight:700;
+  cursor:pointer;
+  transition:
+    transform .32s cubic-bezier(.20,.62,.18,1),
+    background .32s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.memory-viewer-share[hidden]{
+  display:none;
+}
+
+.memory-viewer-share:active{
+  transform:scale(.96);
+  background:white;
+}
+
+.memory-viewer-share-symbol{
+  display:grid;
+  place-items:center;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:rgba(202,224,210,.72);
+  font-size:11px;
+}
+
+/*   responsive*/
+
+@media (max-width:420px){
+  .memory-viewer-top{
+    padding:18px 18px 48px;
+  }
+
+  .memory-viewer-nav{
+    width:38px;
+    height:38px;
+    font-size:26px;
+  }
+
+  .memory-viewer-prev{
+    left:11px;
+  }
+
+  .memory-viewer-next{
+    right:11px;
+  }
+
+  .memory-viewer-bottom{
+    left:10px;
+    right:10px;
+    bottom:10px;
+    gap:7px;
+    padding:9px 9px 9px 12px;
+    border-radius:19px;
+  }
+
+  .memory-viewer-actions{
+    gap:5px;
+  }
+
+  .memory-viewer-download,
+  .memory-viewer-share{
+    min-height:36px;
+    padding:0 9px;
+    font-size:8px;
+  }
+
+  .memory-viewer-download-symbol,
+  .memory-viewer-share-symbol{
+    width:18px;
+    height:18px;
+  }
+}
