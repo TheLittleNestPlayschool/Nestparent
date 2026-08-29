@@ -1,28 +1,21 @@
 /*   get media date*/
 function getMediaDate(value){
-  let timestamp=
-    Number(value);
+  let timestamp=Number(value);
 
   if(!timestamp){
     return null;
   }
 
-  if(
-    timestamp<
-    1000000000000
-  ){
+  if(timestamp<1000000000000){
     timestamp*=1000;
   }
 
-  return new Date(
-    timestamp
-  );
+  return new Date(timestamp);
 }
 
 /*   format media date*/
 function formatMediaDate(value){
-  const date=
-    getMediaDate(value);
+  const date=getMediaDate(value);
 
   if(!date){
     return"";
@@ -35,37 +28,180 @@ function formatMediaDate(value){
       day:"numeric",
       year:"numeric"
     }
-  ).format(
-    date
-  );
+  ).format(date);
 }
 
 /*   get collection label*/
-function getCollectionLabel(
-  collection
-){
-  if(
-    collection===
-    "week"
-  ){
+function getCollectionLabel(collection){
+  if(collection==="week"){
     return"This Week";
   }
 
-  if(
-    collection===
-    "month"
-  ){
+  if(collection==="month"){
     return new Intl.DateTimeFormat(
       "en",
       {
         month:"long"
       }
-    ).format(
-      new Date()
-    );
+    ).format(new Date());
   }
 
   return"Today";
+}
+
+/*   get download filename*/
+function getDownloadFilename(item){
+  const original=
+    item?.original_filename||
+    "";
+
+  const filename=
+    original
+      .split("/")
+      .pop();
+
+  if(filename){
+    return filename;
+  }
+
+  if(item?.media_kind==="video"){
+    return"little-nest-memory.mp4";
+  }
+
+  return"little-nest-memory.jpg";
+}
+
+/*   download media*/
+async function downloadMedia(
+  item,
+  button
+){
+  if(
+    !item||
+    !item.media_url||
+    !button
+  ){
+    return;
+  }
+
+  if(
+    button.dataset.downloading===
+    "true"
+  ){
+    return;
+  }
+
+  button.dataset.downloading=
+    "true";
+
+  button.disabled=true;
+
+  const label=
+    button.querySelector(
+      ".memory-viewer-download-label"
+    );
+
+  if(label){
+    label.textContent=
+      "Saving...";
+  }
+
+  try{
+    const response=
+      await fetch(
+        item.media_url
+      );
+
+    if(!response.ok){
+      throw new Error(
+        "Unable to download media."
+      );
+    }
+
+    const blob=
+      await response.blob();
+
+    const objectUrl=
+      URL.createObjectURL(
+        blob
+      );
+
+    const link=
+      document.createElement(
+        "a"
+      );
+
+    link.href=
+      objectUrl;
+
+    link.download=
+      getDownloadFilename(
+        item
+      );
+
+    document.body.appendChild(
+      link
+    );
+
+    link.click();
+
+    link.remove();
+
+    window.setTimeout(
+      ()=>{
+        URL.revokeObjectURL(
+          objectUrl
+        );
+      },
+      1000
+    );
+  }
+
+  catch(error){
+    console.error(
+      "MEMORY DOWNLOAD ERROR",
+      error
+    );
+
+    /*
+      fallback if browser or S3
+      does not allow blob download
+    */
+
+    const link=
+      document.createElement(
+        "a"
+      );
+
+    link.href=
+      item.media_url;
+
+    link.target=
+      "_blank";
+
+    link.rel=
+      "noopener";
+
+    document.body.appendChild(
+      link
+    );
+
+    link.click();
+
+    link.remove();
+  }
+
+  finally{
+    button.dataset.downloading=
+      "false";
+
+    button.disabled=false;
+
+    if(label){
+      label.textContent=
+        "Download";
+    }
+  }
 }
 
 /*   create memory viewer card*/
@@ -138,18 +274,35 @@ export function createMemoryViewerCard({
 
         </div>
 
-        <button
-          class="memory-viewer-share"
-          type="button"
-        >
-          <span class="memory-viewer-share-symbol">
-            ↗
-          </span>
+        <div class="memory-viewer-actions">
 
-          <span>
-            Share this moment
-          </span>
-        </button>
+          <button
+            class="memory-viewer-download"
+            type="button"
+          >
+            <span class="memory-viewer-download-symbol">
+              ↓
+            </span>
+
+            <span class="memory-viewer-download-label">
+              Download
+            </span>
+          </button>
+
+          <button
+            class="memory-viewer-share"
+            type="button"
+          >
+            <span class="memory-viewer-share-symbol">
+              ↗
+            </span>
+
+            <span>
+              Share
+            </span>
+          </button>
+
+        </div>
 
       </div>
 
@@ -184,6 +337,11 @@ export function createMemoryViewerCard({
   const next=
     article.querySelector(
       ".memory-viewer-next"
+    );
+
+  const download=
+    article.querySelector(
+      ".memory-viewer-download"
     );
 
   const share=
@@ -286,9 +444,7 @@ export function createMemoryViewerCard({
     event=>{
       event.stopPropagation();
 
-      if(
-        currentIndex<=0
-      ){
+      if(currentIndex<=0){
         return;
       }
 
@@ -317,6 +473,24 @@ export function createMemoryViewerCard({
     }
   );
 
+  /*   download memory*/
+  download.addEventListener(
+    "click",
+    async event=>{
+      event.stopPropagation();
+
+      const item=
+        mediaItems[
+          currentIndex
+        ];
+
+      await downloadMedia(
+        item,
+        download
+      );
+    }
+  );
+
   /*   share memory*/
   share.addEventListener(
     "click",
@@ -342,8 +516,7 @@ export function createMemoryViewerCard({
           {
             detail:{
               media:item,
-              index:
-                currentIndex,
+              index:currentIndex,
               mediaItems,
               collection
             }
