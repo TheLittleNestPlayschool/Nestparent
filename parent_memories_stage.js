@@ -3,8 +3,8 @@ import{
 }from"./parent_memories_card.js";
 
 import{
-  createMemoryTodayCard
-}from"./parent_memory_today_card.js";
+  createMemoryCollectionCard
+}from"./parent_memory_collection_card.js";
 
 import{
   renderCardOffset
@@ -16,9 +16,9 @@ let currentNestCard=null;
 let currentCarousel=null;
 let closeTimer=null;
 
-let todayOpen=false;
-let todayCard=null;
-let todayCloseTimer=null;
+let collectionOpen=false;
+let collectionCard=null;
+let collectionCloseTimer=null;
 
 /*   open memories stage*/
 export function openMemoriesStage({
@@ -86,40 +86,60 @@ export function openMemoriesStage({
 
 /*   handle memory chapter*/
 function handleMemoryChapter(chapter){
-  if(chapter!=="today"){
-    return false;
+  if(
+    chapter==="today"||
+    chapter==="week"||
+    chapter==="august"
+  ){
+    openCollectionStage(
+      chapter
+    );
+
+    return true;
   }
 
-  openTodayStage();
-
-  return true;
+  return false;
 }
 
-/*   open today stage*/
-function openTodayStage(){
+/*   open collection stage*/
+function openCollectionStage(
+  chapter="today"
+){
   if(
-    todayOpen||
+    collectionOpen||
     !currentCarousel||
     !memoriesCard
   ){
     return;
   }
 
-  if(todayCloseTimer){
-    clearTimeout(todayCloseTimer);
-    todayCloseTimer=null;
+  if(collectionCloseTimer){
+    clearTimeout(
+      collectionCloseTimer
+    );
+
+    collectionCloseTimer=null;
   }
 
-  todayOpen=true;
+  collectionOpen=true;
 
-  todayCard=
-    createMemoryTodayCard();
+  const collection=
+    chapter==="week"
+      ?"week"
+      :chapter==="august"
+        ?"month"
+        :"today";
+
+  collectionCard=
+    createMemoryCollectionCard(
+      collection
+    );
 
   currentCarousel.appendChild(
-    todayCard
+    collectionCard
   );
 
-  void todayCard.offsetWidth;
+  void collectionCard.offsetWidth;
 
   /*   move nest further back*/
   if(currentNestCard){
@@ -164,14 +184,14 @@ function openTodayStage(){
     handleMemoriesCardBack
   );
 
-  /*   reveal today*/
+  /*   reveal collection*/
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
-      if(!todayCard){
+      if(!collectionCard){
         return;
       }
 
-      todayCard.classList.add(
+      collectionCard.classList.add(
         "is-visible"
       );
     });
@@ -182,19 +202,19 @@ function openTodayStage(){
 function handleMemoriesCardBack(event){
   event.stopPropagation();
 
-  closeTodayStage();
+  closeCollectionStage();
 }
 
-/*   close today stage*/
-function closeTodayStage(){
-  if(!todayOpen){
+/*   close collection stage*/
+function closeCollectionStage(){
+  if(!collectionOpen){
     return;
   }
 
-  todayOpen=false;
+  collectionOpen=false;
 
   const cardToRemove=
-    todayCard;
+    collectionCard;
 
   const returningMemoriesCard=
     memoriesCard;
@@ -230,7 +250,7 @@ function closeTodayStage(){
       "none";
   }
 
-  /*   nest returns to previous-card position*/
+  /*   nest returns to previous position*/
   if(currentNestCard){
     renderCardOffset(
       currentNestCard,
@@ -245,11 +265,11 @@ function closeTodayStage(){
       "auto";
   }
 
-  /*   memories glides back to center*/
-  todayCloseTimer=
+  /*   memories returns to center*/
+  collectionCloseTimer=
     window.setTimeout(
       ()=>{
-        todayCloseTimer=null;
+        collectionCloseTimer=null;
 
         if(returningMemoriesCard){
           renderCardOffset(
@@ -261,7 +281,7 @@ function closeTodayStage(){
       110
     );
 
-  /*   remove today after fade*/
+  /*   remove collection after fade*/
   window.setTimeout(
     ()=>{
       if(
@@ -271,8 +291,11 @@ function closeTodayStage(){
         cardToRemove.remove();
       }
 
-      if(todayCard===cardToRemove){
-        todayCard=null;
+      if(
+        collectionCard===
+        cardToRemove
+      ){
+        collectionCard=null;
       }
     },
     1050
@@ -310,7 +333,7 @@ function closeTodayStage(){
 function handleNestCardBack(event){
   event.stopPropagation();
 
-  if(todayOpen){
+  if(collectionOpen){
     return;
   }
 
@@ -326,7 +349,7 @@ export function closeMemoriesStage({
 }={}){
   if(
     !memoriesOpen||
-    todayOpen
+    collectionOpen
   ){
     return;
   }
@@ -422,7 +445,7 @@ export function isMemoriesStageOpen(){
   return memoriesOpen;
 }
 
-/*   today state*/
-export function isMemoryTodayStageOpen(){
-  return todayOpen;
+/*   collection state*/
+export function isMemoryCollectionStageOpen(){
+  return collectionOpen;
 }
