@@ -1,32 +1,22 @@
-import {
+import{
   memoriesOverview,
   memoryChapters,
   memoryCollections
-} from "./parent_memories_data.js";
-
+}from"./parent_memories_data.js";
 
 /*   build special collections*/
-
 function buildMemoryCollections(){
-
-  const availableCollections =
+  const availableCollections=
     memoryCollections.filter(
-      collection=>
-        collection.available
+      collection=>collection.available
     );
 
-
-  if(
-    availableCollections.length ===
-    0
-  ){
-    return "";
+  if(availableCollections.length===0){
+    return"";
   }
 
-
-  return `
+  return`
     <div class="memory-specials">
-
       ${
         availableCollections
           .map(
@@ -36,7 +26,6 @@ function buildMemoryCollections(){
                 type="button"
                 data-memory-collection="${collection.id}"
               >
-
                 <span class="memory-special-symbol">
                   ${collection.symbol}
                 </span>
@@ -44,38 +33,31 @@ function buildMemoryCollections(){
                 <span class="memory-special-title">
                   ${collection.title}
                 </span>
-
               </button>
             `
           )
           .join("")
       }
-
     </div>
   `;
-
 }
 
-
 /*   create memories card*/
-
-export function createMemoriesCard(){
-
-  const article =
+export function createMemoriesCard({
+  onChapter
+}={}){
+  const article=
     document.createElement(
       "article"
     );
 
-
-  article.className =
+  article.className=
     "experience memories-experience";
 
-
-  article.dataset.type =
+  article.dataset.type=
     "memories";
 
-
-  article.innerHTML = `
+  article.innerHTML=`
     <div class="memories-stage-card">
 
       <div class="memories-hero">
@@ -109,17 +91,13 @@ export function createMemoriesCard(){
             little moments saved
           </div>
 
-          ${
-            buildMemoryCollections()
-          }
+          ${buildMemoryCollections()}
 
         </div>
 
       </div>
 
-
       <div class="memory-chapters">
-
         ${
           memoryChapters
             .map(
@@ -129,7 +107,6 @@ export function createMemoriesCard(){
                   type="button"
                   data-memory-chapter="${chapter.id}"
                 >
-
                   <span class="memory-chapter-title">
                     ${chapter.title}
                   </span>
@@ -141,91 +118,77 @@ export function createMemoriesCard(){
                   <span class="memory-chapter-count">
                     ${chapter.count}
                   </span>
-
                 </button>
               `
             )
             .join("")
         }
-
       </div>
 
     </div>
   `;
 
-
   article
     .querySelectorAll(
       ".memory-chapter"
     )
-    .forEach(
-      button=>{
+    .forEach(button=>{
+      button.addEventListener(
+        "click",
+        event=>{
+          event.stopPropagation();
 
-        button.addEventListener(
-          "click",
-          event=>{
+          const chapter=
+            button.dataset.memoryChapter;
 
-            event.stopPropagation();
+          const handled=
+            typeof onChapter==="function" &&
+            onChapter(chapter)===true;
 
-
-            const chapter =
-              button.dataset.memoryChapter;
-
-
-            window.dispatchEvent(
-              new CustomEvent(
-                "parent:memory-chapter",
-                {
-                  detail:{
-                    chapter
-                  }
-                }
-              )
-            );
-
+          if(handled){
+            return;
           }
-        );
 
-      }
-    );
-
+          window.dispatchEvent(
+            new CustomEvent(
+              "parent:memory-chapter",
+              {
+                detail:{
+                  chapter
+                }
+              }
+            )
+          );
+        }
+      );
+    });
 
   article
     .querySelectorAll(
       ".memory-special"
     )
-    .forEach(
-      button=>{
+    .forEach(button=>{
+      button.addEventListener(
+        "click",
+        event=>{
+          event.stopPropagation();
 
-        button.addEventListener(
-          "click",
-          event=>{
+          const collection=
+            button.dataset.memoryCollection;
 
-            event.stopPropagation();
-
-
-            const collection =
-              button.dataset.memoryCollection;
-
-
-            window.dispatchEvent(
-              new CustomEvent(
-                "parent:memory-collection",
-                {
-                  detail:{
-                    collection
-                  }
+          window.dispatchEvent(
+            new CustomEvent(
+              "parent:memory-collection",
+              {
+                detail:{
+                  collection
                 }
-              )
-            );
-
-          }
-        );
-
-      }
-    );
-
+              }
+            )
+          );
+        }
+      );
+    });
 
   return article;
-
 }
