@@ -53,7 +53,9 @@ export function openMemoriesStage({
   memoriesCard=
     createMemoriesCard({
       onChapter:
-        handleMemoryChapter
+        handleMemoryChapter,
+      onCollection:
+        handleMemoryCollection
     });
 
   memoriesCard.addEventListener(
@@ -99,39 +101,71 @@ export function openMemoriesStage({
   );
 }
 
+/*   open collection*/
+function openCollection(
+  collection
+){
+  return openMemoryCollectionStage({
+    carousel:
+      currentCarousel,
+
+    nestCard:
+      currentNestCard,
+
+    memoriesCard,
+
+    collection,
+
+    onMedia:
+      handleCollectionMedia,
+
+    onBack:
+      handleCollectionCardBack
+  });
+}
+
 /*   handle memory chapter*/
 function handleMemoryChapter(
   chapter
 ){
+  if(chapter==="today"){
+    openCollection(
+      "today"
+    );
+
+    return true;
+  }
+
+  if(chapter==="week"){
+    openCollection(
+      "week"
+    );
+
+    return true;
+  }
+
+  if(chapter==="august"){
+    openCollection(
+      "month"
+    );
+
+    return true;
+  }
+
+  return false;
+}
+
+/*   handle special collection*/
+function handleMemoryCollection(
+  collection
+){
   if(
-    chapter==="today"||
-    chapter==="week"||
-    chapter==="august"
+    collection===
+    "recognition"
   ){
-    const collection=
-      chapter==="week"
-        ?"week"
-        :chapter==="august"
-          ?"month"
-          :"today";
-
-    openMemoryCollectionStage({
-      carousel:
-        currentCarousel,
-
-      nestCard:
-        currentNestCard,
-
-      memoriesCard,
-
-      collection,
-
-      onMedia:
-        handleCollectionMedia,
-
-      onBack:
-        handleCollectionCardBack
-    });
+    openCollection(
+      "recognition"
+    );
 
     return true;
   }
@@ -236,7 +270,6 @@ export function closeMemoriesStage(){
     return;
   }
 
-  /*   close viewer first*/
   if(
     isMemoryViewerStageOpen()
   ){
@@ -253,7 +286,6 @@ export function closeMemoriesStage(){
     return;
   }
 
-  /*   close collection first*/
   if(
     isMemoryCollectionStageOpen()
   ){
