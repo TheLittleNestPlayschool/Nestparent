@@ -1,21 +1,36 @@
+import{
+  renderViewerMedia
+}from"./parent_memory_viewer_media.js";
+
+import{
+  downloadMemoryMedia
+}from"./parent_memory_download.js";
+
 /*   get media date*/
 function getMediaDate(value){
-  let timestamp=Number(value);
+  let timestamp=
+    Number(value);
 
   if(!timestamp){
     return null;
   }
 
-  if(timestamp<1000000000000){
+  if(
+    timestamp<
+    1000000000000
+  ){
     timestamp*=1000;
   }
 
-  return new Date(timestamp);
+  return new Date(
+    timestamp
+  );
 }
 
 /*   format media date*/
 function formatMediaDate(value){
-  const date=getMediaDate(value);
+  const date=
+    getMediaDate(value);
 
   if(!date){
     return"";
@@ -28,203 +43,37 @@ function formatMediaDate(value){
       day:"numeric",
       year:"numeric"
     }
-  ).format(date);
+  ).format(
+    date
+  );
 }
 
 /*   get collection label*/
-function getCollectionLabel(collection){
-  if(collection==="week"){
+function getCollectionLabel(
+  collection
+){
+  if(
+    collection===
+    "week"
+  ){
     return"This Week";
   }
 
-  if(collection==="month"){
+  if(
+    collection===
+    "month"
+  ){
     return new Intl.DateTimeFormat(
       "en",
       {
         month:"long"
       }
-    ).format(new Date());
+    ).format(
+      new Date()
+    );
   }
 
   return"Today";
-}
-
-/*   get download filename*/
-function getDownloadFilename(item){
-  const original=
-    item?.original_filename||
-    "";
-
-  const filename=
-    original
-      .split("/")
-      .pop();
-
-  if(filename){
-    return filename;
-  }
-
-  if(item?.media_kind==="video"){
-    return"little-nest-memory.mp4";
-  }
-
-  return"little-nest-memory.jpg";
-}
-
-/*   download media*/
-async function downloadMedia(
-  item,
-  button
-){
-  if(
-    !item||
-    !item.media_url||
-    !button
-  ){
-    return;
-  }
-
-  if(
-    button.dataset.downloading===
-    "true"
-  ){
-    return;
-  }
-
-  button.dataset.downloading=
-    "true";
-
-  button.disabled=true;
-
-  const label=
-    button.querySelector(
-      ".memory-viewer-download-label"
-    );
-
-  if(label){
-    label.textContent=
-      "Saving...";
-  }
-
-  try{
-    console.log(
-      "MEMORY DOWNLOAD START",
-      {
-        id:item.id,
-        media_kind:item.media_kind,
-        mime_type:item.mime_type
-      }
-    );
-
-    const response=
-      await fetch(
-        item.media_url,
-        {
-          method:"GET",
-          mode:"cors",
-          cache:"no-store"
-        }
-      );
-
-    console.log(
-      "MEMORY DOWNLOAD RESPONSE",
-      {
-        ok:response.ok,
-        status:response.status,
-        type:response.type,
-        contentType:
-          response.headers.get(
-            "content-type"
-          )
-      }
-    );
-
-    if(!response.ok){
-      throw new Error(
-        `Unable to download media. HTTP ${response.status}`
-      );
-    }
-
-    const blob=
-      await response.blob();
-
-    console.log(
-      "MEMORY DOWNLOAD BLOB",
-      {
-        size:blob.size,
-        type:blob.type
-      }
-    );
-
-    const objectUrl=
-      URL.createObjectURL(
-        blob
-      );
-
-    const link=
-      document.createElement(
-        "a"
-      );
-
-    link.href=
-      objectUrl;
-
-    link.download=
-      getDownloadFilename(
-        item
-      );
-
-    link.style.display=
-      "none";
-
-    document.body.appendChild(
-      link
-    );
-
-    link.click();
-
-    link.remove();
-
-    window.setTimeout(
-      ()=>{
-        URL.revokeObjectURL(
-          objectUrl
-        );
-      },
-      1500
-    );
-
-    console.log(
-      "MEMORY DOWNLOAD COMPLETE",
-      getDownloadFilename(
-        item
-      )
-    );
-  }
-
-  catch(error){
-    console.error(
-      "MEMORY DOWNLOAD ERROR",
-      error,
-      {
-        id:item?.id,
-        media_kind:item?.media_kind,
-        mime_type:item?.mime_type
-      }
-    );
-  }
-
-  finally{
-    button.dataset.downloading=
-      "false";
-
-    button.disabled=false;
-
-    if(label){
-      label.textContent=
-        "Download";
-    }
-  }
 }
 
 /*   create memory viewer card*/
@@ -383,72 +232,10 @@ export function createMemoryViewerCard({
       return;
     }
 
-    mediaContainer.innerHTML=
-      "";
-
-    if(
-      item.media_kind===
-      "video"
-    ){
-      const video=
-        document.createElement(
-          "video"
-        );
-
-      video.className=
-        "memory-viewer-video";
-
-      video.crossOrigin=
-        "anonymous";
-
-      video.src=
-        item.media_url||
-        "";
-
-      video.controls=true;
-      video.playsInline=true;
-      video.preload="metadata";
-
-      mediaContainer.appendChild(
-        video
-      );
-    }
-
-    else{
-      const image=
-        document.createElement(
-          "img"
-        );
-
-      image.className=
-        "memory-viewer-image";
-
-      /*
-        Set crossOrigin BEFORE src.
-
-        This makes the initial image
-        request a CORS-aware request so
-        Chrome does not cache a non-CORS
-        version of the same signed URL.
-      */
-
-      image.crossOrigin=
-        "anonymous";
-
-      image.src=
-        item.media_url||
-        item.thumbnail||
-        "";
-
-      image.alt=
-        "Little Nest memory";
-
-      image.draggable=false;
-
-      mediaContainer.appendChild(
-        image
-      );
-    }
+    renderViewerMedia(
+      mediaContainer,
+      item
+    );
 
     counter.textContent=
       `${currentIndex+1} of ${mediaItems.length}`;
@@ -482,7 +269,9 @@ export function createMemoryViewerCard({
     event=>{
       event.stopPropagation();
 
-      if(currentIndex<=0){
+      if(
+        currentIndex<=0
+      ){
         return;
       }
 
@@ -522,7 +311,7 @@ export function createMemoryViewerCard({
           currentIndex
         ];
 
-      await downloadMedia(
+      await downloadMemoryMedia(
         item,
         download
       );
