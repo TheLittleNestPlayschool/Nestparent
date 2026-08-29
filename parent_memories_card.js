@@ -230,7 +230,6 @@ function getLiveChapters(){
 
   return memoryChapters.map(
     chapter=>{
-
       if(chapter.id==="today"){
         return{
           ...chapter,
@@ -277,11 +276,8 @@ function getLiveChapters(){
 /*   get live special collections*/
 function getLiveMemoryCollections(){
   const media=getMemoryMedia();
-  const collectionLinks=
-    getStudentMediaCollections();
-
-  const collectionTypes=
-    getMediaCollectionTypes();
+  const collectionLinks=getStudentMediaCollections();
+  const collectionTypes=getMediaCollectionTypes();
 
   const validMediaIds=
     new Set(
@@ -298,12 +294,11 @@ function getLiveMemoryCollections(){
     )
     .map(
       type=>{
-        const code=
-          String(
-            type.code||""
-          )
-            .trim()
-            .toLowerCase();
+        const code=String(
+          type.code||""
+        )
+          .trim()
+          .toLowerCase();
 
         const matchingMediaIds=
           new Set(
@@ -315,8 +310,7 @@ function getLiveMemoryCollections(){
                   )===
                   Number(
                     type.id
-                  )
-                  &&
+                  )&&
                   validMediaIds.has(
                     Number(
                       link.student_media_id
@@ -331,10 +325,7 @@ function getLiveMemoryCollections(){
               )
           );
 
-        if(
-          matchingMediaIds.size===
-          0
-        ){
+        if(matchingMediaIds.size===0){
           return null;
         }
 
@@ -399,7 +390,8 @@ function buildMemoryCollections(){
 
 /*   create memories card*/
 export function createMemoriesCard({
-  onChapter
+  onChapter,
+  onCollection
 }={}){
   const article=
     document.createElement(
@@ -493,6 +485,7 @@ export function createMemoriesCard({
     </div>
   `;
 
+  /*   chapter actions*/
   article
     .querySelectorAll(
       ".memory-chapter"
@@ -508,9 +501,7 @@ export function createMemoriesCard({
               button.dataset.memoryChapter;
 
             const handled=
-              typeof onChapter===
-                "function"
-              &&
+              typeof onChapter==="function"&&
               onChapter(
                 chapter
               )===true;
@@ -534,6 +525,7 @@ export function createMemoriesCard({
       }
     );
 
+  /*   special collection actions*/
   article
     .querySelectorAll(
       ".memory-special"
@@ -547,6 +539,16 @@ export function createMemoriesCard({
 
             const collection=
               button.dataset.memoryCollection;
+
+            const handled=
+              typeof onCollection==="function"&&
+              onCollection(
+                collection
+              )===true;
+
+            if(handled){
+              return;
+            }
 
             window.dispatchEvent(
               new CustomEvent(
