@@ -15,29 +15,94 @@
 
   justify-content:center;
 
-  gap:8px;
+  gap:14px;
 
-  width:54px;
+  width:50px;
 
-  min-height:72px;
+  height:74%;
 
-  padding:0;
+  min-height:230px;
 
-  border:0;
+  max-height:340px;
+
+  padding:
+    18px
+    7px;
 
   appearance:none;
 
   -webkit-appearance:none;
 
-  background:none;
+  border:
+    1px solid
+    rgba(
+      205,
+      146,
+      38,
+      .62
+    );
 
-  box-shadow:none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        255,
+        246,
+        218,
+        .88
+      ),
+      rgba(
+        244,
+        190,
+        83,
+        .80
+      )
+    );
+
+  backdrop-filter:
+    blur(18px)
+    saturate(1.28);
+
+  -webkit-backdrop-filter:
+    blur(18px)
+    saturate(1.28);
+
+  box-shadow:
+    0
+    12px
+    32px
+    rgba(
+      119,
+      78,
+      16,
+      .22
+    ),
+    inset
+    0
+    1px
+    0
+    rgba(
+      255,
+      255,
+      255,
+      .82
+    ),
+    inset
+    0
+    -18px
+    30px
+    rgba(
+      214,
+      145,
+      33,
+      .14
+    );
 
   color:
     rgba(
-      42,
-      65,
-      49,
+      91,
+      57,
+      13,
       .98
     );
 
@@ -56,11 +121,17 @@
 
   transition:
     opacity .45s ease,
-    transform .35s ease;
+    filter .45s ease;
+
+  animation:
+    cardNavBreathe
+    3.8s
+    ease-in-out
+    infinite;
 }
 
 
-/*   right side card*/
+/*   right side arrow*/
 
 .has-nav-handle-right
 .card-nav-handle{
@@ -69,15 +140,24 @@
   transform:
     translateY(-50%);
 
-  animation:
-    cardNavInviteRight
-    3.6s
-    ease-in-out
-    infinite;
+  clip-path:
+    polygon(
+      0 0,
+      68% 0,
+      100% 50%,
+      68% 100%,
+      0 100%
+    );
+
+  border-radius:
+    25px
+    12px
+    12px
+    25px;
 }
 
 
-/*   left side card*/
+/*   left side arrow*/
 
 .has-nav-handle-left
 .card-nav-handle{
@@ -86,18 +166,108 @@
   transform:
     translateY(-50%);
 
+  clip-path:
+    polygon(
+      32% 0,
+      100% 0,
+      100% 100%,
+      32% 100%,
+      0 50%
+    );
+
+  border-radius:
+    12px
+    25px
+    25px
+    12px;
+}
+
+
+/*   inner light*/
+
+.card-nav-handle::before{
+  content:"";
+
+  position:absolute;
+
+  inset:7px;
+
+  z-index:-1;
+
+  border-radius:20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        255,
+        255,
+        255,
+        .34
+      ),
+      rgba(
+        255,
+        249,
+        225,
+        .08
+      )
+      48%,
+      rgba(
+        224,
+        157,
+        39,
+        .12
+      )
+    );
+
+  pointer-events:none;
+}
+
+
+/*   soft outer glow*/
+
+.card-nav-handle::after{
+  content:"";
+
+  position:absolute;
+
+  inset:
+    -5px
+    -3px;
+
+  z-index:-2;
+
+  border-radius:28px;
+
+  background:
+    rgba(
+      244,
+      178,
+      55,
+      .18
+    );
+
+  filter:
+    blur(10px);
+
+  opacity:.7;
+
+  pointer-events:none;
+
   animation:
-    cardNavInviteLeft
-    3.6s
+    cardNavGlow
+    3.8s
     ease-in-out
     infinite;
 }
 
 
-/*   arrow beacon*/
+/*   arrow*/
 
 .card-nav-handle-arrow{
   position:relative;
+
+  z-index:2;
 
   display:flex;
 
@@ -105,41 +275,44 @@
 
   justify-content:center;
 
-  width:38px;
+  width:34px;
 
-  height:38px;
+  height:34px;
 
-  flex:0 0 38px;
+  flex:
+    0
+    0
+    34px;
 
   border-radius:50%;
 
   border:
-    2px solid
+    1px solid
     rgba(
-      242,
-      213,
-      137,
-      .98
+      255,
+      244,
+      207,
+      .94
     );
 
   background:
-    linear-gradient(
-      145deg,
-      rgba(
-        80,
-        137,
-        101,
-        1
-      ),
-      rgba(
-        45,
-        88,
-        65,
-        1
-      )
+    rgba(
+      181,
+      112,
+      18,
+      .90
     );
 
   box-shadow:
+    0
+    4px
+    10px
+    rgba(
+      106,
+      65,
+      11,
+      .22
+    ),
     inset
     0
     1px
@@ -148,42 +321,14 @@
       255,
       255,
       255,
-      .28
-    ),
-    0
-    0
-    0
-    2px
-    rgba(
-      255,
-      248,
-      221,
-      .72
-    ),
-    0
-    0
-    10px
-    rgba(
-      238,
-      198,
-      96,
-      .48
-    ),
-    0
-    5px
-    12px
-    rgba(
-      31,
-      51,
-      38,
-      .28
+      .30
     );
 
   font-family:
     Arial,
     sans-serif;
 
-  font-size:20px;
+  font-size:19px;
 
   line-height:1;
 
@@ -196,151 +341,34 @@
     1px
     2px
     rgba(
-      20,
-      37,
-      27,
-      .24
+      72,
+      43,
+      7,
+      .28
     );
-
-  animation:
-    cardNavBeacon
-    3.6s
-    ease-in-out
-    infinite;
 }
 
 
-/*   outer halo*/
-
-.card-nav-handle-arrow::before{
-  content:"";
-
-  position:absolute;
-
-  inset:-7px;
-
-  z-index:-1;
-
-  border-radius:50%;
-
-  border:
-    1px solid
-    rgba(
-      243,
-      208,
-      119,
-      .34
-    );
-
-  box-shadow:
-    0
-    0
-    14px
-    rgba(
-      242,
-      198,
-      87,
-      .30
-    );
-
-  opacity:.72;
-
-  animation:
-    cardNavHalo
-    3.6s
-    ease-in-out
-    infinite;
-}
-
-
-/*   highlight*/
-
-.card-nav-handle-arrow::after{
-  content:"";
-
-  position:absolute;
-
-  width:12px;
-
-  height:6px;
-
-  left:8px;
-
-  top:6px;
-
-  border-radius:50%;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .34
-    );
-
-  filter:blur(.5px);
-
-  transform:
-    rotate(-25deg);
-
-  pointer-events:none;
-}
-
-
-/*   label*/
+/*   navigation label*/
 
 .card-nav-handle-label{
-  display:inline-flex;
+  position:relative;
+
+  z-index:2;
+
+  display:flex;
 
   align-items:center;
 
   justify-content:center;
 
-  min-width:40px;
-
-  min-height:20px;
-
-  padding:
-    4px
-    7px;
-
-  border:
-    1px solid
-    rgba(
-      225,
-      203,
-      149,
-      .72
-    );
-
-  border-radius:999px;
-
-  background:
-    rgba(
-      255,
-      251,
-      239,
-      .94
-    );
-
-  box-shadow:
-    0
-    3px
-    9px
-    rgba(
-      33,
-      50,
-      39,
-      .16
-    );
-
-  font-size:8px;
+  font-size:9px;
 
   line-height:1;
 
   font-weight:800;
 
-  letter-spacing:.08em;
+  letter-spacing:.14em;
 
   text-transform:uppercase;
 
@@ -348,20 +376,36 @@
 
   color:
     rgba(
-      43,
-      72,
-      53,
-      .98
+      82,
+      52,
+      15,
+      .96
     );
+
+  writing-mode:
+    vertical-rl;
+
+  text-orientation:
+    mixed;
+}
+
+
+/*   keep word reading downward*/
+
+.has-nav-handle-right
+.card-nav-handle-label,
+.has-nav-handle-left
+.card-nav-handle-label{
+  transform:
+    rotate(180deg);
 }
 
 
 /*   press*/
 
-.card-nav-handle:active
-.card-nav-handle-arrow{
-  transform:
-    scale(.94);
+.card-nav-handle:active{
+  filter:
+    brightness(.96);
 }
 
 
@@ -375,112 +419,31 @@
   animation:none;
 }
 
-.card-nav-handle.is-travelling
-.card-nav-handle-arrow,
-.card-nav-handle.is-travelling
-.card-nav-handle-arrow::before{
+.card-nav-handle.is-travelling::after{
   animation:none;
 }
 
 
-/*   right navigation invitation*/
+/*   gentle life*/
 
-@keyframes cardNavInviteRight{
-
-  0%,
-  68%,
-  100%{
-    margin-left:0;
-  }
-
-  80%{
-    margin-left:4px;
-  }
-
-  90%{
-    margin-left:0;
-  }
-
-}
-
-
-/*   left navigation invitation*/
-
-@keyframes cardNavInviteLeft{
+@keyframes cardNavBreathe{
 
   0%,
   68%,
   100%{
-    margin-right:0;
-  }
-
-  80%{
-    margin-right:4px;
-  }
-
-  90%{
-    margin-right:0;
-  }
-
-}
-
-
-/*   beacon pulse*/
-
-@keyframes cardNavBeacon{
-
-  0%,
-  66%,
-  100%{
-    transform:
-      scale(1);
+    filter:
+      brightness(1);
 
     box-shadow:
-      inset
       0
-      1px
-      0
-      rgba(
-        255,
-        255,
-        255,
-        .28
-      ),
-      0
-      0
-      0
-      2px
-      rgba(
-        255,
-        248,
-        221,
-        .72
-      ),
-      0
-      0
-      10px
-      rgba(
-        238,
-        198,
-        96,
-        .48
-      ),
-      0
-      5px
       12px
+      32px
       rgba(
-        31,
-        51,
-        38,
-        .28
-      );
-  }
-
-  79%{
-    transform:
-      scale(1.08);
-
-    box-shadow:
+        119,
+        78,
+        16,
+        .22
+      ),
       inset
       0
       1px
@@ -489,59 +452,77 @@
         255,
         255,
         255,
-        .34
+        .82
       ),
+      inset
       0
+      -18px
+      30px
+      rgba(
+        214,
+        145,
+        33,
+        .14
+      );
+  }
+
+  80%{
+    filter:
+      brightness(1.07);
+
+    box-shadow:
       0
+      14px
+      38px
+      rgba(
+        132,
+        85,
+        13,
+        .29
+      ),
+      inset
       0
-      2px
+      1px
+      0
       rgba(
         255,
-        245,
-        207,
-        .94
+        255,
+        255,
+        .92
       ),
+      inset
       0
-      0
-      16px
+      -18px
+      30px
       rgba(
-        242,
-        194,
-        73,
-        .76
-      ),
-      0
-      6px
-      14px
-      rgba(
-        31,
-        51,
-        38,
-        .30
+        214,
+        145,
+        33,
+        .18
       );
   }
 
 }
 
 
-/*   halo pulse*/
+/*   glow pulse*/
 
-@keyframes cardNavHalo{
+@keyframes cardNavGlow{
 
   0%,
-  66%,
+  68%,
   100%{
-    transform:
-      scale(.94);
+    opacity:.5;
 
-    opacity:.48;
+    transform:
+      scale(.98);
   }
 
-  79%{
-    transform:
-      scale(1.18);
+  80%{
+    opacity:.9;
 
-    opacity:.92;
+    transform:
+      scale(1.04);
   }
 
 }
@@ -559,31 +540,37 @@
 @media (max-width:420px){
 
   .card-nav-handle{
-    width:50px;
+    width:46px;
 
-    min-height:68px;
+    height:74%;
+
+    min-height:210px;
+
+    max-height:310px;
+
+    gap:12px;
+
+    padding:
+      16px
+      6px;
   }
 
 
   .card-nav-handle-arrow{
-    width:36px;
+    width:31px;
 
-    height:36px;
+    height:31px;
 
-    flex-basis:36px;
+    flex-basis:31px;
 
-    font-size:19px;
+    font-size:17px;
   }
 
 
   .card-nav-handle-label{
-    min-width:38px;
+    font-size:8px;
 
-    min-height:19px;
-
-    padding:
-      4px
-      6px;
+    letter-spacing:.12em;
   }
 
 }
@@ -594,8 +581,7 @@
 @media (prefers-reduced-motion:reduce){
 
   .card-nav-handle,
-  .card-nav-handle-arrow,
-  .card-nav-handle-arrow::before{
+  .card-nav-handle::after{
     animation:none !important;
   }
 
