@@ -10,62 +10,72 @@
   align-items:center;
   justify-content:center;
 
-  gap:4px;
+  gap:5px;
 
-  width:40px;
-  min-height:54px;
+  width:44px;
+  min-height:58px;
 
   padding:
-    6px
-    3px;
+    7px
+    4px;
 
   border:
     1px solid
     rgba(
-      255,
-      255,
-      255,
-      .82
+      61,
+      88,
+      67,
+      .42
     );
 
-  border-radius:22px;
+  border-radius:23px;
 
   appearance:none;
   -webkit-appearance:none;
 
   background:
     rgba(
-      250,
-      248,
-      241,
-      .92
+      255,
+      251,
+      239,
+      .96
     );
 
   backdrop-filter:
     blur(12px)
-    saturate(1.05);
+    saturate(1.08);
 
   -webkit-backdrop-filter:
     blur(12px)
-    saturate(1.05);
+    saturate(1.08);
 
   box-shadow:
     0
-    6px
-    18px
+    7px
+    20px
     rgba(
-      39,
-      54,
-      45,
-      .18
+      35,
+      52,
+      40,
+      .24
+    ),
+    inset
+    0
+    1px
+    0
+    rgba(
+      255,
+      255,
+      255,
+      .98
     );
 
   color:
     rgba(
-      48,
-      67,
-      54,
-      .92
+      42,
+      65,
+      49,
+      .98
     );
 
   font:inherit;
@@ -86,13 +96,7 @@
 }
 
 
-/*
-  RIGHT SIDE CARD
-
-  Start at the exposed edge,
-  then extend INTO the visible
-  portion of the card on the right.
-*/
+/*   right side card*/
 
 .has-nav-handle-right
 .card-nav-handle{
@@ -109,13 +113,7 @@
 }
 
 
-/*
-  LEFT SIDE CARD
-
-  Same idea in reverse.
-  Start at the exposed edge and
-  extend into the visible portion.
-*/
+/*   left side card*/
 
 .has-nav-handle-left
 .card-nav-handle{
@@ -132,67 +130,116 @@
 }
 
 
-/*   arrow*/
+/*   arrow circle*/
 
 .card-nav-handle-arrow{
   display:flex;
-
   align-items:center;
   justify-content:center;
 
-  width:28px;
-  height:28px;
+  width:31px;
+  height:31px;
 
   border-radius:50%;
 
+  border:
+    1px solid
+    rgba(
+      238,
+      211,
+      143,
+      .98
+    );
+
   background:
     rgba(
-      78,
-      105,
-      86,
-      .92
+      60,
+      94,
+      69,
+      .98
     );
 
   box-shadow:
-    inset
     0
     0
     0
-    1px
+    2px
+    rgba(
+      245,
+      225,
+      173,
+      .84
+    ),
+    0
+    0
+    0
+    5px
     rgba(
       255,
-      255,
-      255,
-      .18
+      244,
+      205,
+      .25
+    ),
+    0
+    0
+    13px
+    rgba(
+      226,
+      185,
+      84,
+      .48
+    ),
+    0
+    4px
+    8px
+    rgba(
+      31,
+      49,
+      37,
+      .28
     );
 
   font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
+    Arial,
+    sans-serif;
 
-  font-size:25px;
-
+  font-size:18px;
   line-height:1;
 
+  font-weight:700;
+
   color:white;
+
+  animation:
+    cardNavGlow
+    3.4s
+    ease-in-out
+    infinite;
 }
 
 
 /*   label*/
 
 .card-nav-handle-label{
-  font-size:7px;
+  font-size:8px;
 
   line-height:1;
 
-  font-weight:700;
+  font-weight:800;
 
-  letter-spacing:.07em;
+  letter-spacing:.08em;
 
   text-transform:uppercase;
 
   white-space:nowrap;
+
+  color:
+    rgba(
+      42,
+      66,
+      49,
+      .98
+    );
 }
 
 
@@ -201,21 +248,21 @@
 .card-nav-handle:active{
   background:
     rgba(
-      244,
-      242,
-      234,
-      .98
+      248,
+      243,
+      226,
+      .99
     );
 
   box-shadow:
     0
-    3px
-    10px
+    4px
+    12px
     rgba(
       39,
       54,
       45,
-      .15
+      .18
     );
 }
 
@@ -227,6 +274,11 @@
 
   pointer-events:none;
 
+  animation:none;
+}
+
+.card-nav-handle.is-travelling
+.card-nav-handle-arrow{
   animation:none;
 }
 
@@ -273,6 +325,110 @@
 }
 
 
+/*   glowing pulse*/
+
+@keyframes cardNavGlow{
+
+  0%,
+  65%,
+  100%{
+    transform:
+      scale(1);
+
+    box-shadow:
+      0
+      0
+      0
+      2px
+      rgba(
+        245,
+        225,
+        173,
+        .84
+      ),
+      0
+      0
+      0
+      5px
+      rgba(
+        255,
+        244,
+        205,
+        .25
+      ),
+      0
+      0
+      13px
+      rgba(
+        226,
+        185,
+        84,
+        .48
+      ),
+      0
+      4px
+      8px
+      rgba(
+        31,
+        49,
+        37,
+        .28
+      );
+  }
+
+  78%{
+    transform:
+      scale(1.09);
+
+    box-shadow:
+      0
+      0
+      0
+      2px
+      rgba(
+        250,
+        220,
+        139,
+        1
+      ),
+      0
+      0
+      0
+      7px
+      rgba(
+        255,
+        242,
+        194,
+        .44
+      ),
+      0
+      0
+      23px
+      rgba(
+        232,
+        184,
+        70,
+        .78
+      ),
+      0
+      5px
+      11px
+      rgba(
+        31,
+        49,
+        37,
+        .30
+      );
+  }
+
+  90%{
+    transform:
+      scale(1);
+  }
+
+}
+
+
 /*   old swipe instruction*/
 
 .hint{
@@ -285,17 +441,16 @@
 @media (max-width:420px){
 
   .card-nav-handle{
-    width:38px;
-
-    min-height:52px;
+    width:42px;
+    min-height:56px;
   }
 
 
   .card-nav-handle-arrow{
-    width:27px;
-    height:27px;
+    width:30px;
+    height:30px;
 
-    font-size:24px;
+    font-size:17px;
   }
 
 }
@@ -305,7 +460,8 @@
 
 @media (prefers-reduced-motion:reduce){
 
-  .card-nav-handle{
+  .card-nav-handle,
+  .card-nav-handle-arrow{
     animation:none !important;
   }
 
