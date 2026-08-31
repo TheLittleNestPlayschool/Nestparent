@@ -7,22 +7,19 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  width:56px;
+  width:58px;
   height:76%;
   min-height:230px;
   max-height:340px;
   padding:18px 6px;
   appearance:none;
   -webkit-appearance:none;
-  border:1px solid rgba(255,255,255,.82);
-  background:rgba(255,255,255,.34);
-  backdrop-filter:blur(16px) saturate(1.18);
-  -webkit-backdrop-filter:blur(16px) saturate(1.18);
+  border:1px solid rgba(223,228,235,.96);
+  background:#ffffff;
   box-shadow:
-    0 12px 34px rgba(70,84,92,.16),
-    inset 0 1px 0 rgba(255,255,255,.88),
-    inset 0 -10px 18px rgba(232,238,244,.26);
-  color:rgba(82,92,102,.92);
+    0 14px 36px rgba(65,78,88,.16),
+    0 2px 10px rgba(65,78,88,.08);
+  color:rgba(78,88,98,.96);
   font:inherit;
   cursor:pointer;
   pointer-events:auto;
@@ -31,10 +28,10 @@
   -webkit-tap-highlight-color:transparent;
   transition:
     opacity .45s ease,
-    filter .45s ease,
-    transform .45s ease;
-  animation:
-    cardNavBreathe 3.8s ease-in-out infinite;
+    transform .45s ease,
+    box-shadow .45s ease,
+    background .45s ease;
+  animation:cardNavBreathe 3.8s ease-in-out infinite;
 }
 
 /*   right side tall arrow*/
@@ -44,12 +41,12 @@
   transform:translateY(-50%);
   clip-path:polygon(
     0 0,
-    68% 0,
+    66% 0,
     100% 50%,
-    68% 100%,
+    66% 100%,
     0 100%
   );
-  border-radius:24px 12px 12px 24px;
+  border-radius:24px 0 0 24px;
 }
 
 /*   left side tall arrow*/
@@ -58,28 +55,28 @@
   right:22%;
   transform:translateY(-50%);
   clip-path:polygon(
-    32% 0,
+    34% 0,
     100% 0,
     100% 100%,
-    32% 100%,
+    34% 100%,
     0 50%
   );
-  border-radius:12px 24px 24px 12px;
+  border-radius:0 24px 24px 0;
 }
 
-/*   inner frosted layer*/
+/*   inner surface*/
 
 .card-nav-handle::before{
   content:"";
   position:absolute;
-  inset:5px;
+  inset:4px;
   background:linear-gradient(
     180deg,
-    rgba(255,255,255,.54),
-    rgba(255,255,255,.20) 48%,
-    rgba(240,244,248,.32) 100%
+    rgba(255,255,255,.98),
+    rgba(247,249,251,.98)
   );
   pointer-events:none;
+  z-index:0;
 }
 
 /*   soft glow*/
@@ -87,14 +84,13 @@
 .card-nav-handle::after{
   content:"";
   position:absolute;
-  inset:-6px;
+  inset:-5px;
   border-radius:28px;
-  background:rgba(255,255,255,.24);
+  background:rgba(255,255,255,.72);
   filter:blur(10px);
-  opacity:.72;
+  opacity:.75;
   pointer-events:none;
-  animation:
-    cardNavGlow 3.8s ease-in-out infinite;
+  animation:cardNavGlow 3.8s ease-in-out infinite;
 }
 
 /*   remove old little arrow circle*/
@@ -111,16 +107,16 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:10px;
-  line-height:1.02;
+  font-size:12px;
+  line-height:1.6;
   font-weight:800;
-  letter-spacing:.16em;
+  letter-spacing:.18em;
   text-transform:uppercase;
-  color:rgba(88,96,106,.94);
+  color:rgba(88,94,102,.96);
   writing-mode:vertical-rl;
   text-orientation:upright;
   white-space:nowrap;
-  text-shadow:0 1px 0 rgba(255,255,255,.45);
+  text-shadow:0 1px 0 rgba(255,255,255,.7);
 }
 
 /*   keep reading direction feeling right*/
@@ -136,7 +132,7 @@
 /*   press*/
 
 .card-nav-handle:active{
-  filter:brightness(.98);
+  transform:translateY(-50%) scale(.985);
 }
 
 /*   handle travels with card*/
@@ -157,19 +153,15 @@
   0%,
   68%,
   100%{
-    filter:brightness(1);
     box-shadow:
-      0 12px 34px rgba(70,84,92,.16),
-      inset 0 1px 0 rgba(255,255,255,.88),
-      inset 0 -10px 18px rgba(232,238,244,.26);
+      0 14px 36px rgba(65,78,88,.16),
+      0 2px 10px rgba(65,78,88,.08);
   }
 
   80%{
-    filter:brightness(1.04);
     box-shadow:
-      0 16px 40px rgba(70,84,92,.18),
-      inset 0 1px 0 rgba(255,255,255,.94),
-      inset 0 -12px 20px rgba(232,238,244,.30);
+      0 18px 44px rgba(65,78,88,.20),
+      0 3px 14px rgba(65,78,88,.10);
   }
 }
 
@@ -179,13 +171,13 @@
   0%,
   68%,
   100%{
-    opacity:.52;
+    opacity:.58;
     transform:scale(.985);
   }
 
   80%{
     opacity:.92;
-    transform:scale(1.03);
+    transform:scale(1.025);
   }
 }
 
@@ -199,7 +191,7 @@
 
 @media (max-width:420px){
   .card-nav-handle{
-    width:50px;
+    width:54px;
     height:74%;
     min-height:210px;
     max-height:300px;
@@ -207,8 +199,9 @@
   }
 
   .card-nav-handle-label{
-    font-size:9px;
-    letter-spacing:.12em;
+    font-size:11px;
+    line-height:1.72;
+    letter-spacing:.16em;
   }
 }
 
