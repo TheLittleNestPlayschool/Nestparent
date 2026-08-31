@@ -2,420 +2,148 @@
 
 .card-nav-handle{
   position:absolute;
-
   top:50%;
-
   z-index:30;
-
   display:flex;
-
-  flex-direction:column;
-
   align-items:center;
-
   justify-content:center;
-
-  gap:14px;
-
-  width:50px;
-
-  height:74%;
-
+  width:56px;
+  height:76%;
   min-height:230px;
-
   max-height:340px;
-
-  padding:
-    18px
-    7px;
-
+  padding:18px 6px;
   appearance:none;
-
   -webkit-appearance:none;
-
-  border:
-    1px solid
-    rgba(
-      205,
-      146,
-      38,
-      .62
-    );
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(
-        255,
-        246,
-        218,
-        .88
-      ),
-      rgba(
-        244,
-        190,
-        83,
-        .80
-      )
-    );
-
-  backdrop-filter:
-    blur(18px)
-    saturate(1.28);
-
-  -webkit-backdrop-filter:
-    blur(18px)
-    saturate(1.28);
-
+  border:1px solid rgba(255,255,255,.82);
+  background:rgba(255,255,255,.34);
+  backdrop-filter:blur(16px) saturate(1.18);
+  -webkit-backdrop-filter:blur(16px) saturate(1.18);
   box-shadow:
-    0
-    12px
-    32px
-    rgba(
-      119,
-      78,
-      16,
-      .22
-    ),
-    inset
-    0
-    1px
-    0
-    rgba(
-      255,
-      255,
-      255,
-      .82
-    ),
-    inset
-    0
-    -18px
-    30px
-    rgba(
-      214,
-      145,
-      33,
-      .14
-    );
-
-  color:
-    rgba(
-      91,
-      57,
-      13,
-      .98
-    );
-
+    0 12px 34px rgba(70,84,92,.16),
+    inset 0 1px 0 rgba(255,255,255,.88),
+    inset 0 -10px 18px rgba(232,238,244,.26);
+  color:rgba(82,92,102,.92);
   font:inherit;
-
   cursor:pointer;
-
   pointer-events:auto;
-
   touch-action:manipulation;
-
   overflow:visible;
-
-  -webkit-tap-highlight-color:
-    transparent;
-
+  -webkit-tap-highlight-color:transparent;
   transition:
     opacity .45s ease,
-    filter .45s ease;
-
+    filter .45s ease,
+    transform .45s ease;
   animation:
-    cardNavBreathe
-    3.8s
-    ease-in-out
-    infinite;
+    cardNavBreathe 3.8s ease-in-out infinite;
 }
 
+/*   right side tall arrow*/
 
-/*   right side arrow*/
-
-.has-nav-handle-right
-.card-nav-handle{
-  left:24%;
-
-  transform:
-    translateY(-50%);
-
-  clip-path:
-    polygon(
-      0 0,
-      68% 0,
-      100% 50%,
-      68% 100%,
-      0 100%
-    );
-
-  border-radius:
-    25px
-    12px
-    12px
-    25px;
+.has-nav-handle-right .card-nav-handle{
+  left:22%;
+  transform:translateY(-50%);
+  clip-path:polygon(
+    0 0,
+    68% 0,
+    100% 50%,
+    68% 100%,
+    0 100%
+  );
+  border-radius:24px 12px 12px 24px;
 }
 
+/*   left side tall arrow*/
 
-/*   left side arrow*/
-
-.has-nav-handle-left
-.card-nav-handle{
-  right:24%;
-
-  transform:
-    translateY(-50%);
-
-  clip-path:
-    polygon(
-      32% 0,
-      100% 0,
-      100% 100%,
-      32% 100%,
-      0 50%
-    );
-
-  border-radius:
-    12px
-    25px
-    25px
-    12px;
+.has-nav-handle-left .card-nav-handle{
+  right:22%;
+  transform:translateY(-50%);
+  clip-path:polygon(
+    32% 0,
+    100% 0,
+    100% 100%,
+    32% 100%,
+    0 50%
+  );
+  border-radius:12px 24px 24px 12px;
 }
 
-
-/*   inner light*/
+/*   inner frosted layer*/
 
 .card-nav-handle::before{
   content:"";
-
   position:absolute;
-
-  inset:7px;
-
-  z-index:-1;
-
-  border-radius:20px;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(
-        255,
-        255,
-        255,
-        .34
-      ),
-      rgba(
-        255,
-        249,
-        225,
-        .08
-      )
-      48%,
-      rgba(
-        224,
-        157,
-        39,
-        .12
-      )
-    );
-
+  inset:5px;
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.54),
+    rgba(255,255,255,.20) 48%,
+    rgba(240,244,248,.32) 100%
+  );
   pointer-events:none;
 }
 
-
-/*   soft outer glow*/
+/*   soft glow*/
 
 .card-nav-handle::after{
   content:"";
-
   position:absolute;
-
-  inset:
-    -5px
-    -3px;
-
-  z-index:-2;
-
+  inset:-6px;
   border-radius:28px;
-
-  background:
-    rgba(
-      244,
-      178,
-      55,
-      .18
-    );
-
-  filter:
-    blur(10px);
-
-  opacity:.7;
-
+  background:rgba(255,255,255,.24);
+  filter:blur(10px);
+  opacity:.72;
   pointer-events:none;
-
   animation:
-    cardNavGlow
-    3.8s
-    ease-in-out
-    infinite;
+    cardNavGlow 3.8s ease-in-out infinite;
 }
 
-
-/*   arrow*/
+/*   remove old little arrow circle*/
 
 .card-nav-handle-arrow{
-  position:relative;
-
-  z-index:2;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  width:34px;
-
-  height:34px;
-
-  flex:
-    0
-    0
-    34px;
-
-  border-radius:50%;
-
-  border:
-    1px solid
-    rgba(
-      255,
-      244,
-      207,
-      .94
-    );
-
-  background:
-    rgba(
-      181,
-      112,
-      18,
-      .90
-    );
-
-  box-shadow:
-    0
-    4px
-    10px
-    rgba(
-      106,
-      65,
-      11,
-      .22
-    ),
-    inset
-    0
-    1px
-    0
-    rgba(
-      255,
-      255,
-      255,
-      .30
-    );
-
-  font-family:
-    Arial,
-    sans-serif;
-
-  font-size:19px;
-
-  line-height:1;
-
-  font-weight:700;
-
-  color:white;
-
-  text-shadow:
-    0
-    1px
-    2px
-    rgba(
-      72,
-      43,
-      7,
-      .28
-    );
+  display:none;
 }
 
-
-/*   navigation label*/
+/*   stacked vertical text*/
 
 .card-nav-handle-label{
   position:relative;
-
   z-index:2;
-
   display:flex;
-
   align-items:center;
-
   justify-content:center;
-
-  font-size:9px;
-
-  line-height:1;
-
+  font-size:10px;
+  line-height:1.02;
   font-weight:800;
-
-  letter-spacing:.14em;
-
+  letter-spacing:.16em;
   text-transform:uppercase;
-
+  color:rgba(88,96,106,.94);
+  writing-mode:vertical-rl;
+  text-orientation:upright;
   white-space:nowrap;
-
-  color:
-    rgba(
-      82,
-      52,
-      15,
-      .96
-    );
-
-  writing-mode:
-    vertical-rl;
-
-  text-orientation:
-    mixed;
+  text-shadow:0 1px 0 rgba(255,255,255,.45);
 }
 
+/*   keep reading direction feeling right*/
 
-/*   keep word reading downward*/
-
-.has-nav-handle-right
-.card-nav-handle-label,
-.has-nav-handle-left
-.card-nav-handle-label{
-  transform:
-    rotate(180deg);
+.has-nav-handle-right .card-nav-handle-label{
+  transform:none;
 }
 
+.has-nav-handle-left .card-nav-handle-label{
+  transform:rotate(180deg);
+}
 
 /*   press*/
 
 .card-nav-handle:active{
-  filter:
-    brightness(.96);
+  filter:brightness(.98);
 }
-
 
 /*   handle travels with card*/
 
 .card-nav-handle.is-travelling{
   opacity:0;
-
   pointer-events:none;
-
   animation:none;
 }
 
@@ -423,110 +151,43 @@
   animation:none;
 }
 
-
 /*   gentle life*/
 
 @keyframes cardNavBreathe{
-
   0%,
   68%,
   100%{
-    filter:
-      brightness(1);
-
+    filter:brightness(1);
     box-shadow:
-      0
-      12px
-      32px
-      rgba(
-        119,
-        78,
-        16,
-        .22
-      ),
-      inset
-      0
-      1px
-      0
-      rgba(
-        255,
-        255,
-        255,
-        .82
-      ),
-      inset
-      0
-      -18px
-      30px
-      rgba(
-        214,
-        145,
-        33,
-        .14
-      );
+      0 12px 34px rgba(70,84,92,.16),
+      inset 0 1px 0 rgba(255,255,255,.88),
+      inset 0 -10px 18px rgba(232,238,244,.26);
   }
 
   80%{
-    filter:
-      brightness(1.07);
-
+    filter:brightness(1.04);
     box-shadow:
-      0
-      14px
-      38px
-      rgba(
-        132,
-        85,
-        13,
-        .29
-      ),
-      inset
-      0
-      1px
-      0
-      rgba(
-        255,
-        255,
-        255,
-        .92
-      ),
-      inset
-      0
-      -18px
-      30px
-      rgba(
-        214,
-        145,
-        33,
-        .18
-      );
+      0 16px 40px rgba(70,84,92,.18),
+      inset 0 1px 0 rgba(255,255,255,.94),
+      inset 0 -12px 20px rgba(232,238,244,.30);
   }
-
 }
-
 
 /*   glow pulse*/
 
 @keyframes cardNavGlow{
-
   0%,
   68%,
   100%{
-    opacity:.5;
-
-    transform:
-      scale(.98);
+    opacity:.52;
+    transform:scale(.985);
   }
 
   80%{
-    opacity:.9;
-
-    transform:
-      scale(1.04);
+    opacity:.92;
+    transform:scale(1.03);
   }
-
 }
-
 
 /*   old swipe instruction*/
 
@@ -534,55 +195,28 @@
   display:none !important;
 }
 
-
 /*   mobile*/
 
 @media (max-width:420px){
-
   .card-nav-handle{
-    width:46px;
-
+    width:50px;
     height:74%;
-
     min-height:210px;
-
-    max-height:310px;
-
-    gap:12px;
-
-    padding:
-      16px
-      6px;
+    max-height:300px;
+    padding:16px 5px;
   }
-
-
-  .card-nav-handle-arrow{
-    width:31px;
-
-    height:31px;
-
-    flex-basis:31px;
-
-    font-size:17px;
-  }
-
 
   .card-nav-handle-label{
-    font-size:8px;
-
+    font-size:9px;
     letter-spacing:.12em;
   }
-
 }
-
 
 /*   reduced motion*/
 
 @media (prefers-reduced-motion:reduce){
-
   .card-nav-handle,
   .card-nav-handle::after{
     animation:none !important;
   }
-
 }
