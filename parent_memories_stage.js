@@ -90,6 +90,10 @@ export function openMemoriesStage({
 
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
+      if(!memoriesCard){
+        return;
+      }
+
       memoriesCard.classList.add(
         "is-visible"
       );
@@ -280,6 +284,7 @@ export function closeMemoriesStage(){
 
   memoriesCard=null;
 
+  /*   outgoing memories fades underneath*/
   if(cardToRemove){
     cardToRemove.classList.remove(
       "is-visible"
@@ -288,8 +293,12 @@ export function closeMemoriesStage(){
     cardToRemove.classList.add(
       "is-leaving"
     );
+
+    cardToRemove.style.pointerEvents=
+      "none";
   }
 
+  /*   nest becomes foreground return card*/
   if(returningNestCard){
     returningNestCard.removeEventListener(
       "click",
@@ -300,26 +309,66 @@ export function closeMemoriesStage(){
       "is-stage-back"
     );
 
-    renderCardOffset(
-      returningNestCard,
-      0
+    returningNestCard.classList.add(
+      "is-returning-front"
     );
 
     returningNestCard.style.pointerEvents=
-      "auto";
+      "none";
   }
 
+  /*   begin return glide*/
   closeTimer=
-    window.setTimeout(()=>{
-      if(cardToRemove){
+    window.setTimeout(
+      ()=>{
+        closeTimer=null;
+
+        if(returningNestCard){
+          renderCardOffset(
+            returningNestCard,
+            0
+          );
+        }
+      },
+      110
+    );
+
+  /*   remove memories after fade*/
+  window.setTimeout(
+    ()=>{
+      if(
+        cardToRemove&&
+        cardToRemove.parentNode
+      ){
         cardToRemove.remove();
       }
+    },
+    1050
+  );
 
-      closeTimer=null;
-    },700);
+  /*   release nest after glide*/
+  window.setTimeout(
+    ()=>{
+      if(returningNestCard){
+        returningNestCard.classList.remove(
+          "is-returning-front"
+        );
 
-  currentNestCard=null;
-  currentCarousel=null;
+        returningNestCard.style.pointerEvents=
+          "auto";
+      }
+
+      if(
+        currentNestCard===
+        returningNestCard
+      ){
+        currentNestCard=null;
+      }
+
+      currentCarousel=null;
+    },
+    1700
+  );
 }
 
 /*   memories stage open*/
