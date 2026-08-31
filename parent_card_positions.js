@@ -1,7 +1,5 @@
 /*   remove card navigation cue*/
-function removeCardNavigationCue(
-  card
-){
+function removeCardNavigationCue(card){
   if(!card){
     return;
   }
@@ -24,16 +22,13 @@ function removeCardNavigationCue(
   delete card.dataset.navLabel;
 }
 
-
 /*   add card navigation cue*/
 function setCardNavigationCue(
   card,
   label,
   offset
 ){
-  removeCardNavigationCue(
-    card
-  );
+  removeCardNavigationCue(card);
 
   if(
     !label||
@@ -44,7 +39,7 @@ function setCardNavigationCue(
 
   const cue=
     document.createElement(
-      "span"
+      "button"
     );
 
   const arrow=
@@ -52,8 +47,13 @@ function setCardNavigationCue(
       ?"←"
       :"→";
 
-  cue.className=
-    "card-nav-cue";
+  cue.type="button";
+  cue.className="card-nav-cue";
+
+  cue.setAttribute(
+    "aria-label",
+    label
+  );
 
   cue.innerHTML=`
     <span class="card-nav-cue-arrow">
@@ -78,11 +78,8 @@ function setCardNavigationCue(
       :"has-card-nav-cue-left"
   );
 
-  card.appendChild(
-    cue
-  );
+  card.appendChild(cue);
 }
-
 
 /*   get navigation label*/
 function getNavigationLabel(
@@ -119,7 +116,6 @@ function getNavigationLabel(
   return null;
 }
 
-
 /*   render card offset*/
 export function renderCardOffset(
   card,
@@ -134,24 +130,18 @@ export function renderCardOffset(
     offset < -2||
     offset > 2
   ){
-    removeCardNavigationCue(
-      card
-    );
+    removeCardNavigationCue(card);
 
     card.style.opacity="0";
     card.style.pointerEvents="none";
 
     card.style.transform=`
       translate(-50%,-50%)
-      translateX(
-        ${offset*64}%
-      )
+      translateX(${offset*64}%)
       scale(.74)
     `;
 
-    card.style.filter=
-      "blur(9px)";
-
+    card.style.filter="blur(9px)";
     card.style.zIndex="4";
     card.dataset.pos=offset;
 
@@ -224,12 +214,8 @@ export function renderCardOffset(
       ${y}px,
       ${z}px
     )
-    rotate(
-      ${rotate}deg
-    )
-    scale(
-      ${scale}
-    )
+    rotate(${rotate}deg)
+    scale(${scale})
   `;
 
   card.style.zIndex=
@@ -238,7 +224,6 @@ export function renderCardOffset(
   card.dataset.pos=
     offset;
 }
-
 
 /*   render nest mode position*/
 export function renderNestModePosition(
@@ -250,9 +235,7 @@ export function renderNestModePosition(
     index-activeIndex;
 
   if(relativeIndex<0){
-    removeCardNavigationCue(
-      card
-    );
+    removeCardNavigationCue(card);
 
     card.style.opacity="0";
     card.style.pointerEvents="none";
@@ -286,7 +269,6 @@ export function renderNestModePosition(
       :null
   );
 }
-
 
 /*   render all positions*/
 export function renderCardPositions({
