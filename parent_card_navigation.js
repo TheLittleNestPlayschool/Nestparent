@@ -16,7 +16,7 @@ function getNavigation(card,offset){
     return{
       label:"Back",
       side:"right",
-      arrow:"‹"
+      arrow:"→"
     };
   }
 
@@ -29,7 +29,7 @@ function getNavigation(card,offset){
       return{
         label:"More",
         side:"right",
-        arrow:"‹"
+        arrow:"→"
       };
     }
 
@@ -37,7 +37,7 @@ function getNavigation(card,offset){
       return{
         label:"Back",
         side:"left",
-        arrow:"›"
+        arrow:"←"
       };
     }
   }
@@ -99,6 +99,7 @@ function createHandle(
     );
 
   handle.type="button";
+
   handle.className=
     "card-nav-handle";
 
