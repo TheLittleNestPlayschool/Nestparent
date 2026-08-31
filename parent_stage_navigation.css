@@ -2,73 +2,36 @@
 
 .card-nav-handle{
   position:absolute;
+
   top:50%;
+
   z-index:30;
 
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
   justify-content:center;
 
-  gap:5px;
+  gap:8px;
 
-  width:44px;
-  min-height:58px;
+  width:54px;
 
-  padding:
-    7px
-    4px;
+  min-height:72px;
 
-  border:
-    1px solid
-    rgba(
-      61,
-      88,
-      67,
-      .42
-    );
+  padding:0;
 
-  border-radius:23px;
+  border:0;
 
   appearance:none;
+
   -webkit-appearance:none;
 
-  background:
-    rgba(
-      255,
-      251,
-      239,
-      .96
-    );
+  background:none;
 
-  backdrop-filter:
-    blur(12px)
-    saturate(1.08);
-
-  -webkit-backdrop-filter:
-    blur(12px)
-    saturate(1.08);
-
-  box-shadow:
-    0
-    7px
-    20px
-    rgba(
-      35,
-      52,
-      40,
-      .24
-    ),
-    inset
-    0
-    1px
-    0
-    rgba(
-      255,
-      255,
-      255,
-      .98
-    );
+  box-shadow:none;
 
   color:
     rgba(
@@ -86,13 +49,14 @@
 
   touch-action:manipulation;
 
+  overflow:visible;
+
   -webkit-tap-highlight-color:
     transparent;
 
   transition:
-    opacity .5s ease,
-    background .3s ease,
-    box-shadow .3s ease;
+    opacity .45s ease,
+    transform .35s ease;
 }
 
 
@@ -106,8 +70,8 @@
     translateY(-50%);
 
   animation:
-    cardNavInviteLeft
-    3.4s
+    cardNavInviteRight
+    3.6s
     ease-in-out
     infinite;
 }
@@ -123,79 +87,95 @@
     translateY(-50%);
 
   animation:
-    cardNavInviteRight
-    3.4s
+    cardNavInviteLeft
+    3.6s
     ease-in-out
     infinite;
 }
 
 
-/*   arrow circle*/
+/*   arrow beacon*/
 
 .card-nav-handle-arrow{
+  position:relative;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
 
-  width:31px;
-  height:31px;
+  width:38px;
+
+  height:38px;
+
+  flex:0 0 38px;
 
   border-radius:50%;
 
   border:
-    1px solid
+    2px solid
     rgba(
-      238,
-      211,
-      143,
+      242,
+      213,
+      137,
       .98
     );
 
   background:
-    rgba(
-      60,
-      94,
-      69,
-      .98
+    linear-gradient(
+      145deg,
+      rgba(
+        80,
+        137,
+        101,
+        1
+      ),
+      rgba(
+        45,
+        88,
+        65,
+        1
+      )
     );
 
   box-shadow:
+    inset
+    0
+    1px
+    0
+    rgba(
+      255,
+      255,
+      255,
+      .28
+    ),
     0
     0
     0
     2px
     rgba(
-      245,
-      225,
-      173,
-      .84
-    ),
-    0
-    0
-    0
-    5px
-    rgba(
       255,
-      244,
-      205,
-      .25
+      248,
+      221,
+      .72
     ),
     0
     0
-    13px
+    10px
     rgba(
-      226,
-      185,
-      84,
+      238,
+      198,
+      96,
       .48
     ),
     0
-    4px
-    8px
+    5px
+    12px
     rgba(
       31,
-      49,
-      37,
+      51,
+      38,
       .28
     );
 
@@ -203,24 +183,157 @@
     Arial,
     sans-serif;
 
-  font-size:18px;
+  font-size:20px;
+
   line-height:1;
 
   font-weight:700;
 
   color:white;
 
+  text-shadow:
+    0
+    1px
+    2px
+    rgba(
+      20,
+      37,
+      27,
+      .24
+    );
+
   animation:
-    cardNavGlow
-    3.4s
+    cardNavBeacon
+    3.6s
     ease-in-out
     infinite;
+}
+
+
+/*   outer halo*/
+
+.card-nav-handle-arrow::before{
+  content:"";
+
+  position:absolute;
+
+  inset:-7px;
+
+  z-index:-1;
+
+  border-radius:50%;
+
+  border:
+    1px solid
+    rgba(
+      243,
+      208,
+      119,
+      .34
+    );
+
+  box-shadow:
+    0
+    0
+    14px
+    rgba(
+      242,
+      198,
+      87,
+      .30
+    );
+
+  opacity:.72;
+
+  animation:
+    cardNavHalo
+    3.6s
+    ease-in-out
+    infinite;
+}
+
+
+/*   highlight*/
+
+.card-nav-handle-arrow::after{
+  content:"";
+
+  position:absolute;
+
+  width:12px;
+
+  height:6px;
+
+  left:8px;
+
+  top:6px;
+
+  border-radius:50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .34
+    );
+
+  filter:blur(.5px);
+
+  transform:
+    rotate(-25deg);
+
+  pointer-events:none;
 }
 
 
 /*   label*/
 
 .card-nav-handle-label{
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  min-width:40px;
+
+  min-height:20px;
+
+  padding:
+    4px
+    7px;
+
+  border:
+    1px solid
+    rgba(
+      225,
+      203,
+      149,
+      .72
+    );
+
+  border-radius:999px;
+
+  background:
+    rgba(
+      255,
+      251,
+      239,
+      .94
+    );
+
+  box-shadow:
+    0
+    3px
+    9px
+    rgba(
+      33,
+      50,
+      39,
+      .16
+    );
+
   font-size:8px;
 
   line-height:1;
@@ -235,9 +348,9 @@
 
   color:
     rgba(
-      42,
-      66,
-      49,
+      43,
+      72,
+      53,
       .98
     );
 }
@@ -245,25 +358,10 @@
 
 /*   press*/
 
-.card-nav-handle:active{
-  background:
-    rgba(
-      248,
-      243,
-      226,
-      .99
-    );
-
-  box-shadow:
-    0
-    4px
-    12px
-    rgba(
-      39,
-      54,
-      45,
-      .18
-    );
+.card-nav-handle:active
+.card-nav-handle-arrow{
+  transform:
+    scale(.94);
 }
 
 
@@ -278,44 +376,46 @@
 }
 
 .card-nav-handle.is-travelling
-.card-nav-handle-arrow{
+.card-nav-handle-arrow,
+.card-nav-handle.is-travelling
+.card-nav-handle-arrow::before{
   animation:none;
 }
 
 
-/*   right card invitation*/
-
-@keyframes cardNavInviteLeft{
-
-  0%,
-  68%,
-  100%{
-    margin-left:0;
-  }
-
-  80%{
-    margin-left:-4px;
-  }
-
-  90%{
-    margin-left:0;
-  }
-
-}
-
-
-/*   left card invitation*/
+/*   right navigation invitation*/
 
 @keyframes cardNavInviteRight{
 
   0%,
   68%,
   100%{
+    margin-left:0;
+  }
+
+  80%{
+    margin-left:4px;
+  }
+
+  90%{
+    margin-left:0;
+  }
+
+}
+
+
+/*   left navigation invitation*/
+
+@keyframes cardNavInviteLeft{
+
+  0%,
+  68%,
+  100%{
     margin-right:0;
   }
 
   80%{
-    margin-right:-4px;
+    margin-right:4px;
   }
 
   90%{
@@ -325,105 +425,123 @@
 }
 
 
-/*   glowing pulse*/
+/*   beacon pulse*/
 
-@keyframes cardNavGlow{
+@keyframes cardNavBeacon{
 
   0%,
-  65%,
+  66%,
   100%{
     transform:
       scale(1);
 
     box-shadow:
+      inset
+      0
+      1px
+      0
+      rgba(
+        255,
+        255,
+        255,
+        .28
+      ),
       0
       0
       0
       2px
       rgba(
-        245,
-        225,
-        173,
-        .84
-      ),
-      0
-      0
-      0
-      5px
-      rgba(
         255,
-        244,
-        205,
-        .25
+        248,
+        221,
+        .72
       ),
       0
       0
-      13px
+      10px
       rgba(
-        226,
-        185,
-        84,
+        238,
+        198,
+        96,
         .48
       ),
       0
-      4px
-      8px
+      5px
+      12px
       rgba(
         31,
-        49,
-        37,
+        51,
+        38,
         .28
       );
   }
 
-  78%{
+  79%{
     transform:
-      scale(1.09);
+      scale(1.08);
 
     box-shadow:
+      inset
+      0
+      1px
+      0
+      rgba(
+        255,
+        255,
+        255,
+        .34
+      ),
       0
       0
       0
       2px
       rgba(
-        250,
-        220,
-        139,
-        1
+        255,
+        245,
+        207,
+        .94
       ),
       0
       0
-      0
-      7px
+      16px
       rgba(
-        255,
         242,
         194,
-        .44
+        73,
+        .76
       ),
       0
-      0
-      23px
-      rgba(
-        232,
-        184,
-        70,
-        .78
-      ),
-      0
-      5px
-      11px
+      6px
+      14px
       rgba(
         31,
-        49,
-        37,
+        51,
+        38,
         .30
       );
   }
 
-  90%{
+}
+
+
+/*   halo pulse*/
+
+@keyframes cardNavHalo{
+
+  0%,
+  66%,
+  100%{
     transform:
-      scale(1);
+      scale(.94);
+
+    opacity:.48;
+  }
+
+  79%{
+    transform:
+      scale(1.18);
+
+    opacity:.92;
   }
 
 }
@@ -441,16 +559,31 @@
 @media (max-width:420px){
 
   .card-nav-handle{
-    width:42px;
-    min-height:56px;
+    width:50px;
+
+    min-height:68px;
   }
 
 
   .card-nav-handle-arrow{
-    width:30px;
-    height:30px;
+    width:36px;
 
-    font-size:17px;
+    height:36px;
+
+    flex-basis:36px;
+
+    font-size:19px;
+  }
+
+
+  .card-nav-handle-label{
+    min-width:38px;
+
+    min-height:19px;
+
+    padding:
+      4px
+      6px;
   }
 
 }
@@ -461,7 +594,8 @@
 @media (prefers-reduced-motion:reduce){
 
   .card-nav-handle,
-  .card-nav-handle-arrow{
+  .card-nav-handle-arrow,
+  .card-nav-handle-arrow::before{
     animation:none !important;
   }
 
