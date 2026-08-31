@@ -1,5 +1,7 @@
-/*   remove card navigation cue*/
-function removeCardNavigationCue(card){
+let navigationFrame=null;
+
+/*   remove legacy card cue*/
+function removeLegacyCardCue(card){
   if(!card){
     return;
   }
@@ -22,142 +24,227 @@ function removeCardNavigationCue(card){
   delete card.dataset.navLabel;
 }
 
-/*   add card navigation cue*/
-function setCardNavigationCue(
-  card,
-  label,
-  offset
+/*   remove stage navigation button*/
+function removeStageNavigationButton(
+  carousel
 ){
-  removeCardNavigationCue(card);
-
-  if(
-    !label||
-    Math.abs(offset)!==1
-  ){
+  if(!carousel){
     return;
   }
 
-  const cue=
-    document.createElement(
-      "button"
+  const button=
+    carousel.querySelector(
+      ":scope > .stage-nav-button"
     );
 
-  const arrow=
-    offset>0
-      ?"←"
-      :"→";
-
-  cue.type="button";
-  cue.className="card-nav-cue";
-
-  cue.setAttribute(
-    "aria-label",
-    label
-  );
-
-  cue.innerHTML=`
-    <span class="card-nav-cue-arrow">
-      ${arrow}
-    </span>
-
-    <span class="card-nav-cue-label">
-      ${label}
-    </span>
-  `;
-
-  card.dataset.navLabel=
-    label;
-
-  card.classList.add(
-    "has-card-nav-cue"
-  );
-
-  card.classList.add(
-    offset>0
-      ?"has-card-nav-cue-right"
-      :"has-card-nav-cue-left"
-  );
-
-  card.appendChild(cue);
+  if(button){
+    button.remove();
+  }
 }
 
-/*   get navigation label*/
-function getNavigationLabel(
-  card,
-  offset,
-  explicitLabel
+/*   get right navigation target*/
+function getRightNavigationTarget(
+  carousel
 ){
-  if(explicitLabel){
-    return explicitLabel;
-  }
-
-  if(Math.abs(offset)!==1){
+  if(!carousel){
     return null;
   }
 
-  if(
-    card.classList.contains(
-      "is-stage-back"
+  const cards=[
+    ...carousel.querySelectorAll(
+      '.experience[data-pos="1"]'
     )
-  ){
-    return "Back";
+  ];
+
+  /*
+    Deeper navigation takes priority.
+
+    Several cards can technically remain
+    at offset 1 underneath each other.
+    The newest one in the DOM is the
+    level immediately behind the current
+    experience.
+  */
+  const backCards=
+    cards.filter(
+      card=>
+        card.classList.contains(
+          "is-stage-back"
+        )
+    );
+
+  if(backCards.length){
+    return{
+      card:
+        backCards[
+          backCards.length-1
+        ],
+      label:"Back"
+    };
   }
 
-  if(
-    card.hasAttribute(
-      "data-index"
-    )
-  ){
-    return offset>0
-      ?"More"
-      :"Back";
+  /*
+    On the main Experience Engine,
+    the next experience is the More target.
+  */
+  const moreCards=
+    cards.filter(
+      card=>
+        card.hasAttribute(
+          "data-index"
+        )
+    );
+
+  if(moreCards.length){
+    return{
+      card:moreCards[0],
+      label:"More"
+    };
   }
 
   return null;
 }
 
+/*   sync stage navigation button*/
+function syncStageNavigationButton(
+  carousel
+){
+  removeStageNavigationButton(
+    carousel
+  );
+
+  const target=
+    getRightNavigationTarget(
+      carousel
+    );
+
+  if(!target){
+    return;
+  }
+
+  const button=
+    document.createElement(
+      "button"
+    );
+
+  button.type="button";
+  button.className=
+    "stage-nav-button";
+
+  button.setAttribute(
+    "aria-label",
+    target.label==="Back"
+      ?"Go back"
+      :"Show more"
+  );
+
+  button.innerHTML=`
+    <span class="stage-nav-arrow">
+      ←
+    </span>
+
+    <span class="stage-nav-label">
+      ${target.label}
+    </span>
+  `;
+
+  button.addEventListener(
+    "click",
+    event=>{
+      event.preventDefault();
+      event.stopPropagation();
+
+      target.card.click();
+    }
+  );
+
+  carousel.appendChild(
+    button
+  );
+}
+
+/*   schedule navigation sync*/
+function scheduleStageNavigationSync(
+  carousel
+){
+  if(!carousel){
+    return;
+  }
+
+  if(navigationFrame){
+    cancelAnimationFrame(
+      navigationFrame
+    );
+  }
+
+  navigationFrame=
+    requestAnimationFrame(
+      ()=>{
+        navigationFrame=null;
+
+        syncStageNavigationButton(
+          carousel
+        );
+      }
+    );
+}
+
 /*   render card offset*/
 export function renderCardOffset(
   card,
-  offset,
-  navigationLabel=null
+  offset
 ){
   if(!card){
     return;
   }
 
+  removeLegacyCardCue(
+    card
+  );
+
+  const carousel=
+    card.parentElement;
+
   if(
     offset < -2||
     offset > 2
   ){
-    removeCardNavigationCue(card);
-
     card.style.opacity="0";
     card.style.pointerEvents="none";
 
     card.style.transform=`
       translate(-50%,-50%)
-      translateX(${offset*64}%)
+      translateX(
+        ${offset*64}%
+      )
       scale(.74)
     `;
 
-    card.style.filter="blur(9px)";
+    card.style.filter=
+      "blur(9px)";
+
     card.style.zIndex="4";
-    card.dataset.pos=offset;
+
+    card.dataset.pos=
+      offset;
+
+    scheduleStageNavigationSync(
+      carousel
+    );
 
     return;
   }
 
-  const navLabel=
-    getNavigationLabel(
-      card,
-      offset,
-      navigationLabel
-    );
-
   const isNavigationCard=
-    Boolean(navLabel)&&
-    Math.abs(offset)===1;
+    offset===1&&
+    (
+      card.classList.contains(
+        "is-stage-back"
+      )||
+      card.hasAttribute(
+        "data-index"
+      )
+    );
 
   const x=
     offset*73;
@@ -176,7 +263,9 @@ export function renderCardOffset(
       :-90;
 
   const y=
-    Math.abs(offset)*10;
+    Math.abs(
+      offset
+    )*10;
 
   const opacity=
     offset===0
@@ -184,12 +273,6 @@ export function renderCardOffset(
       :isNavigationCard
         ?.72
         :.46;
-
-  setCardNavigationCue(
-    card,
-    navLabel,
-    offset
-  );
 
   card.style.opacity=
     opacity;
@@ -214,15 +297,26 @@ export function renderCardOffset(
       ${y}px,
       ${z}px
     )
-    rotate(${rotate}deg)
-    scale(${scale})
+    rotate(
+      ${rotate}deg
+    )
+    scale(
+      ${scale}
+    )
   `;
 
   card.style.zIndex=
-    10-Math.abs(offset);
+    10-
+    Math.abs(
+      offset
+    );
 
   card.dataset.pos=
     offset;
+
+  scheduleStageNavigationSync(
+    carousel
+  );
 }
 
 /*   render nest mode position*/
@@ -235,7 +329,9 @@ export function renderNestModePosition(
     index-activeIndex;
 
   if(relativeIndex<0){
-    removeCardNavigationCue(card);
+    removeLegacyCardCue(
+      card
+    );
 
     card.style.opacity="0";
     card.style.pointerEvents="none";
@@ -255,6 +351,10 @@ export function renderNestModePosition(
     card.style.zIndex="5";
     card.dataset.pos=-1;
 
+    scheduleStageNavigationSync(
+      card.parentElement
+    );
+
     return;
   }
 
@@ -263,10 +363,7 @@ export function renderNestModePosition(
 
   renderCardOffset(
     card,
-    offset,
-    relativeIndex===0
-      ?"Back"
-      :null
+    offset
   );
 }
 
@@ -309,5 +406,9 @@ export function renderCardPositions({
         offset
       );
     }
+  );
+
+  scheduleStageNavigationSync(
+    carousel
   );
 }
