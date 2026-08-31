@@ -15,6 +15,11 @@ import{
 }from"./parent_carousel_input.js";
 
 import{
+  activateRestingAtmosphere,
+  setRestingAtmosphere
+}from"./parent_resting_atmosphere.js";
+
+import{
   openNestStage as openNestStageView,
   closeNestStage as closeNestStageView,
   isNestStageOpen
@@ -38,26 +43,31 @@ const deepSheet=
 let activeIndex=0;
 let hasInteracted=false;
 
-
 /*   build cards*/
 export function buildCards(){
   if(!carousel){
     return;
   }
 
+  const experiences=
+    getExperiences();
+
   buildExperienceCards(
     carousel,
     openExperience
   );
 
+  activateRestingAtmosphere(
+    experiences[
+      activeIndex
+    ]
+  );
+
   renderPositions();
 }
 
-
 /*   open experience*/
-function openExperience(
-  index
-){
+function openExperience(index){
   if(isNestStageOpen()){
     return;
   }
@@ -87,7 +97,6 @@ function openExperience(
   */
 }
 
-
 /*   render positions*/
 function renderPositions(){
   renderCardPositions({
@@ -98,11 +107,8 @@ function renderPositions(){
   });
 }
 
-
 /*   move*/
-function move(
-  direction
-){
+function move(direction){
   if(isNestStageOpen()){
     return;
   }
@@ -125,10 +131,15 @@ function move(
 
   activeIndex=next;
 
+  setRestingAtmosphere(
+    experiences[
+      activeIndex
+    ]
+  );
+
   renderPositions();
   hideHint();
 }
-
 
 /*   hide hint*/
 export function hideHint(){
@@ -143,7 +154,6 @@ export function hideHint(){
   }
 }
 
-
 /*   open nest stage*/
 export function openNestStage(){
   openNestStageView({
@@ -153,7 +163,6 @@ export function openNestStage(){
   });
 }
 
-
 /*   close nest stage*/
 export function closeNestStage(){
   closeNestStageView({
@@ -162,12 +171,10 @@ export function closeNestStage(){
   });
 }
 
-
 /*   expose nest state*/
 export{
   isNestStageOpen
 };
-
 
 /*   activate carousel*/
 export function activateCarousel(){
