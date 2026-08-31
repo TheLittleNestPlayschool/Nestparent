@@ -1,141 +1,112 @@
-/*   card navigation handle*/
+/*   stage navigation handle*/
 
 .card-nav-handle{
   position:absolute;
   top:50%;
-  z-index:30;
+  z-index:32;
   display:flex;
   align-items:center;
   justify-content:center;
-  width:58px;
+  width:56px;
   height:76%;
-  min-height:230px;
-  max-height:340px;
-  padding:18px 6px;
+  min-height:220px;
+  max-height:330px;
+  padding:16px 6px;
   appearance:none;
   -webkit-appearance:none;
-  border:1px solid rgba(223,228,235,.96);
+  border:1px solid rgba(219,209,186,.96);
   background:#ffffff;
-  box-shadow:
-    0 14px 36px rgba(65,78,88,.16),
-    0 2px 10px rgba(65,78,88,.08);
-  color:rgba(78,88,98,.96);
+  color:rgba(88,83,72,.96);
   font:inherit;
   cursor:pointer;
   pointer-events:auto;
-  touch-action:manipulation;
-  overflow:visible;
+  overflow:hidden;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
   -webkit-tap-highlight-color:transparent;
+  filter:
+    drop-shadow(0 14px 28px rgba(57,67,79,.16))
+    drop-shadow(0 2px 8px rgba(57,67,79,.08))
+    drop-shadow(0 0 10px rgba(244,194,92,.16));
   transition:
-    opacity .45s ease,
-    transform .45s ease,
-    box-shadow .45s ease,
-    background .45s ease;
-  animation:cardNavBreathe 3.8s ease-in-out infinite;
+    transform .34s ease,
+    opacity .34s ease,
+    filter .34s ease;
+  animation:cardNavPulse 3.2s ease-in-out infinite;
 }
 
-/*   right side tall arrow*/
+/*   kill any old frosted layers*/
+
+.card-nav-handle::before,
+.card-nav-handle::after,
+.card-nav-handle-arrow{
+  display:none !important;
+  content:none !important;
+}
+
+/*   right arrow*/
 
 .has-nav-handle-right .card-nav-handle{
-  left:22%;
+  left:calc(100% + 12px);
   transform:translateY(-50%);
   clip-path:polygon(
     0 0,
-    66% 0,
+    58% 0,
     100% 50%,
-    66% 100%,
+    58% 100%,
     0 100%
   );
-  border-radius:24px 0 0 24px;
 }
 
-/*   left side tall arrow*/
+/*   left arrow*/
 
 .has-nav-handle-left .card-nav-handle{
-  right:22%;
+  right:calc(100% + 12px);
   transform:translateY(-50%);
   clip-path:polygon(
-    34% 0,
+    42% 0,
     100% 0,
     100% 100%,
-    34% 100%,
+    42% 100%,
     0 50%
   );
-  border-radius:0 24px 24px 0;
 }
 
-/*   inner surface*/
-
-.card-nav-handle::before{
-  content:"";
-  position:absolute;
-  inset:4px;
-  background:linear-gradient(
-    180deg,
-    rgba(255,255,255,.98),
-    rgba(247,249,251,.98)
-  );
-  pointer-events:none;
-  z-index:0;
-}
-
-/*   soft glow*/
-
-.card-nav-handle::after{
-  content:"";
-  position:absolute;
-  inset:-5px;
-  border-radius:28px;
-  background:rgba(255,255,255,.72);
-  filter:blur(10px);
-  opacity:.75;
-  pointer-events:none;
-  animation:cardNavGlow 3.8s ease-in-out infinite;
-}
-
-/*   remove old little arrow circle*/
-
-.card-nav-handle-arrow{
-  display:none;
-}
-
-/*   stacked vertical text*/
+/*   label*/
 
 .card-nav-handle-label{
   position:relative;
   z-index:2;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:12px;
-  line-height:1.6;
+  display:block;
+  font-size:14px;
+  line-height:1.9;
   font-weight:800;
-  letter-spacing:.18em;
+  letter-spacing:.16em;
   text-transform:uppercase;
-  color:rgba(88,94,102,.96);
+  color:rgba(100,92,78,.96);
+  text-align:center;
+  white-space:nowrap;
   writing-mode:vertical-rl;
   text-orientation:upright;
-  white-space:nowrap;
-  text-shadow:0 1px 0 rgba(255,255,255,.7);
+  transform:none !important;
+  user-select:none;
 }
 
-/*   keep reading direction feeling right*/
-
-.has-nav-handle-right .card-nav-handle-label{
-  transform:none;
-}
+/*   left handle text should stay readable too*/
 
 .has-nav-handle-left .card-nav-handle-label{
-  transform:rotate(180deg);
+  writing-mode:vertical-rl;
+  text-orientation:upright;
+  transform:none !important;
 }
 
-/*   press*/
+/*   press state*/
 
 .card-nav-handle:active{
-  transform:translateY(-50%) scale(.985);
+  transform:translateY(-50%) scale(.97);
 }
 
-/*   handle travels with card*/
+/*   travelling state*/
 
 .card-nav-handle.is-travelling{
   opacity:0;
@@ -143,45 +114,26 @@
   animation:none;
 }
 
-.card-nav-handle.is-travelling::after{
-  animation:none;
-}
+/*   pulse*/
 
-/*   gentle life*/
-
-@keyframes cardNavBreathe{
+@keyframes cardNavPulse{
   0%,
-  68%,
   100%{
-    box-shadow:
-      0 14px 36px rgba(65,78,88,.16),
-      0 2px 10px rgba(65,78,88,.08);
+    filter:
+      drop-shadow(0 14px 28px rgba(57,67,79,.16))
+      drop-shadow(0 2px 8px rgba(57,67,79,.08))
+      drop-shadow(0 0 10px rgba(244,194,92,.16));
   }
 
-  80%{
-    box-shadow:
-      0 18px 44px rgba(65,78,88,.20),
-      0 3px 14px rgba(65,78,88,.10);
+  50%{
+    filter:
+      drop-shadow(0 18px 34px rgba(57,67,79,.18))
+      drop-shadow(0 3px 10px rgba(57,67,79,.10))
+      drop-shadow(0 0 14px rgba(244,194,92,.26));
   }
 }
 
-/*   glow pulse*/
-
-@keyframes cardNavGlow{
-  0%,
-  68%,
-  100%{
-    opacity:.58;
-    transform:scale(.985);
-  }
-
-  80%{
-    opacity:.92;
-    transform:scale(1.025);
-  }
-}
-
-/*   old swipe instruction*/
+/*   hide old swipe hint*/
 
 .hint{
   display:none !important;
@@ -191,25 +143,32 @@
 
 @media (max-width:420px){
   .card-nav-handle{
-    width:54px;
+    width:52px;
     height:74%;
-    min-height:210px;
+    min-height:205px;
     max-height:300px;
-    padding:16px 5px;
+    padding:14px 5px;
   }
 
   .card-nav-handle-label{
-    font-size:11px;
-    line-height:1.72;
-    letter-spacing:.16em;
+    font-size:15px;
+    line-height:2.05;
+    letter-spacing:.12em;
+  }
+
+  .has-nav-handle-right .card-nav-handle{
+    left:calc(100% + 10px);
+  }
+
+  .has-nav-handle-left .card-nav-handle{
+    right:calc(100% + 10px);
   }
 }
 
 /*   reduced motion*/
 
 @media (prefers-reduced-motion:reduce){
-  .card-nav-handle,
-  .card-nav-handle::after{
-    animation:none !important;
+  .card-nav-handle{
+    animation:none;
   }
 }
