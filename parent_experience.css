@@ -1,8 +1,12 @@
 /*   experience area*/
+
 .experience-shell{
   position:absolute;
+
   inset:0;
+
   z-index:5;
+
   padding:
     max(
       112px,
@@ -15,90 +19,344 @@
     92px;
 }
 
+
 .intro{
   height:34px;
+
   margin:0;
+
   padding:0;
 }
+
 
 .intro-quiet{
   pointer-events:none;
 }
 
+
 /*   carousel*/
+
 .carousel-wrap{
   position:relative;
+
   width:100%;
+
   height:
     calc(
       100dvh - 210px
     );
+
   min-height:470px;
+
   perspective:1100px;
+
   overflow:visible;
 }
 
+
 .carousel{
   position:absolute;
+
   inset:0;
+
   touch-action:pan-y;
+
   user-select:none;
 }
 
+
 /*   experience*/
+
 .experience{
   position:absolute;
+
   left:50%;
   top:50%;
+
   width:
     min(
       78vw,
       390px
     );
+
   height:
     min(
       62vh,
       480px
     );
+
   transform:
     translate(
       -50%,
       -50%
     );
+
   transform-origin:center;
+
   transition:
     transform 1.45s cubic-bezier(.20,.62,.18,1),
     opacity 1.05s ease,
     filter 1.05s ease;
+
   will-change:
     transform,
     opacity,
     filter;
 }
 
+
+/*   side navigation cue*/
+
+.card-nav-cue{
+  position:absolute;
+
+  top:50%;
+
+  z-index:20;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:3px;
+
+  width:34px;
+
+  min-height:58px;
+
+  padding:
+    6px
+    4px;
+
+  border:
+    1px solid
+    rgba(
+      187,
+      151,
+      72,
+      .72
+    );
+
+  border-radius:999px;
+
+  background:
+    rgba(
+      249,
+      247,
+      240,
+      .96
+    );
+
+  backdrop-filter:
+    blur(12px)
+    saturate(1.05);
+
+  -webkit-backdrop-filter:
+    blur(12px)
+    saturate(1.05);
+
+  box-shadow:
+    0 8px 24px
+    rgba(
+      49,
+      63,
+      54,
+      .18
+    ),
+    inset 0 1px 0
+    rgba(
+      255,
+      255,
+      255,
+      .9
+    );
+
+  color:
+    rgba(
+      47,
+      61,
+      52,
+      .92
+    );
+
+  pointer-events:none;
+}
+
+
+.has-card-nav-cue-right
+.card-nav-cue{
+  right:4px;
+
+  animation:
+    cardNavPullLeft
+    3.8s
+    ease-in-out
+    infinite;
+}
+
+
+.has-card-nav-cue-left
+.card-nav-cue{
+  left:4px;
+
+  animation:
+    cardNavPullRight
+    3.8s
+    ease-in-out
+    infinite;
+}
+
+
+.card-nav-cue-arrow{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  width:23px;
+  height:23px;
+
+  border-radius:50%;
+
+  background:
+    rgba(
+      220,
+      235,
+      225,
+      .96
+    );
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(
+      93,
+      122,
+      100,
+      .12
+    );
+
+  font-size:15px;
+
+  line-height:1;
+
+  font-weight:500;
+}
+
+
+.card-nav-cue-label{
+  font-size:8px;
+
+  line-height:1;
+
+  font-weight:700;
+
+  letter-spacing:.04em;
+
+  text-transform:uppercase;
+}
+
+
+@keyframes cardNavPullLeft{
+  0%,
+  68%,
+  100%{
+    transform:
+      translateY(-50%)
+      translateX(0);
+  }
+
+  78%{
+    transform:
+      translateY(-50%)
+      translateX(-4px);
+  }
+
+  88%{
+    transform:
+      translateY(-50%)
+      translateX(0);
+  }
+}
+
+
+@keyframes cardNavPullRight{
+  0%,
+  68%,
+  100%{
+    transform:
+      translateY(-50%)
+      translateX(0);
+  }
+
+  78%{
+    transform:
+      translateY(-50%)
+      translateX(4px);
+  }
+
+  88%{
+    transform:
+      translateY(-50%)
+      translateX(0);
+  }
+}
+
+
 /*   previous stage card*/
+
 .experience.is-stage-back{
   pointer-events:auto !important;
+
   cursor:pointer;
 }
+
+
+/*
+  When a card becomes navigation,
+  its internal controls stop being
+  separate controls.
+
+  The whole visible card becomes
+  one Back target.
+*/
+
+.experience.is-stage-back
+> *:not(.card-nav-cue){
+  pointer-events:none;
+}
+
 
 .experience.is-stage-back .card{
   cursor:pointer;
 }
 
+
 /*   returning card comes over outgoing card*/
+
 .experience.is-returning-front{
   z-index:40 !important;
+
   pointer-events:none !important;
 }
 
+
 /*   experience card*/
+
 .card{
   position:relative;
+
   width:100%;
   height:100%;
+
   overflow:hidden;
+
   border-radius:34px;
+
   border:
     1px solid
     rgba(
@@ -107,6 +365,7 @@
       255,
       .66
     );
+
   background:
     rgba(
       255,
@@ -114,12 +373,15 @@
       255,
       .42
     );
+
   backdrop-filter:
     blur(22px)
     saturate(1.04);
+
   -webkit-backdrop-filter:
     blur(22px)
     saturate(1.04);
+
   box-shadow:
     0 25px 70px
     rgba(
@@ -128,21 +390,32 @@
       48,
       .14
     );
+
   cursor:pointer;
 }
 
+
 .photo{
   position:absolute;
+
   inset:0;
+
   background-size:cover;
+
   background-position:center;
-  transform:scale(1.025);
+
+  transform:
+    scale(1.025);
 }
+
 
 .card::after{
   content:"";
+
   position:absolute;
+
   inset:0;
+
   background:
     linear-gradient(
       to bottom,
@@ -168,18 +441,25 @@
       )
       100%
     );
+
   pointer-events:none;
 }
 
+
 /*   card type*/
+
 .type-mark{
   position:absolute;
+
   right:18px;
   top:18px;
+
   z-index:3;
+
   padding:
     9px
     13px;
+
   border:
     1px solid
     rgba(
@@ -188,7 +468,9 @@
       255,
       .34
     );
+
   border-radius:999px;
+
   background:
     rgba(
       255,
@@ -196,36 +478,57 @@
       255,
       .18
     );
+
   backdrop-filter:
     blur(14px);
+
   -webkit-backdrop-filter:
     blur(14px);
+
   font-size:9px;
+
   font-weight:700;
+
   letter-spacing:.06em;
+
   text-transform:uppercase;
+
   color:white;
 }
 
+
 /*   card content*/
+
 .content{
   position:absolute;
+
   left:25px;
   right:25px;
   bottom:25px;
+
   z-index:4;
+
   color:white;
 }
 
+
 .moment-label{
   display:flex;
+
   align-items:center;
+
   gap:8px;
+
   margin-bottom:9px;
+
   font-size:10px;
+
   font-weight:700;
+
   letter-spacing:.1em;
+
   text-transform:uppercase;
+
   color:
     rgba(
       255,
@@ -235,10 +538,13 @@
     );
 }
 
+
 .moment-label::before{
   content:"";
+
   width:20px;
   height:1px;
+
   background:
     rgba(
       255,
@@ -248,32 +554,44 @@
     );
 }
 
+
 .moment-title{
   margin:0;
+
   max-width:330px;
+
   font-family:
     Georgia,
     "Times New Roman",
     serif;
+
   font-size:
     clamp(
       27px,
       7vw,
       36px
     );
+
   line-height:.98;
+
   font-weight:400;
+
   letter-spacing:-.035em;
 }
+
 
 .moment-copy{
   margin:
     14px
     0
     0;
+
   max-width:330px;
+
   font-size:13px;
+
   line-height:1.55;
+
   color:
     rgba(
       255,
@@ -283,21 +601,31 @@
     );
 }
 
+
 /*   learning pills*/
+
 .learn-row{
   display:flex;
+
   flex-wrap:wrap;
+
   gap:7px;
+
   margin-top:15px;
 }
 
+
 .learn-pill{
   display:inline-flex;
+
   align-items:center;
+
   min-height:29px;
+
   padding:
     6px
     11px;
+
   border:
     1px solid
     rgba(
@@ -306,7 +634,9 @@
       255,
       .30
     );
+
   border-radius:999px;
+
   background:
     rgba(
       255,
@@ -314,11 +644,15 @@
       255,
       .15
     );
+
   backdrop-filter:
     blur(12px);
+
   -webkit-backdrop-filter:
     blur(12px);
+
   font-size:10px;
+
   color:
     rgba(
       255,
@@ -328,10 +662,14 @@
     );
 }
 
+
 /*   swipe hint*/
+
 .hint{
   position:absolute;
+
   left:50%;
+
   bottom:
     max(
       28px,
@@ -340,15 +678,24 @@
         + 20px
       )
     );
+
   z-index:8;
+
   display:flex;
+
   align-items:center;
+
   gap:10px;
+
   transform:
     translateX(-50%);
+
   white-space:nowrap;
+
   font-size:10px;
+
   letter-spacing:.04em;
+
   color:
     rgba(
       38,
@@ -358,9 +705,11 @@
     );
 }
 
+
 .hint-line{
   width:24px;
   height:1px;
+
   background:
     rgba(
       38,
@@ -370,14 +719,18 @@
     );
 }
 
+
 /*   responsive*/
+
 @media (max-width:420px){
+
   .experience{
     width:
       min(
         78vw,
         370px
       );
+
     height:
       min(
         58vh,
@@ -385,94 +738,20 @@
       );
   }
 
+
   .content{
     left:23px;
     right:23px;
     bottom:23px;
   }
 
-  /*   visible adjacent card cue*/
-  .experience[data-pos="1"]::before{
-    content:"›";
-    position:absolute;
-    right:8px;
-    top:50%;
-    z-index:8;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:25px;
-    height:39px;
-    border:
-      1px solid
-      rgba(
-        255,
-        255,
-        255,
-        .72
-      );
-    border-radius:999px;
-    background:
-      rgba(
-        250,
-        249,
-        244,
-        .78
-      );
-    backdrop-filter:
-      blur(10px);
-    -webkit-backdrop-filter:
-      blur(10px);
-    box-shadow:
-      0 5px 16px
-      rgba(
-        38,
-        54,
-        48,
-        .14
-      );
-    color:
-      rgba(
-        54,
-        69,
-        61,
-        .72
-      );
-    font-family:
-      Georgia,
-      "Times New Roman",
-      serif;
-    font-size:23px;
-    line-height:1;
-    transform:
-      translateY(-50%);
-    pointer-events:none;
-    animation:
-      experiencePeekCue
-      2.8s
-      ease-in-out
-      infinite;
-  }
-
-  @keyframes experiencePeekCue{
-    0%,100%{
-      transform:
-        translateY(-50%)
-        translateX(0);
-      opacity:.72;
-    }
-
-    50%{
-      transform:
-        translateY(-50%)
-        translateX(3px);
-      opacity:1;
-    }
-  }
 }
 
+
 @media (prefers-reduced-motion:reduce){
-  .experience[data-pos="1"]::before{
-    animation:none;
+
+  .card-nav-cue{
+    animation:none !important;
   }
+
 }
