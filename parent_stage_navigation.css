@@ -1,174 +1,396 @@
-/*   stage navigation handle*/
+/*   card navigation handle*/
 
 .card-nav-handle{
   position:absolute;
   top:50%;
   z-index:32;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  width:56px;
+
+  width:58px;
+
   height:76%;
   min-height:220px;
   max-height:330px;
-  padding:16px 6px;
+
+  padding:
+    16px
+    7px;
+
   appearance:none;
   -webkit-appearance:none;
-  border:1px solid rgba(219,209,186,.96);
+
+  border:0;
+  border-radius:0;
+
   background:#ffffff;
-  color:rgba(88,83,72,.96);
+
+  color:
+    rgba(
+      73,
+      76,
+      82,
+      .98
+    );
+
   font:inherit;
+
   cursor:pointer;
+
   pointer-events:auto;
+
+  touch-action:manipulation;
+
   overflow:hidden;
+
   backdrop-filter:none !important;
   -webkit-backdrop-filter:none !important;
-  -webkit-tap-highlight-color:transparent;
+
+  -webkit-tap-highlight-color:
+    transparent;
+
   filter:
-    drop-shadow(0 14px 28px rgba(57,67,79,.16))
-    drop-shadow(0 2px 8px rgba(57,67,79,.08))
-    drop-shadow(0 0 10px rgba(244,194,92,.16));
+    drop-shadow(
+      0
+      12px
+      22px
+      rgba(
+        49,
+        57,
+        65,
+        .18
+      )
+    )
+    drop-shadow(
+      0
+      0
+      7px
+      rgba(
+        255,
+        255,
+        255,
+        .50
+      )
+    );
+
   transition:
-    transform .34s ease,
-    opacity .34s ease,
-    filter .34s ease;
-  animation:cardNavPulse 3.2s ease-in-out infinite;
+    opacity .4s ease,
+    filter .4s ease;
+
+  animation:
+    cardNavPulse
+    3.4s
+    ease-in-out
+    infinite;
 }
 
-/*   kill any old frosted layers*/
+
+/*   remove old circle and decoration*/
+
+.card-nav-handle-arrow{
+  display:none !important;
+}
+
+
+/*   no old pseudo layers*/
 
 .card-nav-handle::before,
-.card-nav-handle::after,
-.card-nav-handle-arrow{
+.card-nav-handle::after{
   display:none !important;
   content:none !important;
 }
 
-/*   right arrow*/
 
-.has-nav-handle-right .card-nav-handle{
-  left:calc(100% + 12px);
-  transform:translateY(-50%);
-  clip-path:polygon(
-    0 0,
-    58% 0,
-    100% 50%,
-    58% 100%,
-    0 100%
-  );
+/*   right card arrow*/
+
+.has-nav-handle-right
+.card-nav-handle{
+  /*
+    Keep it inside the visible
+    LEFT portion of the right card.
+  */
+
+  left:22%;
+
+  /*
+    Right card rotates -2.6deg.
+    Counter-rotate the navigation
+    arrow so it stays upright.
+  */
+
+  transform:
+    translateY(-50%)
+    rotate(2.6deg);
+
+  /*
+    Tall clean arrow.
+    Straight top/bottom.
+    No rounded corners.
+  */
+
+  clip-path:
+    polygon(
+      0 0,
+      58% 0,
+      100% 50%,
+      58% 100%,
+      0 100%
+    );
 }
 
-/*   left arrow*/
 
-.has-nav-handle-left .card-nav-handle{
-  right:calc(100% + 12px);
-  transform:translateY(-50%);
-  clip-path:polygon(
-    42% 0,
-    100% 0,
-    100% 100%,
-    42% 100%,
-    0 50%
-  );
+/*   left card arrow*/
+
+.has-nav-handle-left
+.card-nav-handle{
+  /*
+    Keep it inside the visible
+    RIGHT portion of the left card.
+  */
+
+  right:22%;
+
+  /*
+    Left card rotates +2.6deg.
+    Counter-rotate it.
+  */
+
+  transform:
+    translateY(-50%)
+    rotate(-2.6deg);
+
+  clip-path:
+    polygon(
+      42% 0,
+      100% 0,
+      100% 100%,
+      42% 100%,
+      0 50%
+    );
 }
 
-/*   label*/
+
+/*   vertical letters*/
 
 .card-nav-handle-label{
   position:relative;
+
   z-index:2;
+
   display:block;
-  font-size:14px;
-  line-height:1.9;
-  font-weight:800;
-  letter-spacing:.16em;
+
+  margin:0;
+
+  padding:0;
+
+  font-size:15px;
+
+  line-height:1;
+
+  font-weight:700;
+
+  letter-spacing:.42em;
+
   text-transform:uppercase;
-  color:rgba(100,92,78,.96);
-  text-align:center;
+
+  color:
+    rgba(
+      72,
+      76,
+      83,
+      .98
+    );
+
+  writing-mode:
+    vertical-rl;
+
+  text-orientation:
+    upright;
+
   white-space:nowrap;
-  writing-mode:vertical-rl;
-  text-orientation:upright;
+
+  text-align:center;
+
   transform:none !important;
+
   user-select:none;
+
+  text-shadow:
+    0
+    1px
+    0
+    rgba(
+      255,
+      255,
+      255,
+      .8
+    );
 }
 
-/*   left handle text should stay readable too*/
 
-.has-nav-handle-left .card-nav-handle-label{
-  writing-mode:vertical-rl;
-  text-orientation:upright;
+/*
+  IMPORTANT
+
+  Do not rotate Back text.
+
+  Both MORE and BACK read:
+  top → bottom
+
+  M
+  O
+  R
+  E
+
+  B
+  A
+  C
+  K
+*/
+
+.has-nav-handle-left
+.card-nav-handle-label,
+.has-nav-handle-right
+.card-nav-handle-label{
   transform:none !important;
 }
 
-/*   press state*/
 
+/*   press right*/
+
+.has-nav-handle-right
 .card-nav-handle:active{
-  transform:translateY(-50%) scale(.97);
+  transform:
+    translateY(-50%)
+    rotate(2.6deg)
+    scale(.97);
 }
 
-/*   travelling state*/
+
+/*   press left*/
+
+.has-nav-handle-left
+.card-nav-handle:active{
+  transform:
+    translateY(-50%)
+    rotate(-2.6deg)
+    scale(.97);
+}
+
+
+/*   travelling*/
 
 .card-nav-handle.is-travelling{
   opacity:0;
+
   pointer-events:none;
+
   animation:none;
 }
 
-/*   pulse*/
+
+/*   subtle pulse*/
 
 @keyframes cardNavPulse{
+
   0%,
+  68%,
   100%{
     filter:
-      drop-shadow(0 14px 28px rgba(57,67,79,.16))
-      drop-shadow(0 2px 8px rgba(57,67,79,.08))
-      drop-shadow(0 0 10px rgba(244,194,92,.16));
+      drop-shadow(
+        0
+        12px
+        22px
+        rgba(
+          49,
+          57,
+          65,
+          .18
+        )
+      )
+      drop-shadow(
+        0
+        0
+        7px
+        rgba(
+          255,
+          255,
+          255,
+          .50
+        )
+      );
   }
 
-  50%{
+  80%{
     filter:
-      drop-shadow(0 18px 34px rgba(57,67,79,.18))
-      drop-shadow(0 3px 10px rgba(57,67,79,.10))
-      drop-shadow(0 0 14px rgba(244,194,92,.26));
+      drop-shadow(
+        0
+        15px
+        28px
+        rgba(
+          49,
+          57,
+          65,
+          .22
+        )
+      )
+      drop-shadow(
+        0
+        0
+        12px
+        rgba(
+          255,
+          255,
+          255,
+          .92
+        )
+      );
   }
+
 }
 
-/*   hide old swipe hint*/
+
+/*   old swipe hint*/
 
 .hint{
   display:none !important;
 }
 
+
 /*   mobile*/
 
 @media (max-width:420px){
+
   .card-nav-handle{
-    width:52px;
-    height:74%;
+    width:54px;
+
+    height:75%;
+
     min-height:205px;
     max-height:300px;
-    padding:14px 5px;
+
+    padding:
+      14px
+      6px;
   }
+
 
   .card-nav-handle-label{
     font-size:15px;
-    line-height:2.05;
-    letter-spacing:.12em;
+
+    letter-spacing:.46em;
   }
 
-  .has-nav-handle-right .card-nav-handle{
-    left:calc(100% + 10px);
-  }
-
-  .has-nav-handle-left .card-nav-handle{
-    right:calc(100% + 10px);
-  }
 }
+
 
 /*   reduced motion*/
 
 @media (prefers-reduced-motion:reduce){
+
   .card-nav-handle{
-    animation:none;
+    animation:none !important;
   }
+
 }
