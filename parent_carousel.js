@@ -45,33 +45,10 @@ export function buildCards(){
   }
 
   buildExperienceCards(
-    carousel,
-    openExperience
+    carousel
   );
 
   renderPositions();
-}
-
-/*   open experience*/
-function openExperience(index){
-  if(isNestStageOpen()){
-    return;
-  }
-
-  if(index!==activeIndex){
-    return;
-  }
-
-  window.dispatchEvent(
-    new CustomEvent(
-      "parent:open-experience",
-      {
-        detail:{
-          index:activeIndex
-        }
-      }
-    )
-  );
 }
 
 /*   render positions*/
