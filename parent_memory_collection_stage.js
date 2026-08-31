@@ -53,6 +53,7 @@ export function openMemoryCollectionStage({
       "click",
       event=>{
         if(
+          !collectionCard||
           !collectionCard.classList.contains(
             "is-stage-back"
           )
@@ -107,17 +108,17 @@ export function openMemoryCollectionStage({
     0
   );
 
-  requestAnimationFrame(
-    ()=>{
-      requestAnimationFrame(
-        ()=>{
-          collectionCard.classList.add(
-            "is-visible"
-          );
-        }
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      if(!collectionCard){
+        return;
+      }
+
+      collectionCard.classList.add(
+        "is-visible"
       );
-    }
-  );
+    });
+  });
 
   return true;
 }
@@ -136,8 +137,12 @@ export function closeMemoryCollectionStage({
   const cardToRemove=
     collectionCard;
 
+  const returningMemoriesCard=
+    memoriesCard;
+
   collectionCard=null;
 
+  /*   outgoing collection fades underneath*/
   if(cardToRemove){
     cardToRemove.classList.remove(
       "is-visible"
@@ -146,21 +151,23 @@ export function closeMemoryCollectionStage({
     cardToRemove.classList.add(
       "is-leaving"
     );
+
+    cardToRemove.style.pointerEvents=
+      "none";
   }
 
-  /*   memories returns to center*/
-  if(memoriesCard){
-    memoriesCard.classList.remove(
+  /*   memories becomes foreground return card*/
+  if(returningMemoriesCard){
+    returningMemoriesCard.classList.remove(
       "is-stage-back"
     );
 
-    renderCardOffset(
-      memoriesCard,
-      0
+    returningMemoriesCard.classList.add(
+      "is-returning-front"
     );
 
-    memoriesCard.style.pointerEvents=
-      "auto";
+    returningMemoriesCard.style.pointerEvents=
+      "none";
   }
 
   /*   nest becomes previous level*/
@@ -178,17 +185,51 @@ export function closeMemoryCollectionStage({
       "auto";
   }
 
+  /*   begin memories return glide*/
   collectionCloseTimer=
     window.setTimeout(
       ()=>{
-        if(cardToRemove){
-          cardToRemove.remove();
-        }
-
         collectionCloseTimer=null;
+
+        if(returningMemoriesCard){
+          renderCardOffset(
+            returningMemoriesCard,
+            0
+          );
+        }
       },
-      700
+      110
     );
+
+  /*   remove outgoing collection*/
+  window.setTimeout(
+    ()=>{
+      if(
+        cardToRemove&&
+        cardToRemove.parentNode
+      ){
+        cardToRemove.remove();
+      }
+    },
+    1050
+  );
+
+  /*   release memories after glide*/
+  window.setTimeout(
+    ()=>{
+      if(!returningMemoriesCard){
+        return;
+      }
+
+      returningMemoriesCard.classList.remove(
+        "is-returning-front"
+      );
+
+      returningMemoriesCard.style.pointerEvents=
+        "auto";
+    },
+    1700
+  );
 
   return true;
 }
