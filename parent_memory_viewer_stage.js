@@ -100,17 +100,17 @@ export function openMemoryViewerStage({
     0
   );
 
-  requestAnimationFrame(
-    ()=>{
-      requestAnimationFrame(
-        ()=>{
-          viewerCard.classList.add(
-            "is-visible"
-          );
-        }
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      if(!viewerCard){
+        return;
+      }
+
+      viewerCard.classList.add(
+        "is-visible"
       );
-    }
-  );
+    });
+  });
 
   return true;
 }
@@ -130,8 +130,12 @@ export function closeMemoryViewerStage({
   const cardToRemove=
     viewerCard;
 
+  const returningCollectionCard=
+    collectionCard;
+
   viewerCard=null;
 
+  /*   outgoing viewer fades underneath*/
   if(cardToRemove){
     cardToRemove.classList.remove(
       "is-visible"
@@ -140,21 +144,23 @@ export function closeMemoryViewerStage({
     cardToRemove.classList.add(
       "is-leaving"
     );
+
+    cardToRemove.style.pointerEvents=
+      "none";
   }
 
-  /*   collection returns to center*/
-  if(collectionCard){
-    collectionCard.classList.remove(
+  /*   collection becomes foreground return card*/
+  if(returningCollectionCard){
+    returningCollectionCard.classList.remove(
       "is-stage-back"
     );
 
-    renderCardOffset(
-      collectionCard,
-      0
+    returningCollectionCard.classList.add(
+      "is-returning-front"
     );
 
-    collectionCard.style.pointerEvents=
-      "auto";
+    returningCollectionCard.style.pointerEvents=
+      "none";
   }
 
   /*   memories becomes back level*/
@@ -187,17 +193,51 @@ export function closeMemoryViewerStage({
       "none";
   }
 
+  /*   begin collection return glide*/
   viewerCloseTimer=
     window.setTimeout(
       ()=>{
-        if(cardToRemove){
-          cardToRemove.remove();
-        }
-
         viewerCloseTimer=null;
+
+        if(returningCollectionCard){
+          renderCardOffset(
+            returningCollectionCard,
+            0
+          );
+        }
       },
-      700
+      110
     );
+
+  /*   remove outgoing viewer*/
+  window.setTimeout(
+    ()=>{
+      if(
+        cardToRemove&&
+        cardToRemove.parentNode
+      ){
+        cardToRemove.remove();
+      }
+    },
+    1050
+  );
+
+  /*   release collection after glide*/
+  window.setTimeout(
+    ()=>{
+      if(!returningCollectionCard){
+        return;
+      }
+
+      returningCollectionCard.classList.remove(
+        "is-returning-front"
+      );
+
+      returningCollectionCard.style.pointerEvents=
+        "auto";
+    },
+    1700
+  );
 
   return true;
 }
