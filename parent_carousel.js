@@ -38,6 +38,7 @@ const deepSheet=
 let activeIndex=0;
 let hasInteracted=false;
 
+
 /*   build cards*/
 export function buildCards(){
   if(!carousel){
@@ -45,11 +46,47 @@ export function buildCards(){
   }
 
   buildExperienceCards(
-    carousel
+    carousel,
+    openExperience
   );
 
   renderPositions();
 }
+
+
+/*   open experience*/
+function openExperience(
+  index
+){
+  if(isNestStageOpen()){
+    return;
+  }
+
+  if(
+    index===
+    activeIndex+1
+  ){
+    move(1);
+    return;
+  }
+
+  if(
+    index===
+    activeIndex-1
+  ){
+    move(-1);
+    return;
+  }
+
+  /*
+    Center card intentionally does
+    nothing for now.
+
+    Later this becomes the entrance
+    into the card's real experience.
+  */
+}
+
 
 /*   render positions*/
 function renderPositions(){
@@ -61,8 +98,11 @@ function renderPositions(){
   });
 }
 
+
 /*   move*/
-function move(direction){
+function move(
+  direction
+){
   if(isNestStageOpen()){
     return;
   }
@@ -89,6 +129,7 @@ function move(direction){
   hideHint();
 }
 
+
 /*   hide hint*/
 export function hideHint(){
   if(hasInteracted){
@@ -102,6 +143,7 @@ export function hideHint(){
   }
 }
 
+
 /*   open nest stage*/
 export function openNestStage(){
   openNestStageView({
@@ -111,6 +153,7 @@ export function openNestStage(){
   });
 }
 
+
 /*   close nest stage*/
 export function closeNestStage(){
   closeNestStageView({
@@ -119,10 +162,12 @@ export function closeNestStage(){
   });
 }
 
+
 /*   expose nest state*/
 export{
   isNestStageOpen
 };
+
 
 /*   activate carousel*/
 export function activateCarousel(){
