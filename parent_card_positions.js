@@ -1,193 +1,8 @@
-let navigationFrame=null;
-
-/*   remove legacy card cue*/
-function removeLegacyCardCue(card){
-  if(!card){
-    return;
-  }
-
-  const cue=
-    card.querySelector(
-      ":scope > .card-nav-cue"
-    );
-
-  if(cue){
-    cue.remove();
-  }
-
-  card.classList.remove(
-    "has-card-nav-cue",
-    "has-card-nav-cue-left",
-    "has-card-nav-cue-right"
-  );
-
-  delete card.dataset.navLabel;
-}
-
-/*   remove stage navigation button*/
-function removeStageNavigationButton(
-  carousel
-){
-  if(!carousel){
-    return;
-  }
-
-  const button=
-    carousel.querySelector(
-      ":scope > .stage-nav-button"
-    );
-
-  if(button){
-    button.remove();
-  }
-}
-
-/*   get right navigation target*/
-function getRightNavigationTarget(
-  carousel
-){
-  if(!carousel){
-    return null;
-  }
-
-  const cards=[
-    ...carousel.querySelectorAll(
-      '.experience[data-pos="1"]'
-    )
-  ];
-
-  /*
-    Deeper navigation takes priority.
-
-    Several cards can technically remain
-    at offset 1 underneath each other.
-    The newest one in the DOM is the
-    level immediately behind the current
-    experience.
-  */
-  const backCards=
-    cards.filter(
-      card=>
-        card.classList.contains(
-          "is-stage-back"
-        )
-    );
-
-  if(backCards.length){
-    return{
-      card:
-        backCards[
-          backCards.length-1
-        ],
-      label:"Back"
-    };
-  }
-
-  /*
-    On the main Experience Engine,
-    the next experience is the More target.
-  */
-  const moreCards=
-    cards.filter(
-      card=>
-        card.hasAttribute(
-          "data-index"
-        )
-    );
-
-  if(moreCards.length){
-    return{
-      card:moreCards[0],
-      label:"More"
-    };
-  }
-
-  return null;
-}
-
-/*   sync stage navigation button*/
-function syncStageNavigationButton(
-  carousel
-){
-  removeStageNavigationButton(
-    carousel
-  );
-
-  const target=
-    getRightNavigationTarget(
-      carousel
-    );
-
-  if(!target){
-    return;
-  }
-
-  const button=
-    document.createElement(
-      "button"
-    );
-
-  button.type="button";
-  button.className=
-    "stage-nav-button";
-
-  button.setAttribute(
-    "aria-label",
-    target.label==="Back"
-      ?"Go back"
-      :"Show more"
-  );
-
-  button.innerHTML=`
-    <span class="stage-nav-arrow">
-      ←
-    </span>
-
-    <span class="stage-nav-label">
-      ${target.label}
-    </span>
-  `;
-
-  button.addEventListener(
-    "click",
-    event=>{
-      event.preventDefault();
-      event.stopPropagation();
-
-      target.card.click();
-    }
-  );
-
-  carousel.appendChild(
-    button
-  );
-}
-
-/*   schedule navigation sync*/
-function scheduleStageNavigationSync(
-  carousel
-){
-  if(!carousel){
-    return;
-  }
-
-  if(navigationFrame){
-    cancelAnimationFrame(
-      navigationFrame
-    );
-  }
-
-  navigationFrame=
-    requestAnimationFrame(
-      ()=>{
-        navigationFrame=null;
-
-        syncStageNavigationButton(
-          carousel
-        );
-      }
-    );
-}
+import{
+  clearLegacyStageNavigation,
+  isCardNavigationTarget,
+  syncCardNavigation
+}from"./parent_card_navigation.js";
 
 /*   render card offset*/
 export function renderCardOffset(
@@ -198,17 +13,15 @@ export function renderCardOffset(
     return;
   }
 
-  removeLegacyCardCue(
-    card
-  );
-
-  const carousel=
-    card.parentElement;
-
   if(
     offset < -2||
     offset > 2
   ){
+    syncCardNavigation(
+      card,
+      offset
+    );
+
     card.style.opacity="0";
     card.style.pointerEvents="none";
 
@@ -224,26 +37,15 @@ export function renderCardOffset(
       "blur(9px)";
 
     card.style.zIndex="4";
-
-    card.dataset.pos=
-      offset;
-
-    scheduleStageNavigationSync(
-      carousel
-    );
+    card.dataset.pos=offset;
 
     return;
   }
 
   const isNavigationCard=
-    offset===1&&
-    (
-      card.classList.contains(
-        "is-stage-back"
-      )||
-      card.hasAttribute(
-        "data-index"
-      )
+    isCardNavigationTarget(
+      card,
+      offset
     );
 
   const x=
@@ -273,6 +75,11 @@ export function renderCardOffset(
       :isNavigationCard
         ?.72
         :.46;
+
+  syncCardNavigation(
+    card,
+    offset
+  );
 
   card.style.opacity=
     opacity;
@@ -313,10 +120,6 @@ export function renderCardOffset(
 
   card.dataset.pos=
     offset;
-
-  scheduleStageNavigationSync(
-    carousel
-  );
 }
 
 /*   render nest mode position*/
@@ -329,8 +132,9 @@ export function renderNestModePosition(
     index-activeIndex;
 
   if(relativeIndex<0){
-    removeLegacyCardCue(
-      card
+    syncCardNavigation(
+      card,
+      -3
     );
 
     card.style.opacity="0";
@@ -350,10 +154,6 @@ export function renderNestModePosition(
 
     card.style.zIndex="5";
     card.dataset.pos=-1;
-
-    scheduleStageNavigationSync(
-      card.parentElement
-    );
 
     return;
   }
@@ -377,6 +177,10 @@ export function renderCardPositions({
     return;
   }
 
+  clearLegacyStageNavigation(
+    carousel
+  );
+
   const cards=[
     ...carousel.querySelectorAll(
       ".experience:not(.nest-experience)"
@@ -398,17 +202,10 @@ export function renderCardPositions({
         return;
       }
 
-      const offset=
-        index-activeIndex;
-
       renderCardOffset(
         card,
-        offset
+        index-activeIndex
       );
     }
-  );
-
-  scheduleStageNavigationSync(
-    carousel
   );
 }
