@@ -38,7 +38,7 @@
       250,
       248,
       241,
-      .90
+      .92
     );
 
   backdrop-filter:
@@ -89,8 +89,9 @@
 /*
   RIGHT SIDE CARD
 
-  The visible part is toward the
-  LEFT side of that card.
+  Start at the exposed edge,
+  then extend INTO the visible
+  portion of the card on the right.
 */
 
 .has-nav-handle-right
@@ -98,10 +99,7 @@
   left:24%;
 
   transform:
-    translate(
-      -50%,
-      -50%
-    );
+    translateY(-50%);
 
   animation:
     cardNavInviteLeft
@@ -114,8 +112,9 @@
 /*
   LEFT SIDE CARD
 
-  The visible part is toward the
-  RIGHT side of that card.
+  Same idea in reverse.
+  Start at the exposed edge and
+  extend into the visible portion.
 */
 
 .has-nav-handle-left
@@ -123,10 +122,7 @@
   right:24%;
 
   transform:
-    translate(
-      50%,
-      -50%
-    );
+    translateY(-50%);
 
   animation:
     cardNavInviteRight
