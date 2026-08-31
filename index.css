@@ -2,7 +2,11 @@
 @import url("./parent_login.css");
 @import url("./parent_atmosphere.css");
 @import url("./parent_header.css");
+
 @import url("./parent_experience.css");
+@import url("./parent_experience_card.css");
+@import url("./parent_stage_navigation.css");
+
 @import url("./parent_navigation.css");
 @import url("./parent_sheet.css");
 @import url("./parent_arrival.css");
