@@ -45,6 +45,13 @@ function isCurrentMonth(value){
   return date.getFullYear()===now.getFullYear()&&date.getMonth()===now.getMonth();
 }
 
+/*   is archive month*/
+function isArchiveMonth(value,year,month){
+  const date=getMediaDate(value);
+  if(!date)return false;
+  return date.getFullYear()===year&&date.getMonth()===month;
+}
+
 /*   get memory media*/
 function getMemoryMedia(){
   const media=getStudentMedia();
@@ -73,6 +80,16 @@ function getSpecialCollectionMediaIds(collectionCode){
 /*   get collection definition*/
 function getCollectionDefinition(collection){
   const monthName=new Intl.DateTimeFormat("en",{month:"long"}).format(new Date());
+
+  if(collection&&typeof collection==="object"&&collection.type==="archive-month"){
+    const year=Number(collection.year);
+    const month=Number(collection.month);
+    const title=new Intl.DateTimeFormat("en",{month:"long",year:"numeric"}).format(new Date(year,month,1));
+    return{
+      title,
+      filter:item=>isArchiveMonth(item.created_at,year,month)
+    };
+  }
 
   if(collection==="week"){
     return{
@@ -153,27 +170,30 @@ export function createMemoryCollectionCard(collection="today",{onMedia}={}){
   const studentName=student?.preferred_name||student?.name||"Your little one";
   const media=getMemoryMedia().filter(item=>definition.filter(item));
   const article=document.createElement("article");
+  const isArchiveMonth=collection&&typeof collection==="object"&&collection.type==="archive-month";
+  const collectionType=isArchiveMonth?"archive-month":collection;
 
   article.className="experience memories-experience memory-today-experience";
-  article.dataset.type=`memory-${collection}`;
+  article.dataset.type=`memory-${collectionType}`;
 
-  const title=collection==="today"
-    ?`${studentName}'s little moments`
-    :collection==="recognition"
-      ?`${studentName}'s Recognition Days`
-      :collection==="birthday"
-        ?`${studentName}'s Birthdays`
-        :definition.title;
+  const title=isArchiveMonth
+    ?definition.title
+    :collection==="today"
+      ?`${studentName}'s little moments`
+      :collection==="recognition"
+        ?`${studentName}'s Recognition Days`
+        :collection==="birthday"
+          ?`${studentName}'s Birthdays`
+          :definition.title;
 
   article.innerHTML=`
     <div class="memories-stage-card memory-today-stage-card">
       <div class="memory-today-heading">
         <h2 class="memory-today-title">${title}</h2>
       </div>
-      ${
-        media.length>0
-          ?`<div class="memory-today-grid">${media.map(buildMediaItem).join("")}</div>`
-          :buildEmptyState(studentName,collection)
+      ${media.length>0
+        ?`<div class="memory-today-grid">${media.map(buildMediaItem).join("")}</div>`
+        :buildEmptyState(studentName,collection)
       }
     </div>
   `;
