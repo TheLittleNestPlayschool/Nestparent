@@ -20,3 +20,24 @@
 @import url("./parent_memory_collection.css");
 @import url("./parent_memory_viewer.css");
 @import url("./parent_memory_archive.css");
+
+/*   quick display heading scale*/
+.nest-card-title{
+  font-size:clamp(23px,5.6vw,28px);
+  line-height:1.04;
+}
+
+.memories-title{
+  font-size:clamp(25px,6vw,30px);
+  line-height:1.02;
+}
+
+.memory-today-title{
+  font-size:clamp(21px,5.2vw,26px);
+  line-height:1.04;
+}
+
+.memory-archive-title{
+  font-size:clamp(22px,5.4vw,27px);
+  line-height:1.04;
+}
