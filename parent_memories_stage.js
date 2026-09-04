@@ -1,18 +1,15 @@
+import{createMemoriesCard}from"./parent_memories_card.js";
 import{
-  createMemoriesCard
-}from"./parent_memories_card.js";
-
-import{
-  renderCardOffset
-}from"./parent_card_positions.js";
-
+  pushStageCard,
+  popStageCard,
+  isStageMotionLocked
+}from"./parent_stage_motion.js";
 import{
   openMemoryCollectionStage,
   closeMemoryCollectionStage,
   getMemoryCollectionCard,
   isMemoryCollectionStageOpen
 }from"./parent_memory_collection_stage.js";
-
 import{
   openMemoryViewerStage,
   closeMemoryViewerStage,
@@ -23,88 +20,43 @@ let memoriesOpen=false;
 let memoriesCard=null;
 let currentNestCard=null;
 let currentCarousel=null;
-let closeTimer=null;
 
 /*   open memories stage*/
-export function openMemoriesStage({
-  carousel,
-  nestCard
-}){
+export function openMemoriesStage({carousel,nestCard}){
   if(
     memoriesOpen||
     !carousel||
-    !nestCard
+    !nestCard||
+    isStageMotionLocked()
   ){
     return;
   }
 
-  if(closeTimer){
-    clearTimeout(closeTimer);
-    closeTimer=null;
+  const newMemoriesCard=createMemoriesCard({
+    onChapter:handleMemoryChapter,
+    onCollection:handleMemoryCollection
+  });
+
+  newMemoriesCard.addEventListener("click",handleMemoriesCardBack);
+  nestCard.addEventListener("click",handleNestCardBack);
+  carousel.appendChild(newMemoriesCard);
+
+  const pushed=pushStageCard(newMemoriesCard);
+  if(!pushed){
+    newMemoriesCard.removeEventListener("click",handleMemoriesCardBack);
+    nestCard.removeEventListener("click",handleNestCardBack);
+    newMemoriesCard.remove();
+    return;
   }
 
-  memoriesOpen=true;
-  currentCarousel=carousel;
+  memoriesCard=newMemoriesCard;
   currentNestCard=nestCard;
-
-  memoriesCard=
-    createMemoriesCard({
-      onChapter:handleMemoryChapter,
-      onCollection:handleMemoryCollection
-    });
-
-  memoriesCard.addEventListener(
-    "click",
-    handleMemoriesCardBack
-  );
-
-  currentNestCard.addEventListener(
-    "click",
-    handleNestCardBack
-  );
-
-  carousel.appendChild(
-    memoriesCard
-  );
-
-  void memoriesCard.offsetWidth;
-
-  /*   nest becomes previous level*/
-  currentNestCard.classList.add(
-    "is-stage-back"
-  );
-
-  renderCardOffset(
-    currentNestCard,
-    1
-  );
-
-  currentNestCard.style.pointerEvents=
-    "auto";
-
-  /*   memories enters*/
-  renderCardOffset(
-    memoriesCard,
-    0
-  );
-
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      if(!memoriesCard){
-        return;
-      }
-
-      memoriesCard.classList.add(
-        "is-visible"
-      );
-    });
-  });
+  currentCarousel=carousel;
+  memoriesOpen=true;
 }
 
 /*   open collection*/
-function openCollection(
-  collection
-){
+function openCollection(collection){
   return openMemoryCollectionStage({
     carousel:currentCarousel,
     nestCard:currentNestCard,
@@ -116,9 +68,7 @@ function openCollection(
 }
 
 /*   handle memory chapter*/
-function handleMemoryChapter(
-  chapter
-){
+function handleMemoryChapter(chapter){
   if(chapter==="today"){
     openCollection("today");
     return true;
@@ -129,7 +79,7 @@ function handleMemoryChapter(
     return true;
   }
 
-  if(chapter==="august"){
+  if(chapter==="august"||chapter==="month"){
     openCollection("month");
     return true;
   }
@@ -138,9 +88,7 @@ function handleMemoryChapter(
 }
 
 /*   handle special collection*/
-function handleMemoryCollection(
-  collection
-){
+function handleMemoryCollection(collection){
   if(collection==="recognition"){
     openCollection("recognition");
     return true;
@@ -155,15 +103,9 @@ function handleMemoryCollection(
 }
 
 /*   collection media*/
-function handleCollectionMedia(
-  payload
-){
-  const collectionCard=
-    getMemoryCollectionCard();
-
-  if(!collectionCard){
-    return false;
-  }
+function handleCollectionMedia(payload){
+  const collectionCard=getMemoryCollectionCard();
+  if(!collectionCard){return false;}
 
   openMemoryViewerStage({
     carousel:currentCarousel,
@@ -180,59 +122,40 @@ function handleCollectionMedia(
 
 /*   collection card back*/
 function handleCollectionCardBack(){
-  if(
-    !isMemoryViewerStageOpen()
-  ){
-    return;
-  }
+  if(!isMemoryViewerStageOpen()){return;}
 
   closeMemoryViewerStage({
     nestCard:currentNestCard,
     memoriesCard,
-    collectionCard:
-      getMemoryCollectionCard()
+    collectionCard:getMemoryCollectionCard()
   });
 }
 
 /*   memories card back*/
-function handleMemoriesCardBack(
-  event
-){
+function handleMemoriesCardBack(event){
   if(
     !memoriesCard||
-    !memoriesCard.classList.contains(
-      "is-stage-back"
-    )
+    !memoriesCard.classList.contains("is-stage-back")||
+    isMemoryViewerStageOpen()
   ){
     return;
   }
 
   event.stopPropagation();
 
-  if(
-    isMemoryViewerStageOpen()
-  ){
-    return;
-  }
-
-  if(
-    isMemoryCollectionStageOpen()
-  ){
+  if(isMemoryCollectionStageOpen()){
     closeMemoryCollectionStage({
       nestCard:currentNestCard,
       memoriesCard
     });
-
-    return;
   }
 }
 
 /*   nest card back*/
-function handleNestCardBack(
-  event
-){
+function handleNestCardBack(event){
   if(
     !memoriesOpen||
+    !currentNestCard?.classList.contains("is-stage-back")||
     isMemoryCollectionStageOpen()||
     isMemoryViewerStageOpen()
   ){
@@ -240,148 +163,44 @@ function handleNestCardBack(
   }
 
   event.stopPropagation();
-
   closeMemoriesStage();
 }
 
 /*   close memories stage*/
 export function closeMemoriesStage(){
-  if(!memoriesOpen){
-    return;
-  }
+  if(!memoriesOpen||isStageMotionLocked()){return;}
 
-  if(
-    isMemoryViewerStageOpen()
-  ){
+  if(isMemoryViewerStageOpen()){
     closeMemoryViewerStage({
       nestCard:currentNestCard,
       memoriesCard,
-      collectionCard:
-        getMemoryCollectionCard()
+      collectionCard:getMemoryCollectionCard()
     });
-
     return;
   }
 
-  if(
-    isMemoryCollectionStageOpen()
-  ){
+  if(isMemoryCollectionStageOpen()){
     closeMemoryCollectionStage({
       nestCard:currentNestCard,
       memoriesCard
     });
-
     return;
   }
 
-  memoriesOpen=false;
+  const closingCard=memoriesCard;
+  const closed=popStageCard(closingCard);
+  if(!closed){return;}
 
-  const cardToRemove=
-    memoriesCard;
-
-  const returningNestCard=
-    currentNestCard;
+  closingCard?.removeEventListener("click",handleMemoriesCardBack);
+  currentNestCard?.removeEventListener("click",handleNestCardBack);
 
   memoriesCard=null;
-
-  /*   outgoing memories fades underneath*/
-  if(cardToRemove){
-    cardToRemove.classList.remove(
-      "is-visible"
-    );
-
-    cardToRemove.classList.add(
-      "is-leaving"
-    );
-
-    cardToRemove.style.pointerEvents=
-      "none";
-  }
-
-  /*   nest becomes foreground return card*/
-  if(returningNestCard){
-    returningNestCard.removeEventListener(
-      "click",
-      handleNestCardBack
-    );
-
-    returningNestCard.classList.remove(
-      "is-stage-back"
-    );
-
-    returningNestCard.classList.add(
-      "is-returning-front"
-    );
-
-    returningNestCard.style.pointerEvents=
-      "none";
-  }
-
-  /*   begin return glide*/
-  closeTimer=
-    window.setTimeout(
-      ()=>{
-        closeTimer=null;
-
-        if(returningNestCard){
-          renderCardOffset(
-            returningNestCard,
-            0
-          );
-        }
-      },
-      110
-    );
-
-  /*   remove memories after fade*/
-  window.setTimeout(
-    ()=>{
-      if(
-        cardToRemove&&
-        cardToRemove.parentNode
-      ){
-        cardToRemove.remove();
-      }
-    },
-    1050
-  );
-
-  /*   release nest after glide*/
-  window.setTimeout(
-    ()=>{
-      if(returningNestCard){
-        returningNestCard.classList.remove(
-          "is-returning-front"
-        );
-
-        returningNestCard.style.pointerEvents=
-          "auto";
-      }
-
-      if(
-        currentNestCard===
-        returningNestCard
-      ){
-        currentNestCard=null;
-      }
-
-      currentCarousel=null;
-    },
-    1700
-  );
+  currentNestCard=null;
+  currentCarousel=null;
+  memoriesOpen=false;
 }
 
-/*   memories stage open*/
-export function isMemoriesStageOpen(){
-  return memoriesOpen;
-}
-
-/*   collection stage open*/
-export{
-  isMemoryCollectionStageOpen
-};
-
-/*   viewer stage open*/
-export{
-  isMemoryViewerStageOpen
-};
+/*   stage state*/
+export function isMemoriesStageOpen(){return memoriesOpen;}
+export{isMemoryCollectionStageOpen};
+export{isMemoryViewerStageOpen};
