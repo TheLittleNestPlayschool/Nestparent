@@ -20,6 +20,10 @@ import{
 }from"./parent_resting_atmosphere.js";
 
 import{
+  isStageMotionLocked
+}from"./parent_stage_motion.js";
+
+import{
   openNestStage as openNestStageView,
   closeNestStage as closeNestStageView,
   isNestStageOpen
@@ -68,7 +72,10 @@ export function buildCards(){
 
 /*   open experience*/
 function openExperience(index){
-  if(isNestStageOpen()){
+  if(
+    isNestStageOpen()||
+    isStageMotionLocked()
+  ){
     return;
   }
 
@@ -109,7 +116,10 @@ function renderPositions(){
 
 /*   move*/
 function move(direction){
-  if(isNestStageOpen()){
+  if(
+    isNestStageOpen()||
+    isStageMotionLocked()
+  ){
     return;
   }
 
@@ -156,6 +166,10 @@ export function hideHint(){
 
 /*   open nest stage*/
 export function openNestStage(){
+  if(isStageMotionLocked()){
+    return;
+  }
+
   openNestStageView({
     carousel,
     activeIndex,
@@ -183,7 +197,10 @@ export function activateCarousel(){
     deepSheet,
 
     canMove:()=>{
-      return !isNestStageOpen();
+      return(
+        !isNestStageOpen()&&
+        !isStageMotionLocked()
+      );
     },
 
     onMove:
