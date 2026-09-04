@@ -2,6 +2,7 @@ import{
   getStudent,
   getFranchise,
   getCurrentSessionDetails,
+  getStudentMedia,
   getSignedThumbnails
 }from"./parent_data.js";
 
@@ -11,21 +12,46 @@ const fallbackPhotos=[
   "https://images.unsplash.com/photo-1598880940080-ff9a29891b85?auto=format&fit=crop&w=1200&q=86",
   "https://images.unsplash.com/photo-1560785496-3c9d27877182?auto=format&fit=crop&w=1200&q=86",
   "https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1200&q=86",
-  "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=86",
+  "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9e?auto=format&fit=crop&w=1200&q=86",
   "https://images.unsplash.com/photo-1607453998774-d533f65dac99?auto=format&fit=crop&w=1200&q=86"
 ];
 
-function getExperiencePhoto(thumbnails,index){
-  const livePhotos=
-    thumbnails.filter(Boolean);
-
-  if(livePhotos.length){
-    return livePhotos[
-      index%
-      livePhotos.length
-    ];
+function getMediaTimestamp(value){
+  let timestamp=Number(value)||0;
+  if(timestamp&&timestamp<1000000000000){
+    timestamp*=1000;
   }
+  return timestamp;
+}
 
+function getLatestExperiencePhotos(media,thumbnails){
+  const latest=media
+    .map((item,index)=>({
+      item,
+      thumbnail:thumbnails[index]||""
+    }))
+    .filter(entry=>entry.thumbnail&&!entry.item?.is_deleted)
+    .sort((a,b)=>
+      getMediaTimestamp(b.item?.created_at)-
+      getMediaTimestamp(a.item?.created_at)
+    );
+
+  const seen=new Set();
+  return latest
+    .filter(entry=>{
+      if(seen.has(entry.thumbnail)){
+        return false;
+      }
+      seen.add(entry.thumbnail);
+      return true;
+    })
+    .map(entry=>entry.thumbnail);
+}
+
+function getExperiencePhoto(livePhotos,index){
+  if(livePhotos.length){
+    return livePhotos[index%livePhotos.length];
+  }
   return fallbackPhotos[index];
 }
 
@@ -34,7 +60,9 @@ export function getExperiences(){
   const student=getStudent();
   const franchise=getFranchise();
   const session=getCurrentSessionDetails();
+  const media=getStudentMedia();
   const thumbnails=getSignedThumbnails();
+  const livePhotos=getLatestExperiencePhotos(media,thumbnails);
 
   const studentName=
     student?.preferred_name||
@@ -81,7 +109,7 @@ export function getExperiences(){
       copy:
         session?.session_description||
         `A little look at what was woven into ${studentName}'s day.`,
-      photo:getExperiencePhoto(thumbnails,0),
+      photo:getExperiencePhoto(livePhotos,0),
       categories:sessionCategories,
       deeper:
         session?.full_lesson_plan||
@@ -99,7 +127,7 @@ export function getExperiences(){
       label:"Learning Discovery",
       copy:
         `${studentName}'s ${sessionLabel} included hands-on chances to practice control, coordination and growing independence.`,
-      photo:getExperiencePhoto(thumbnails,1),
+      photo:getExperiencePhoto(livePhotos,1),
       categories:[
         "Careful hand movements",
         "Growing independence",
@@ -120,7 +148,7 @@ export function getExperiences(){
       label:"Activity",
       copy:
         `${sessionLabel} gave ${studentName} opportunities to move, participate and connect learning with action.`,
-      photo:getExperiencePhoto(thumbnails,2),
+      photo:getExperiencePhoto(livePhotos,2),
       categories:[
         "Movement",
         "Participation",
@@ -141,7 +169,7 @@ export function getExperiences(){
       label:"Growth",
       copy:
         `${sessionLabel} created opportunities for participation, expression and growing independence.`,
-      photo:getExperiencePhoto(thumbnails,3),
+      photo:getExperiencePhoto(livePhotos,3),
       categories:[
         "Growing independence",
         "Finding their voice",
@@ -162,7 +190,7 @@ export function getExperiences(){
       label:"My World",
       copy:
         `${studentName}'s ${sessionLabel} also carried a quieter thread of discovery beyond the main lesson.`,
-      photo:getExperiencePhoto(thumbnails,4),
+      photo:getExperiencePhoto(livePhotos,4),
       categories:[
         "Exploring the world",
         "Everyday discovery"
@@ -181,7 +209,7 @@ export function getExperiences(){
       label:"Together",
       copy:
         `A simple way to keep a little of ${studentName}'s Little Nest experience going at home.`,
-      photo:getExperiencePhoto(thumbnails,5),
+      photo:getExperiencePhoto(livePhotos,5),
       categories:[
         "Talk about the day",
         "Keep it playful"
