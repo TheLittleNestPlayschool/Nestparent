@@ -1,296 +1,77 @@
-import {
-  createMemoryArchiveCard
-} from "./parent_memory_archive.js";
+import{createMemoryArchiveCard}from"./parent_memory_archive.js";
+import{
+  pushStageCard,
+  popStageCard,
+  isStageMotionLocked
+}from"./parent_stage_motion.js";
 
-
-import {
-  renderCardOffset
-} from "./parent_card_positions.js";
-
-
-let archiveOpen =
-  false;
-
-
-let archiveCard =
-  null;
-
-
-let currentMemoriesCard =
-  null;
-
+let archiveOpen=false;
+let archiveCard=null;
+let currentMemoriesCard=null;
 
 /*   open archive stage*/
-
-export function openMemoryArchiveStage({
-  carousel,
-  memoriesCard
-}){
-
+export function openMemoryArchiveStage({carousel,memoriesCard}){
   if(
-    archiveOpen
-    ||
-    !carousel
-    ||
-    !memoriesCard
+    archiveOpen||
+    !carousel||
+    !memoriesCard||
+    isStageMotionLocked()
   ){
     return;
   }
 
+  const newArchiveCard=createMemoryArchiveCard();
+  memoriesCard.addEventListener("click",handleMemoriesBack);
+  carousel.appendChild(newArchiveCard);
 
-  archiveOpen =
-    true;
+  const pushed=pushStageCard(newArchiveCard);
+  if(!pushed){
+    memoriesCard.removeEventListener("click",handleMemoriesBack);
+    newArchiveCard.remove();
+    return;
+  }
 
-
-  currentMemoriesCard =
-    memoriesCard;
-
-
-  archiveCard =
-    createMemoryArchiveCard();
-
-
-  carousel.appendChild(
-    archiveCard
-  );
-
-
-  void archiveCard.offsetWidth;
-
-
-  /*   move memories card to previous position*/
-
-  renderCardOffset(
-    memoriesCard,
-    1
-  );
-
-
-  memoriesCard.classList.add(
-    "is-stage-back"
-  );
-
-
-  memoriesCard.style.pointerEvents =
-    "auto";
-
-
-  memoriesCard.addEventListener(
-    "click",
-    handleMemoriesBack
-  );
-
-
-  /*   bring archive card into center*/
-
-  requestAnimationFrame(
-    ()=>{
-
-      requestAnimationFrame(
-        ()=>{
-
-          if(
-            !archiveCard
-          ){
-            return;
-          }
-
-
-          archiveCard.classList.add(
-            "is-visible"
-          );
-
-        }
-      );
-
-    }
-  );
-
+  archiveCard=newArchiveCard;
+  currentMemoriesCard=memoriesCard;
+  archiveOpen=true;
 }
-
 
 /*   previous memories card*/
-
-function handleMemoriesBack(
-  event
-){
-
-  event.stopPropagation();
-
-
-  closeMemoryArchiveStage({
-    memoriesCard:
-      currentMemoriesCard
-  });
-
-}
-
-
-/*   close archive stage*/
-
-export function closeMemoryArchiveStage({
-  memoriesCard
-} = {}){
-
+function handleMemoriesBack(event){
   if(
-    !archiveOpen
+    !currentMemoriesCard?.classList.contains("is-stage-back")
   ){
     return;
   }
 
-
-  archiveOpen =
-    false;
-
-
-  const cardToRemove =
-    archiveCard;
-
-
-  const previousMemoriesCard =
-    memoriesCard
-    ||
-    currentMemoriesCard;
-
-
-  /*   archive fades underneath*/
-
-  if(
-    cardToRemove
-  ){
-
-    cardToRemove.classList.remove(
-      "is-visible"
-    );
-
-
-    cardToRemove.classList.add(
-      "is-leaving"
-    );
-
-
-    cardToRemove.style.pointerEvents =
-      "none";
-
-  }
-
-
-  /*   memories becomes foreground return card*/
-
-  if(
-    previousMemoriesCard
-  ){
-
-    previousMemoriesCard.removeEventListener(
-      "click",
-      handleMemoriesBack
-    );
-
-
-    previousMemoriesCard.classList.remove(
-      "is-stage-back"
-    );
-
-
-    previousMemoriesCard.classList.add(
-      "is-returning-front"
-    );
-
-
-    previousMemoriesCard.style.pointerEvents =
-      "none";
-
-  }
-
-
-  /*   return memories over archive*/
-
-  window.setTimeout(
-    ()=>{
-
-      if(
-        previousMemoriesCard
-      ){
-
-        renderCardOffset(
-          previousMemoriesCard,
-          0
-        );
-
-      }
-
-    },
-    110
-  );
-
-
-  /*   remove archive*/
-
-  window.setTimeout(
-    ()=>{
-
-      if(
-        cardToRemove
-        &&
-        cardToRemove.parentNode
-      ){
-
-        cardToRemove.remove();
-
-      }
-
-    },
-    1050
-  );
-
-
-  /*   release foreground state*/
-
-  window.setTimeout(
-    ()=>{
-
-      if(
-        previousMemoriesCard
-      ){
-
-        previousMemoriesCard.classList.remove(
-          "is-returning-front"
-        );
-
-
-        previousMemoriesCard.style.pointerEvents =
-          "auto";
-
-      }
-
-    },
-    1700
-  );
-
-
-  archiveCard =
-    null;
-
-
-  currentMemoriesCard =
-    null;
-
+  event.stopPropagation();
+  closeMemoryArchiveStage();
 }
 
+/*   close archive stage*/
+export function closeMemoryArchiveStage(){
+  if(
+    !archiveOpen||
+    !archiveCard||
+    isStageMotionLocked()
+  ){
+    return;
+  }
+
+  const closingCard=archiveCard;
+  const previousMemoriesCard=currentMemoriesCard;
+  const closed=popStageCard(closingCard);
+  if(!closed){return;}
+
+  previousMemoriesCard?.removeEventListener("click",handleMemoriesBack);
+
+  archiveCard=null;
+  currentMemoriesCard=null;
+  archiveOpen=false;
+}
 
 /*   archive state*/
-
-export function isMemoryArchiveOpen(){
-
-  return archiveOpen;
-
-}
-
+export function isMemoryArchiveOpen(){return archiveOpen;}
 
 /*   current archive card*/
-
-export function getMemoryArchiveCard(){
-
-  return archiveCard;
-
-}
+export function getMemoryArchiveCard(){return archiveCard;}
