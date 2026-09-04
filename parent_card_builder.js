@@ -4,13 +4,13 @@ import{
 
 /*   get card type label*/
 function getTypeLabel(type){
-  return ({
+  return({
     session:"Story",
     learning:"Learning",
     activity:"Activity",
     personal:"Growth",
-    world:"My World",
-    home:"Home"
+    moments:"Moments",
+    home:"Together"
   })[type]||"Story";
 }
 
