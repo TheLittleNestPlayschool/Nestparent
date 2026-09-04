@@ -1,416 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1.0,viewport-fit=cover"
-  />
-
-  <meta
-    name="theme-color"
-    content="#eef4f1"
-  />
-
-  <title>
-    The Little Nest — Parent Experience
-  </title>
-
-  <link
-    rel="stylesheet"
-    href="index.css?v=3"
-  />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover" />
+  <meta name="theme-color" content="#eef4f1" />
+  <title>The Little Nest — Parent Experience</title>
+  <link rel="stylesheet" href="index.css?v=4" />
 </head>
-
 <body>
-
-  <main
-    class="app"
-    id="app"
-  >
-
+  <main class="app" id="app">
     <!--   moving atmosphere-->
-
-    <div
-      class="time-atmosphere"
-      aria-hidden="true"
-    >
+    <div class="time-atmosphere" aria-hidden="true">
       <span class="color-field field-a"></span>
       <span class="color-field field-b"></span>
       <span class="color-field field-c"></span>
       <span class="color-field field-d"></span>
       <span class="light-drift"></span>
     </div>
-
     <div class="grain"></div>
 
-
     <!--   parent login-->
-
-    <section
-      class="parent-login"
-      id="parentLogin"
-      aria-label="Parent login"
-    >
-
+    <section class="parent-login" id="parentLogin" aria-label="Parent login">
       <div class="parent-login-card">
-
         <div class="parent-login-brand">
-
-          <div
-            class="parent-login-nest"
-            aria-hidden="true"
-          >
+          <div class="parent-login-nest" aria-hidden="true">
             <span class="parent-login-egg"></span>
-
             <span class="parent-login-nest-line nest-line-one"></span>
             <span class="parent-login-nest-line nest-line-two"></span>
             <span class="parent-login-nest-line nest-line-three"></span>
           </div>
-
-          <span class="parent-login-eyebrow">
-            The Little Nest
-          </span>
-
-          <span class="parent-login-subtitle">
-            Where Little Success Stories Begin
-          </span>
-
+          <span class="parent-login-eyebrow">The Little Nest</span>
+          <span class="parent-login-subtitle">Where Little Success Stories Begin</span>
         </div>
-
-
-        <div class="parent-login-welcome">
-
-          <span class="parent-login-kicker">
-            Welcome Back
-          </span>
-
-          <h1 class="parent-login-title">
-            Come back into The Nest.
-          </h1>
-
-          <p class="parent-login-copy">
-            A little of their day may be waiting for you.
-          </p>
-
-        </div>
-
-
         <div class="parent-login-fields">
-
-          <input
-            type="email"
-            id="loginEmail"
-            class="parent-login-input"
-            placeholder="Email"
-            autocomplete="email"
-          />
-
-          <input
-            type="password"
-            id="loginPassword"
-            class="parent-login-input"
-            placeholder="Password"
-            autocomplete="current-password"
-          />
-
+          <input type="email" id="loginEmail" class="parent-login-input" placeholder="Email" autocomplete="email" />
+          <input type="password" id="loginPassword" class="parent-login-input" placeholder="Password" autocomplete="current-password" />
         </div>
-
-
         <div class="parent-login-action">
-
-          <span class="parent-login-action-text">
-            Enter The Nest
-          </span>
-
-          <button
-            type="button"
-            class="parent-login-button"
-            id="loginButton"
-            aria-label="Enter The Nest"
-          >
-            →
-          </button>
-
+          <span class="parent-login-action-text">Enter The Nest</span>
+          <button type="button" class="parent-login-button" id="loginButton" aria-label="Enter The Nest">→</button>
         </div>
-
-
-        <div
-          class="parent-login-error"
-          id="loginError"
-          role="alert"
-        ></div>
-
+        <div class="parent-login-error" id="loginError" role="alert"></div>
       </div>
-
     </section>
 
-
     <!--   parent experience-->
-
-    <div
-      class="parent-experience"
-      id="parentExperience"
-    >
-
-
+    <div class="parent-experience" id="parentExperience">
       <!--   arrival-->
-
-      <section
-        class="arrival-screen"
-        id="arrivalScreen"
-        aria-label="Welcome"
-      >
-
+      <section class="arrival-screen" id="arrivalScreen" aria-label="Welcome">
         <div class="arrival-copy">
-
-          <span class="arrival-eyebrow">
-            The Little Nest
-          </span>
-
-          <h1
-            class="arrival-greeting"
-            id="arrivalGreeting"
-          ></h1>
-
-          <p
-            class="arrival-message"
-            id="arrivalMessage"
-          ></p>
-
+          <span class="arrival-eyebrow">The Little Nest</span>
+          <h1 class="arrival-greeting" id="arrivalGreeting"></h1>
+          <p class="arrival-message" id="arrivalMessage"></p>
         </div>
-
       </section>
 
-
       <!--   normal app header-->
-
-      <header
-        class="topbar app-content"
-        id="topbar"
-      >
-
+      <header class="topbar app-content" id="topbar">
         <div class="identity">
-
-          <span class="eyebrow">
-            The Little Nest
-          </span>
-
-          <span
-            class="hello"
-            id="timeGreeting"
-          ></span>
-
-          <span
-            class="subhello"
-            id="timeMessage"
-          ></span>
-
+          <span class="eyebrow">The Little Nest</span>
+          <span class="hello" id="timeGreeting"></span>
+          <span class="subhello" id="timeMessage"></span>
         </div>
-
-
-        <!--   little nest orb-->
-
-        <button
-          class="profile nest-orb"
-          id="nestOrb"
-          aria-label="Open The Little Nest"
-        >
-
-          <span
-            class="little-nest"
-            aria-hidden="true"
-          >
-
+        <button class="profile nest-orb" id="nestOrb" aria-label="Open The Little Nest">
+          <span class="little-nest" aria-hidden="true">
             <span class="nest-branch nest-branch-left"></span>
             <span class="nest-branch nest-branch-right"></span>
-
             <span class="nest-leaf nest-leaf-left-a"></span>
             <span class="nest-leaf nest-leaf-left-b"></span>
-
             <span class="nest-leaf nest-leaf-right-a"></span>
             <span class="nest-leaf nest-leaf-right-b"></span>
-
             <span class="nest-egg"></span>
-
             <span class="nest-body">
-
               <span class="nest-weave nest-weave-a"></span>
               <span class="nest-weave nest-weave-b"></span>
               <span class="nest-weave nest-weave-c"></span>
-
             </span>
-
           </span>
-
         </button>
-
       </header>
 
-
       <!--   experience-->
-
-      <section
-        class="experience-shell app-content"
-        id="experienceShell"
-      >
-
-        <div
-          class="intro intro-quiet"
-          aria-hidden="true"
-        ></div>
-
+      <section class="experience-shell app-content" id="experienceShell">
+        <div class="intro intro-quiet" aria-hidden="true"></div>
         <div class="carousel-wrap">
-
-          <div
-            class="carousel"
-            id="carousel"
-          ></div>
-
+          <div class="carousel" id="carousel"></div>
         </div>
-
       </section>
-
 
       <!--   swipe hint-->
-
-      <div
-        class="hint app-content"
-        id="hint"
-      >
-
+      <div class="hint app-content" id="hint">
         <span class="hint-line"></span>
-
-        <span>
-          swipe to wander
-        </span>
-
+        <span>swipe to wander</span>
         <span class="hint-line"></span>
-
       </div>
 
-
       <!--   overlay-->
-
-      <div
-        class="wash"
-        id="wash"
-      ></div>
-
+      <div class="wash" id="wash"></div>
 
       <!--   navigation-->
-
-      <nav
-        class="nav-panel app-content"
-        id="navPanel"
-        aria-label="Parent navigation"
-      >
-
-        <button class="nav-item active">
-
-          <span class="nav-icon">
-            ⌂
-          </span>
-
-          <span class="nav-text">
-            Nest
-          </span>
-
-        </button>
-
-
-        <button class="nav-item">
-
-          <span class="nav-icon">
-            ♡
-          </span>
-
-          <span class="nav-text">
-            Memories
-          </span>
-
-        </button>
-
-
-        <button class="nav-item">
-
-          <span class="nav-icon">
-            ✦
-          </span>
-
-          <span class="nav-text">
-            Journey
-          </span>
-
-        </button>
-
-
-        <button class="nav-item">
-
-          <span class="nav-icon">
-            •••
-          </span>
-
-          <span class="nav-text">
-            More
-          </span>
-
-        </button>
-
+      <nav class="nav-panel app-content" id="navPanel" aria-label="Parent navigation">
+        <button class="nav-item active"><span class="nav-icon">⌂</span><span class="nav-text">Nest</span></button>
+        <button class="nav-item"><span class="nav-icon">♡</span><span class="nav-text">Memories</span></button>
+        <button class="nav-item"><span class="nav-icon">✦</span><span class="nav-text">Journey</span></button>
+        <button class="nav-item"><span class="nav-icon">•••</span><span class="nav-text">More</span></button>
       </nav>
 
-
       <!--   deep sheet-->
-
-      <section
-        class="deep-sheet"
-        id="deepSheet"
-        aria-hidden="true"
-      >
-
+      <section class="deep-sheet" id="deepSheet" aria-hidden="true">
         <div class="sheet-handle"></div>
-
-        <div class="sheet-kicker">
-          Inside this moment
-        </div>
-
-        <h2
-          class="sheet-title"
-          id="sheetTitle"
-        >
-          What Mia was exploring
-        </h2>
-
-        <p
-          class="sheet-copy"
-          id="sheetCopy"
-        ></p>
-
-        <div
-          class="learning-list"
-          id="learningList"
-        ></div>
-
-        <button
-          class="sheet-close"
-          id="sheetClose"
-        >
-          Back to the moment
-        </button>
-
+        <div class="sheet-kicker">Inside this moment</div>
+        <h2 class="sheet-title" id="sheetTitle">What Mia was exploring</h2>
+        <p class="sheet-copy" id="sheetCopy"></p>
+        <div class="learning-list" id="learningList"></div>
+        <button class="sheet-close" id="sheetClose">Back to the moment</button>
       </section>
-
     </div>
-
   </main>
-
-
-  <script
-    type="module"
-    src="index.js?v=3"
-  ></script>
-
+  <script type="module" src="index.js?v=4"></script>
 </body>
 </html>
