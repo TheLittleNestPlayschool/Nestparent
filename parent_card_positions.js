@@ -4,238 +4,120 @@ import{
   syncCardNavigation
 }from"./parent_card_navigation.js";
 
-/*   render card offset and navigation state*/
-export function renderCardOffset(
-  card,
-  offset
-){
-  if(!card){
-    return;
-  }
+/*   render card offset*/
+export function renderCardOffset(card,offset){
+  if(!card){return;}
 
-  if(
-    offset < -2||
-    offset > 2
-  ){
-    card.classList.remove(
-      "is-navigation-side"
-    );
-
-    syncCardNavigation(
-      card,
-      offset
-    );
-
+  if(offset<-2||offset>2){
+    card.classList.remove("is-navigation-side");
+    syncCardNavigation(card,offset);
     card.style.opacity="0";
     card.style.pointerEvents="none";
-
     card.style.transform=`
       translate(-50%,-50%)
-      translateX(
-        ${offset*64}%
-      )
+      translateX(${offset*64}%)
       scale(.74)
     `;
-
-    card.style.filter=
-      "blur(9px)";
-
+    card.style.filter="blur(9px)";
     card.style.zIndex="4";
     card.dataset.pos=offset;
-
     return;
   }
 
-  const isNavigationCard=
-    isCardNavigationTarget(
-      card,
-      offset
-    );
+  const isNavigationCard=isCardNavigationTarget(card,offset);
+  card.classList.toggle("is-navigation-side",isNavigationCard);
 
-  card.classList.toggle(
-    "is-navigation-side",
-    isNavigationCard
-  );
+  const x=offset*73;
+  const scale=offset===0?1:.86;
+  const rotate=offset*-2.6;
+  const z=offset===0?0:-90;
+  const y=Math.abs(offset)*10;
+  const opacity=offset===0?1:isNavigationCard?1:.46;
 
-  const x=
-    offset*73;
+  syncCardNavigation(card,offset);
 
-  const scale=
-    offset===0
-      ?1
-      :.86;
-
-  const rotate=
-    offset*-2.6;
-
-  const z=
-    offset===0
-      ?0
-      :-90;
-
-  const y=
-    Math.abs(
-      offset
-    )*10;
-
-  /*
-    Navigation cards themselves remain
-    fully opaque so their arrow control
-    stays pure white.
-
-    Their actual card surface is faded
-    separately in parent_experience.css.
-  */
-
-  const opacity=
-    offset===0
-      ?1
-      :isNavigationCard
-        ?1
-        :.46;
-
-  syncCardNavigation(
-    card,
-    offset
-  );
-
-  card.style.opacity=
-    opacity;
-
+  card.style.opacity=opacity;
   card.style.pointerEvents=
-    offset===0||
-    isNavigationCard
+    offset===0||isNavigationCard
       ?"auto"
       :"none";
-
-  /*
-    Never blur the navigation card
-    container itself because that also
-    blurs the white arrow.
-
-    The card surface gets its own blur
-    through is-navigation-side.
-  */
-
   card.style.filter=
-    offset===0||
-    isNavigationCard
+    offset===0||isNavigationCard
       ?"blur(0px)"
       :"blur(1.4px)";
-
   card.style.transform=`
     translate(-50%,-50%)
-    translate3d(
-      ${x}%,
-      ${y}px,
-      ${z}px
-    )
-    rotate(
-      ${rotate}deg
-    )
-    scale(
-      ${scale}
-    )
+    translate3d(${x}%,${y}px,${z}px)
+    rotate(${rotate}deg)
+    scale(${scale})
   `;
-
-  card.style.zIndex=
-    10-
-    Math.abs(
-      offset
-    );
-
-  card.dataset.pos=
-    offset;
+  card.style.zIndex=10-Math.abs(offset);
+  card.dataset.pos=offset;
 }
 
-/*   render nest mode position*/
+/*   render nested main-card position*/
 export function renderNestModePosition(
   card,
   index,
-  activeIndex
+  activeIndex,
+  stageDepth=1
 ){
-  const relativeIndex=
-    index-activeIndex;
+  const relativeIndex=index-activeIndex;
 
   if(relativeIndex<0){
-    card.classList.remove(
-      "is-navigation-side"
-    );
-
-    syncCardNavigation(
-      card,
-      -3
-    );
-
+    card.classList.remove("is-navigation-side");
+    syncCardNavigation(card,-3);
     card.style.opacity="0";
     card.style.pointerEvents="none";
     card.style.filter="blur(8px)";
-
     card.style.transform=`
       translate(-50%,-50%)
-      translate3d(
-        -64%,
-        10px,
-        -120px
-      )
+      translate3d(-64%,10px,-120px)
       rotate(2.6deg)
       scale(.78)
     `;
-
     card.style.zIndex="5";
     card.dataset.pos=-1;
-
     return;
   }
-
-  const offset=
-    relativeIndex+1;
 
   renderCardOffset(
     card,
-    offset
+    relativeIndex+stageDepth
   );
 }
 
-/*   render all positions*/
+/*   render all main-card positions*/
 export function renderCardPositions({
   carousel,
   activeIndex,
-  nestOpen
+  nestOpen,
+  stageDepth=1
 }){
-  if(!carousel){
-    return;
-  }
+  if(!carousel){return;}
 
-  clearLegacyStageNavigation(
-    carousel
-  );
+  clearLegacyStageNavigation(carousel);
 
   const cards=[
     ...carousel.querySelectorAll(
-      ".experience:not(.nest-experience)"
+      ".experience[data-index]"
     )
   ];
 
-  cards.forEach(
-    (
-      card,
-      index
-    )=>{
-      if(nestOpen){
-        renderNestModePosition(
-          card,
-          index,
-          activeIndex
-        );
-
-        return;
-      }
-
-      renderCardOffset(
+  cards.forEach((card,index)=>{
+    if(nestOpen){
+      renderNestModePosition(
         card,
-        index-activeIndex
+        index,
+        activeIndex,
+        stageDepth
       );
+      return;
     }
-  );
+
+    renderCardOffset(
+      card,
+      index-activeIndex
+    );
+  });
 }
