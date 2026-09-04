@@ -49,10 +49,16 @@ export function activateParentAuth(startApp){
         data.authToken
       );
 
+      /*
+        Build the personalized arrival while
+        the login screen is still covering it.
+        This prevents partial arrival copy from
+        flashing before the greeting is ready.
+      */
+      await startApp();
+
       login.classList.remove('is-visible');
       experience.classList.add('is-visible');
-
-      startApp();
 
     }catch(err){
       error.textContent=err.message;
