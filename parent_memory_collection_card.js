@@ -365,23 +365,65 @@ function buildMediaItem(
 /*   build empty state*/
 function buildEmptyState(
   studentName,
-  kicker
+  collection
 ){
+  const isTodayCollection=
+    collection==="today";
+
+  const title=
+    isTodayCollection
+      ?"Today's moments are coming soon!"
+      :"Little moments are coming soon!";
+
+  const copy=
+    isTodayCollection
+      ?"As today's little moments arrive, they'll gather here for you."
+      :`As ${studentName}'s little moments arrive, they'll gather here for you.`;
+
+  const status=
+    isTodayCollection
+      ?"More of today is on its way"
+      :"Little moments are on their way";
+
   return`
     <div class="memory-today-empty">
 
-      <div class="memory-today-empty-symbol">
-        ♡
+      <div
+        class="memory-today-empty-visual"
+        aria-hidden="true"
+      >
+        <span class="memory-today-empty-card empty-card-one"></span>
+        <span class="memory-today-empty-card empty-card-two"></span>
+        <span class="memory-today-empty-card empty-card-three"></span>
+
+        <span class="memory-today-empty-heart">
+          ♡
+        </span>
+
+        <span class="memory-today-empty-spark empty-spark-one">
+          ✦
+        </span>
+
+        <span class="memory-today-empty-spark empty-spark-two">
+          ✦
+        </span>
+
+        <span class="memory-today-empty-spark empty-spark-three">
+          ✦
+        </span>
       </div>
 
       <div class="memory-today-empty-title">
-        No moments here yet.
+        ${title}
       </div>
 
       <div class="memory-today-empty-copy">
-        ${studentName}'s ${kicker.toLowerCase()}
-        moments will quietly gather here
-        as they arrive.
+        ${copy}
+      </div>
+
+      <div class="memory-today-empty-status">
+        <span>${status}</span>
+        <span aria-hidden="true">✦</span>
       </div>
 
     </div>
@@ -476,7 +518,7 @@ export function createMemoryCollectionCard(
           `
           :buildEmptyState(
             studentName,
-            definition.kicker
+            collection
           )
       }
 
