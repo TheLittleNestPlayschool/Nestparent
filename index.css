@@ -26,6 +26,19 @@
   margin-top:20px;
 }
 
+/*   shared spatial stage motion*/
+.nest-experience,
+.memories-experience{
+  transition:
+    transform 1.45s cubic-bezier(.20,.62,.18,1),
+    opacity 1.05s ease,
+    filter 1.05s ease;
+}
+
+.experience.is-stage-moving{
+  pointer-events:none !important;
+}
+
 /*   quick display heading scale*/
 .nest-card-title{
   font-size:clamp(23px,5.6vw,28px);
