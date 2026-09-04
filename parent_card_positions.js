@@ -17,6 +17,10 @@ export function renderCardOffset(
     offset < -2||
     offset > 2
   ){
+    card.classList.remove(
+      "is-navigation-side"
+    );
+
     syncCardNavigation(
       card,
       offset
@@ -48,6 +52,11 @@ export function renderCardOffset(
       offset
     );
 
+  card.classList.toggle(
+    "is-navigation-side",
+    isNavigationCard
+  );
+
   const x=
     offset*73;
 
@@ -69,11 +78,20 @@ export function renderCardOffset(
       offset
     )*10;
 
+  /*
+    Navigation cards themselves remain
+    fully opaque so their arrow control
+    stays pure white.
+
+    Their actual card surface is faded
+    separately in parent_experience.css.
+  */
+
   const opacity=
     offset===0
       ?1
       :isNavigationCard
-        ?.72
+        ?1
         :.46;
 
   syncCardNavigation(
@@ -90,12 +108,20 @@ export function renderCardOffset(
       ?"auto"
       :"none";
 
+  /*
+    Never blur the navigation card
+    container itself because that also
+    blurs the white arrow.
+
+    The card surface gets its own blur
+    through is-navigation-side.
+  */
+
   card.style.filter=
-    offset===0
+    offset===0||
+    isNavigationCard
       ?"blur(0px)"
-      :isNavigationCard
-        ?"blur(.6px)"
-        :"blur(1.4px)";
+      :"blur(1.4px)";
 
   card.style.transform=`
     translate(-50%,-50%)
@@ -132,6 +158,10 @@ export function renderNestModePosition(
     index-activeIndex;
 
   if(relativeIndex<0){
+    card.classList.remove(
+      "is-navigation-side"
+    );
+
     syncCardNavigation(
       card,
       -3
