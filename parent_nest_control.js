@@ -34,12 +34,7 @@ function whenStageSettled(callback){
 
 /*   open nest*/
 function openNest(){
-  if(
-    isStageMotionLocked()||
-    isNestStageOpen()
-  ){
-    return;
-  }
+  if(isStageMotionLocked()||isNestStageOpen())return;
 
   if(nestOrb){
     nestOrb.classList.add("is-open");
@@ -50,12 +45,7 @@ function openNest(){
 
 /*   close nest*/
 function closeNest(){
-  if(
-    isStageMotionLocked()||
-    !isNestStageOpen()
-  ){
-    return;
-  }
+  if(isStageMotionLocked()||!isNestStageOpen())return;
 
   closeNestStage();
 
@@ -66,33 +56,22 @@ function closeNest(){
 
 /*   return from memories*/
 function returnFromMemories(){
-  if(
-    isStageMotionLocked()||
-    !isMemoriesStageOpen()
-  ){
-    return;
-  }
-
+  if(isStageMotionLocked()||!isMemoriesStageOpen())return;
   closeMemories();
 }
 
 /*   return from archive*/
 function returnFromArchive(){
-  if(
-    isStageMotionLocked()||
-    !isMemoryArchiveOpen()
-  ){
-    return;
-  }
+  if(isStageMotionLocked()||!isMemoryArchiveOpen())return;
 
   closeEarlierMemories();
 
-  /*
-    The Nest control returns to the Nest.
-    Wait for the archive glide to finish,
-    then reverse the Memories glide.
-  */
   whenStageSettled(()=>{
+    if(isMemoryArchiveOpen()){
+      returnFromArchive();
+      return;
+    }
+
     if(isMemoriesStageOpen()){
       closeMemories();
     }
@@ -101,9 +80,7 @@ function returnFromArchive(){
 
 /*   handle orb*/
 function handleNestOrb(){
-  if(isStageMotionLocked()){
-    return;
-  }
+  if(isStageMotionLocked())return;
 
   if(isMemoryArchiveOpen()){
     returnFromArchive();
@@ -125,27 +102,14 @@ function handleNestOrb(){
 
 /*   handle main stage return*/
 function handleMainStageReturn(){
-  if(
-    isStageMotionLocked()||
-    !isNestStageOpen()
-  ){
-    return;
-  }
-
+  if(isStageMotionLocked()||!isNestStageOpen())return;
   closeNest();
 }
 
 /*   activate nest control*/
 export function activateNestControl(){
-  if(!nestOrb){return;}
+  if(!nestOrb)return;
 
-  nestOrb.addEventListener(
-    "click",
-    handleNestOrb
-  );
-
-  window.addEventListener(
-    "parent:return-main-stage",
-    handleMainStageReturn
-  );
+  nestOrb.addEventListener("click",handleNestOrb);
+  window.addEventListener("parent:return-main-stage",handleMainStageReturn);
 }
