@@ -113,8 +113,8 @@
   z-index:3;
 
   padding:
-    9px
-    13px;
+    10px
+    15px;
 
   border:
     1px solid
@@ -122,7 +122,7 @@
       255,
       255,
       255,
-      .34
+      .90
     );
 
   border-radius:999px;
@@ -130,26 +130,49 @@
   background:
     rgba(
       255,
-      255,
-      255,
-      .18
+      252,
+      244,
+      .94
     );
 
   backdrop-filter:
-    blur(14px);
+    blur(16px)
+    saturate(1.08);
 
   -webkit-backdrop-filter:
-    blur(14px);
+    blur(16px)
+    saturate(1.08);
 
-  font-size:9px;
+  box-shadow:
+    0
+    8px
+    22px
+    rgba(
+      26,
+      42,
+      35,
+      .18
+    ),
+    inset
+    0
+    1px
+    0
+    rgba(
+      255,
+      255,
+      255,
+      .96
+    );
 
-  font-weight:700;
+  font-size:10px;
 
-  letter-spacing:.06em;
+  font-weight:800;
+
+  letter-spacing:.08em;
 
   text-transform:uppercase;
 
-  color:white;
+  color:#31423c;
 }
 
 
