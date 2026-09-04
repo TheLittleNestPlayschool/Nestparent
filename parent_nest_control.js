@@ -1,166 +1,121 @@
-import {
+import{
   openNestStage,
   closeNestStage,
   isNestStageOpen
-} from "./parent_carousel.js";
-
-import {
+}from"./parent_carousel.js";
+import{
   isMemoriesStageOpen
-} from "./parent_memories_stage.js";
-
-import {
+}from"./parent_memories_stage.js";
+import{
   isMemoryArchiveOpen
-} from "./parent_memory_archive_stage.js";
-
-import {
+}from"./parent_memory_archive_stage.js";
+import{
   closeMemories,
   closeEarlierMemories
-} from "./parent_stage_router.js";
+}from"./parent_stage_router.js";
+import{
+  isStageMotionLocked
+}from"./parent_stage_motion.js";
 
-const nestOrb =
-  document.getElementById(
-    "nestOrb"
-  );
+const nestOrb=document.getElementById("nestOrb");
 
-let nestBusy =
-  false;
+/*   run after current glide*/
+function whenStageSettled(callback){
+  if(!isStageMotionLocked()){
+    callback();
+    return;
+  }
 
-/*   release busy state*/
-
-function releaseBusy(
-  delay=420
-){
   window.setTimeout(
-    ()=>{
-      nestBusy =
-        false;
-    },
-    delay
+    ()=>whenStageSettled(callback),
+    50
   );
 }
 
 /*   open nest*/
-
 function openNest(){
   if(
-    nestBusy
-    ||
+    isStageMotionLocked()||
     isNestStageOpen()
   ){
     return;
   }
 
-  nestBusy =
-    true;
-
   if(nestOrb){
-    nestOrb.classList.add(
-      "is-open"
-    );
+    nestOrb.classList.add("is-open");
   }
 
   openNestStage();
-
-  releaseBusy();
 }
 
 /*   close nest*/
-
 function closeNest(){
   if(
-    nestBusy
-    ||
+    isStageMotionLocked()||
     !isNestStageOpen()
   ){
     return;
   }
 
-  nestBusy =
-    true;
-
-  if(nestOrb){
-    nestOrb.classList.remove(
-      "is-open"
-    );
-  }
-
   closeNestStage();
 
-  releaseBusy();
+  if(nestOrb){
+    nestOrb.classList.remove("is-open");
+  }
 }
 
 /*   return from memories*/
-
 function returnFromMemories(){
   if(
-    nestBusy
-    ||
+    isStageMotionLocked()||
     !isMemoriesStageOpen()
   ){
     return;
   }
 
-  nestBusy =
-    true;
-
   closeMemories();
-
-  releaseBusy();
 }
 
 /*   return from archive*/
-
 function returnFromArchive(){
   if(
-    nestBusy
-    ||
+    isStageMotionLocked()||
     !isMemoryArchiveOpen()
   ){
     return;
   }
 
-  nestBusy =
-    true;
-
   closeEarlierMemories();
 
   /*
-    Let Memories return first.
-    Then continue back to the Nest.
+    The Nest control returns to the Nest.
+    Wait for the archive glide to finish,
+    then reverse the Memories glide.
   */
-
-  window.setTimeout(
-    ()=>{
+  whenStageSettled(()=>{
+    if(isMemoriesStageOpen()){
       closeMemories();
-    },
-    720
-  );
-
-  releaseBusy(
-    1850
-  );
+    }
+  });
 }
 
 /*   handle orb*/
-
 function handleNestOrb(){
-  if(
-    isMemoryArchiveOpen()
-  ){
+  if(isStageMotionLocked()){
+    return;
+  }
+
+  if(isMemoryArchiveOpen()){
     returnFromArchive();
     return;
   }
 
-  if(
-    isMemoriesStageOpen()
-  ){
+  if(isMemoriesStageOpen()){
     returnFromMemories();
     return;
   }
 
-  if(
-    isNestStageOpen()
-  ){
+  if(isNestStageOpen()){
     closeNest();
     return;
   }
@@ -169,9 +124,9 @@ function handleNestOrb(){
 }
 
 /*   handle main stage return*/
-
 function handleMainStageReturn(){
   if(
+    isStageMotionLocked()||
     !isNestStageOpen()
   ){
     return;
@@ -181,11 +136,8 @@ function handleMainStageReturn(){
 }
 
 /*   activate nest control*/
-
 export function activateNestControl(){
-  if(!nestOrb){
-    return;
-  }
+  if(!nestOrb){return;}
 
   nestOrb.addEventListener(
     "click",
