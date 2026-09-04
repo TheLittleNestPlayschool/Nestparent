@@ -4,7 +4,7 @@ import{
   syncCardNavigation
 }from"./parent_card_navigation.js";
 
-/*   render card offset*/
+/*   render card offset and navigation state*/
 export function renderCardOffset(
   card,
   offset
