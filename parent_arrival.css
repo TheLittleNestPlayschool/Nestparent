@@ -70,7 +70,7 @@
 
   font-weight:700;
 
-  letter-spacing:.19em;
+  letter-spacing:.18em;
 
   text-transform:uppercase;
 
@@ -79,7 +79,7 @@
       38,
       50,
       47,
-      .42
+      .44
     );
 
   transform-origin:
@@ -104,11 +104,11 @@
 
   font-size:36px;
 
-  line-height:1.05;
+  line-height:1.06;
 
   font-weight:400;
 
-  letter-spacing:-.035em;
+  letter-spacing:-.028em;
 
   color:var(--ink);
 
@@ -134,14 +134,14 @@
 
   font-size:15px;
 
-  line-height:1.5;
+  line-height:1.4;
 
   color:
     rgba(
       38,
       50,
       47,
-      .54
+      .52
     );
 
   transform-origin:
