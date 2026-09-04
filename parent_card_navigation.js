@@ -1,17 +1,13 @@
-const EXIT_TIME=1450;
-const exitTimers=new WeakMap();
+const NAV_APPEAR_DELAY=1320;
+const showTimers=new WeakMap();
 
 /*   get navigation*/
 function getNavigation(card,offset){
-  if(!card){
-    return null;
-  }
+  if(!card){return null;}
 
   if(
     offset===1&&
-    card.classList.contains(
-      "is-stage-back"
-    )
+    card.classList.contains("is-stage-back")
   ){
     return{
       label:"Back",
@@ -20,11 +16,7 @@ function getNavigation(card,offset){
     };
   }
 
-  if(
-    card.hasAttribute(
-      "data-index"
-    )
-  ){
+  if(card.hasAttribute("data-index")){
     if(offset===1){
       return{
         label:"More",
@@ -46,40 +38,31 @@ function getNavigation(card,offset){
 }
 
 /*   navigation target*/
-export function isCardNavigationTarget(
-  card,
-  offset
-){
-  return Boolean(
-    getNavigation(
-      card,
-      offset
-    )
-  );
+export function isCardNavigationTarget(card,offset){
+  return Boolean(getNavigation(card,offset));
+}
+
+/*   navigation key*/
+function getNavigationKey(navigation){
+  if(!navigation){return "";}
+  return`${navigation.side}:${navigation.label}`;
+}
+
+/*   clear show timer*/
+function clearShowTimer(card){
+  const timer=showTimers.get(card);
+  if(!timer){return;}
+  clearTimeout(timer);
+  showTimers.delete(card);
 }
 
 /*   remove handle*/
 function removeHandle(card){
-  if(!card){
-    return;
-  }
+  if(!card){return;}
+  clearShowTimer(card);
 
-  const timer=
-    exitTimers.get(card);
-
-  if(timer){
-    clearTimeout(timer);
-    exitTimers.delete(card);
-  }
-
-  const handle=
-    card.querySelector(
-      ":scope > .card-nav-handle"
-    );
-
-  if(handle){
-    handle.remove();
-  }
+  const handle=card.querySelector(":scope > .card-nav-handle");
+  if(handle){handle.remove();}
 
   card.classList.remove(
     "has-nav-handle",
@@ -89,20 +72,10 @@ function removeHandle(card){
 }
 
 /*   create handle*/
-function createHandle(
-  card,
-  navigation
-){
-  const handle=
-    document.createElement(
-      "button"
-    );
-
+function createHandle(card,navigation){
+  const handle=document.createElement("button");
   handle.type="button";
-
-  handle.className=
-    "card-nav-handle";
-
+  handle.className="card-nav-handle";
   handle.setAttribute(
     "aria-label",
     navigation.label==="Back"
@@ -111,63 +84,28 @@ function createHandle(
   );
 
   handle.innerHTML=`
-    <span class="card-nav-handle-arrow">
-      ${navigation.arrow}
-    </span>
-
-    <span class="card-nav-handle-label">
-      ${navigation.label}
-    </span>
+    <span class="card-nav-handle-arrow">${navigation.arrow}</span>
+    <span class="card-nav-handle-label">${navigation.label}</span>
   `;
 
-  card.appendChild(
-    handle
-  );
-
+  card.appendChild(handle);
   return handle;
 }
 
 /*   show handle*/
-function showHandle(
-  card,
-  navigation
-){
-  const timer=
-    exitTimers.get(card);
+function showHandle(card,navigation){
+  clearShowTimer(card);
 
-  if(timer){
-    clearTimeout(timer);
-    exitTimers.delete(card);
-  }
-
-  let handle=
-    card.querySelector(
-      ":scope > .card-nav-handle"
-    );
-
+  let handle=card.querySelector(":scope > .card-nav-handle");
   if(!handle){
-    handle=
-      createHandle(
-        card,
-        navigation
-      );
+    handle=createHandle(card,navigation);
   }
 
   handle.disabled=false;
+  handle.dataset.navKey=getNavigationKey(navigation);
 
-  handle.classList.remove(
-    "is-travelling"
-  );
-
-  handle.querySelector(
-    ".card-nav-handle-arrow"
-  ).textContent=
-    navigation.arrow;
-
-  handle.querySelector(
-    ".card-nav-handle-label"
-  ).textContent=
-    navigation.label;
+  handle.querySelector(".card-nav-handle-arrow").textContent=navigation.arrow;
+  handle.querySelector(".card-nav-handle-label").textContent=navigation.label;
 
   handle.setAttribute(
     "aria-label",
@@ -187,100 +125,61 @@ function showHandle(
       ?"has-nav-handle-right"
       :"has-nav-handle-left"
   );
-
-  handle.dataset.originSide=
-    navigation.side;
 }
 
-/*   let handle travel into center*/
-function letHandleTravel(card){
-  const handle=
-    card.querySelector(
-      ":scope > .card-nav-handle"
-    );
+/*   show handle after card arrives*/
+function scheduleHandle(card,navigation,offset){
+  removeHandle(card);
 
-  if(
-    !handle||
-    handle.classList.contains(
-      "is-travelling"
-    )
-  ){
-    return;
-  }
+  const navigationKey=getNavigationKey(navigation);
 
-  handle.disabled=true;
+  const timer=window.setTimeout(()=>{
+    showTimers.delete(card);
 
-  handle.classList.add(
-    "is-travelling"
-  );
+    const currentNavigation=getNavigation(card,offset);
+    if(!currentNavigation){return;}
 
-  const timer=
-    window.setTimeout(
-      ()=>{
-        removeHandle(card);
-      },
-      EXIT_TIME
-    );
+    if(
+      String(card.dataset.pos)!==String(offset)||
+      getNavigationKey(currentNavigation)!==navigationKey
+    ){
+      return;
+    }
 
-  exitTimers.set(
-    card,
-    timer
-  );
+    showHandle(card,currentNavigation);
+  },NAV_APPEAR_DELAY);
+
+  showTimers.set(card,timer);
 }
 
 /*   sync navigation*/
-export function syncCardNavigation(
-  card,
-  offset
-){
-  if(!card){
+export function syncCardNavigation(card,offset){
+  if(!card){return;}
+
+  const navigation=getNavigation(card,offset);
+  const handle=card.querySelector(":scope > .card-nav-handle");
+
+  if(!navigation){
+    removeHandle(card);
     return;
   }
 
-  const navigation=
-    getNavigation(
-      card,
-      offset
-    );
+  const navigationKey=getNavigationKey(navigation);
+  const alreadySettled=String(card.dataset.pos)===String(offset);
+  const sameHandle=handle?.dataset.navKey===navigationKey;
 
-  if(navigation){
-    showHandle(
-      card,
-      navigation
-    );
-
+  if(alreadySettled&&sameHandle){
+    showHandle(card,navigation);
     return;
   }
 
-  const handle=
-    card.querySelector(
-      ":scope > .card-nav-handle"
-    );
-
-  if(
-    handle&&
-    offset===0
-  ){
-    letHandleTravel(card);
-    return;
-  }
-
-  removeHandle(card);
+  scheduleHandle(card,navigation,offset);
 }
 
 /*   clear old fixed navigation*/
-export function clearLegacyStageNavigation(
+export function clearLegacyStageNavigation(carousel){
+  if(!carousel){return;}
   carousel
-){
-  if(!carousel){
-    return;
-  }
-
-  carousel
-    .querySelectorAll(
-      ".stage-nav-button"
-    )
-    .forEach(
-      button=>button.remove()
-    );
+    .querySelectorAll(".stage-nav-button")
+    .forEach(button=>button.remove());
 }
