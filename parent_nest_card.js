@@ -1,22 +1,29 @@
+import{
+  getStudent
+}from"./parent_data.js";
+
 /*   create nest card*/
-
 export function createNestCard(){
+  const student=
+    getStudent();
 
-  const article =
+  const studentName=
+    student?.preferred_name||
+    student?.name||
+    "your little one";
+
+  const article=
     document.createElement(
       "article"
     );
 
-
-  article.className =
+  article.className=
     "experience nest-experience";
 
-
-  article.dataset.type =
+  article.dataset.type=
     "nest";
 
-
-  article.innerHTML = `
+  article.innerHTML=`
     <div class="nest-stage-card">
 
       <div class="nest-card-heading">
@@ -30,12 +37,11 @@ export function createNestCard(){
         </h2>
 
         <p class="nest-card-copy">
-          Everything around Mia's experience,
+          Everything around ${studentName}'s experience,
           quietly gathered in one place.
         </p>
 
       </div>
-
 
       <div class="nest-destinations">
 
@@ -59,7 +65,6 @@ export function createNestCard(){
 
         </button>
 
-
         <button
           class="nest-destination"
           type="button"
@@ -75,11 +80,10 @@ export function createNestCard(){
           </span>
 
           <span class="nest-destination-copy">
-            See how Mia is growing
+            See how ${studentName} is growing
           </span>
 
         </button>
-
 
         <button
           class="nest-destination"
@@ -100,7 +104,6 @@ export function createNestCard(){
           </span>
 
         </button>
-
 
         <button
           class="nest-destination"
@@ -127,24 +130,19 @@ export function createNestCard(){
     </div>
   `;
 
-
   article
     .querySelectorAll(
       ".nest-destination"
     )
     .forEach(
       button=>{
-
         button.addEventListener(
           "click",
           event=>{
-
             event.stopPropagation();
 
-
-            const destination =
+            const destination=
               button.dataset.destination;
-
 
             window.dispatchEvent(
               new CustomEvent(
@@ -156,14 +154,10 @@ export function createNestCard(){
                 }
               )
             );
-
           }
         );
-
       }
     );
 
-
   return article;
-
 }
