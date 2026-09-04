@@ -28,18 +28,9 @@ export function createNestCard(){
 
       <div class="nest-card-heading">
 
-        <span class="nest-card-kicker">
-          Your Little Nest
-        </span>
-
         <h2 class="nest-card-title">
           Where would you like to wander?
         </h2>
-
-        <p class="nest-card-copy">
-          Everything around ${studentName}'s experience,
-          quietly gathered in one place.
-        </p>
 
       </div>
 
