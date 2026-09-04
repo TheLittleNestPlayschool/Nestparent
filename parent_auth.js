@@ -1,5 +1,31 @@
 const XANO_BASE_URL='https://x8ki-letl-twmt.n7.xano.io/api:wtEDiEuV';
 
+/*   wait for login exit*/
+function waitForLoginExit(login){
+  return new Promise(resolve=>{
+    let done=false;
+
+    const finish=()=>{
+      if(done) return;
+      done=true;
+      login.removeEventListener('transitionend',handleEnd);
+      resolve();
+    };
+
+    const handleEnd=event=>{
+      if(
+        event.target===login&&
+        event.propertyName==='opacity'
+      ){
+        finish();
+      }
+    };
+
+    login.addEventListener('transitionend',handleEnd);
+    window.setTimeout(finish,900);
+  });
+}
+
 /*   activate*/
 export function activateParentAuth(startApp){
   const login=document.getElementById('parentLogin');
@@ -44,20 +70,14 @@ export function activateParentAuth(startApp){
         );
       }
 
-      localStorage.setItem(
-        'authToken',
-        data.authToken
-      );
+      localStorage.setItem('authToken',data.authToken);
 
-      /*
-        Build the personalized arrival while
-        the login screen is still covering it.
-        This prevents partial arrival copy from
-        flashing before the greeting is ready.
-      */
+      /*   prepare personalized arrival behind login*/
       await startApp();
 
+      /*   finish login exit before revealing arrival*/
       login.classList.remove('is-visible');
+      await waitForLoginExit(login);
       experience.classList.add('is-visible');
 
     }catch(err){
@@ -67,17 +87,9 @@ export function activateParentAuth(startApp){
     }
   }
 
-  button.addEventListener(
-    'click',
-    submit
-  );
+  button.addEventListener('click',submit);
 
-  password.addEventListener(
-    'keydown',
-    event=>{
-      if(event.key==='Enter'){
-        submit();
-      }
-    }
-  );
+  password.addEventListener('keydown',event=>{
+    if(event.key==='Enter') submit();
+  });
 }
