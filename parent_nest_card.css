@@ -237,6 +237,18 @@
 }
 
 
+/*   awards*/
+
+.nest-destination[
+  data-destination="awards"
+]{
+  --nest-card-start:#fff1c9;
+  --nest-card-end:#e9c979;
+  --nest-accent:#76551c;
+  --nest-orb:rgba(255,250,226,.48);
+}
+
+
 /*   home*/
 
 .nest-destination[
