@@ -79,6 +79,26 @@ export function createNestCard(){
         <button
           class="nest-destination"
           type="button"
+          data-destination="awards"
+        >
+
+          <span class="nest-destination-icon">
+            ✧
+          </span>
+
+          <span class="nest-destination-title">
+            ${studentName}'s Awards
+          </span>
+
+          <span class="nest-destination-copy">
+            Little milestones worth celebrating
+          </span>
+
+        </button>
+
+        <button
+          class="nest-destination"
+          type="button"
           data-destination="home"
         >
 
