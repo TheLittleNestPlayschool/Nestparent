@@ -1,3 +1,4 @@
+
 import{
   getStudent
 }from"./parent_data.js";
