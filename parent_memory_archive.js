@@ -59,9 +59,7 @@ export function createMemoryArchiveCard({onArchive}={}){
   article.innerHTML=`
     <div class="memory-archive-card">
       <div class="memory-archive-heading">
-        <span class="memory-archive-kicker">${studentName}'s Story So Far</span>
-        <h2 class="memory-archive-title">Wander a little further back.</h2>
-        <p class="memory-archive-copy">${studentName}'s earlier Little Nest moments are waiting here whenever you want to return to them.</p>
+        <h2 class="memory-archive-title">Earlier Memories</h2>
       </div>
       <div class="memory-archive-list">
         ${archiveGroups.map(group=>`
