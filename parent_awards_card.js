@@ -1,3 +1,4 @@
+
 import{
   getStudent
 }from"./parent_data.js";
@@ -15,16 +16,8 @@ function getStudentName(){
 
 /*   award graphic*/
 function getAwardGraphic(category){
-  return category?.award_graphic||"";
-}
-
-/*   award graphic markup*/
-function getAwardGraphicMarkup(category){
-  const src=getAwardGraphic(category);
-  if(category?.code==="literacy"){
-    return`<object data="${src}?v=20260906-literacy-object" type="image/svg+xml" aria-hidden="true" tabindex="-1" style="width:100%;height:100%;display:block;pointer-events:none;"></object>`;
-  }
-  return`<img src="${src}" alt="" />`;
+  const src=category?.award_graphic||"";
+  return category?.code==="literacy"?`${src}?v=20260906-literacy-restore`:src;
 }
 
 /*   ordered categories*/
@@ -103,7 +96,7 @@ function buildCategoryButton(category){
       data-award-category="${category.id}"
     >
       <span class="award-category-art">
-        ${getAwardGraphicMarkup(category)}
+        <img src="${getAwardGraphic(category)}" alt="" />
       </span>
       <span class="award-category-title">
         ${category.award_short_name||category.name}
@@ -183,7 +176,7 @@ export function createAwardCategoryCard({categoryId,onAward}={}){
     <div class="awards-stage-card award-history-card">
       <div class="award-history-heading">
         <span class="award-history-art">
-          ${getAwardGraphicMarkup(category)}
+          <img src="${getAwardGraphic(category)}" alt="" />
         </span>
         <div>
           <span class="awards-kicker">${studentName}'s journey</span>
@@ -248,7 +241,7 @@ export function createAwardDetailCard({categoryId,badgeId}={}){
     <div class="awards-stage-card award-detail-card">
       <span class="awards-kicker">A little milestone to celebrate</span>
       <div class="award-detail-art">
-        ${getAwardGraphicMarkup(category)}
+        <img src="${getAwardGraphic(category)}" alt="" />
       </div>
       <span class="award-detail-category">
         ${category.award_short_name||category.name} · Level ${badge.level}
