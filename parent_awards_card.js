@@ -1,4 +1,3 @@
-
 import{
   getStudent
 }from"./parent_data.js";
@@ -128,11 +127,7 @@ export function createAwardsCard({onCategory}={}){
   article.innerHTML=`
     <div class="awards-stage-card">
       <div class="awards-heading">
-        <span class="awards-kicker">Little milestones worth celebrating</span>
         <h2 class="awards-title">${studentName}'s Awards</h2>
-        <p class="awards-copy">
-          A growing collection of the learning journeys and little milestones that have become part of ${studentName}'s story.
-        </p>
         <span class="awards-total">
           ${earnedCount} ${earnedCount===1?"milestone":"milestones"} gathered
         </span>
