@@ -20,7 +20,7 @@ jobs:
           import re,base64,io
           from collections import deque
           from PIL import Image, ImageFilter
-          src='assets/awards/receptive_lang_source.svg'
+          src='assets/awards/receptive_lang.svg'
           out='assets/awards/receptive_lang.svg'
           text=open(src,encoding='utf-8').read()
           m=re.search(r'data:image/webp;base64,([^\"]+)',text)
