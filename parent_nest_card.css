@@ -25,7 +25,6 @@
     scale(1);
 }
 
-
 /*   nest fading underneath*/
 
 .nest-experience.is-leaving-under{
@@ -42,7 +41,6 @@
     transform 1.15s cubic-bezier(.20,.62,.18,1),
     filter .72s ease;
 }
-
 
 /*   nest card surface*/
 
@@ -72,7 +70,6 @@
     0 25px 70px
     rgba(38,54,48,.14);
 }
-
 
 /*   soft card atmosphere*/
 
@@ -110,7 +107,6 @@
   pointer-events:none;
 }
 
-
 /*   nest card heading*/
 
 .nest-card-heading{
@@ -130,20 +126,20 @@
 
 .nest-card-title{
   margin:0;
-  max-width:310px;
+  max-width:280px;
   font-family:
     Georgia,
     "Times New Roman",
     serif;
   font-size:
     clamp(
-      25px,
-      6vw,
-      30px
+      21px,
+      5vw,
+      25px
     );
-  line-height:1.04;
+  line-height:1.06;
   font-weight:400;
-  letter-spacing:-.03em;
+  letter-spacing:-.025em;
   color:var(--ink);
 }
 
@@ -154,7 +150,6 @@
   line-height:1.55;
   color:rgba(38,50,47,.55);
 }
-
 
 /*   destination grid*/
 
@@ -172,7 +167,6 @@
   align-content:center;
   margin-top:18px;
 }
-
 
 /*   destination*/
 
@@ -213,7 +207,6 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-
 /*   memories*/
 
 .nest-destination[
@@ -224,7 +217,6 @@
   --nest-accent:#a94d42;
   --nest-orb:rgba(255,240,232,.44);
 }
-
 
 /*   journey*/
 
@@ -237,7 +229,6 @@
   --nest-orb:rgba(235,255,251,.44);
 }
 
-
 /*   awards*/
 
 .nest-destination[
@@ -248,7 +239,6 @@
   --nest-accent:#76551c;
   --nest-orb:rgba(255,250,226,.48);
 }
-
 
 /*   home*/
 
@@ -261,7 +251,6 @@
   --nest-orb:rgba(255,249,219,.46);
 }
 
-
 /*   more*/
 
 .nest-destination[
@@ -272,7 +261,6 @@
   --nest-accent:#57437e;
   --nest-orb:rgba(248,244,255,.46);
 }
-
 
 /*   large color shape*/
 
@@ -293,7 +281,6 @@
     transform .48s var(--ease);
 }
 
-
 /*   second color shape*/
 
 .nest-destination::after{
@@ -313,7 +300,6 @@
   transition:
     transform .5s var(--ease);
 }
-
 
 /*   interaction*/
 
@@ -352,7 +338,6 @@
     scale(1.10);
 }
 
-
 /*   destination icon*/
 
 .nest-destination-icon{
@@ -377,7 +362,6 @@
   font-size:18px;
   line-height:1;
 }
-
 
 /*   destination text*/
 
@@ -409,7 +393,6 @@
     rgba(44,49,46,.62);
 }
 
-
 /*   subtle card shine*/
 
 .nest-destination-icon::after{
@@ -426,7 +409,6 @@
     rotate(-24deg);
   pointer-events:none;
 }
-
 
 /*   orb open response*/
 
@@ -456,7 +438,6 @@
     translateY(-2px);
 }
 
-
 /*   previous nest card*/
 
 .nest-experience.is-stage-back{
@@ -473,7 +454,6 @@
 .nest-destination{
   pointer-events:none;
 }
-
 
 /*   responsive*/
 
@@ -514,7 +494,6 @@
 
 }
 
-
 /*   touch devices*/
 
 @media (hover:none){
@@ -526,7 +505,6 @@
   }
 
 }
-
 
 /*   reduced motion*/
 
