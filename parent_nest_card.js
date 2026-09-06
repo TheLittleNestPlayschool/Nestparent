@@ -1,6 +1,9 @@
 import{
   getStudent
 }from"./parent_data.js";
+import{
+  getStudentBadges
+}from"./parent_awards_data.js";
 
 /*   create nest card*/
 export function createNestCard(){
@@ -11,6 +14,13 @@ export function createNestCard(){
     student?.preferred_name||
     student?.name||
     "your little one";
+
+  const hasAwards=
+    getStudentBadges()
+      .some(
+        item=>
+          item.is_active!==false
+      );
 
   const article=
     document.createElement(
@@ -76,25 +86,31 @@ export function createNestCard(){
 
         </button>
 
-        <button
-          class="nest-destination"
-          type="button"
-          data-destination="awards"
-        >
+        ${
+          hasAwards
+            ?`
+              <button
+                class="nest-destination"
+                type="button"
+                data-destination="awards"
+              >
 
-          <span class="nest-destination-icon">
-            ✧
-          </span>
+                <span class="nest-destination-icon">
+                  ✧
+                </span>
 
-          <span class="nest-destination-title">
-            ${studentName}'s Awards
-          </span>
+                <span class="nest-destination-title">
+                  ${studentName}'s Awards
+                </span>
 
-          <span class="nest-destination-copy">
-            Little milestones worth celebrating
-          </span>
+                <span class="nest-destination-copy">
+                  Little milestones worth celebrating
+                </span>
 
-        </button>
+              </button>
+            `
+            :""
+        }
 
         <button
           class="nest-destination"
