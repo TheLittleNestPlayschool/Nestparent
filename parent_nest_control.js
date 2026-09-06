@@ -10,8 +10,12 @@ import{
   isMemoryArchiveOpen
 }from"./parent_memory_archive_stage.js";
 import{
+  isAwardsStageOpen
+}from"./parent_awards_stage.js";
+import{
   closeMemories,
-  closeEarlierMemories
+  closeEarlierMemories,
+  closeAwards
 }from"./parent_stage_router.js";
 import{
   isStageMotionLocked
@@ -78,6 +82,19 @@ function returnFromArchive(){
   });
 }
 
+/*   return from awards*/
+function returnFromAwards(){
+  if(isStageMotionLocked()||!isAwardsStageOpen())return;
+
+  closeAwards();
+
+  whenStageSettled(()=>{
+    if(isAwardsStageOpen()){
+      returnFromAwards();
+    }
+  });
+}
+
 /*   handle orb*/
 function handleNestOrb(){
   if(isStageMotionLocked())return;
@@ -89,6 +106,11 @@ function handleNestOrb(){
 
   if(isMemoriesStageOpen()){
     returnFromMemories();
+    return;
+  }
+
+  if(isAwardsStageOpen()){
+    returnFromAwards();
     return;
   }
 
