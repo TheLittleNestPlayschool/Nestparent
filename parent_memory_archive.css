@@ -55,32 +55,18 @@
 .memory-archive-heading{
   position:relative;
   z-index:2;
-}
-.memory-archive-kicker{
-  display:block;
-  margin-bottom:8px;
-  font-size:9px;
-  font-weight:700;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:rgba(38,50,47,.42);
+  flex:0 0 auto;
+  padding:2px 2px 0;
 }
 .memory-archive-title{
   max-width:310px;
   margin:0;
   font-family:Georgia,"Times New Roman",serif;
-  font-size:clamp(25px,6vw,31px);
-  line-height:1.02;
+  font-size:clamp(21px,5.2vw,25px);
+  line-height:1.08;
   font-weight:400;
-  letter-spacing:-.035em;
+  letter-spacing:-.03em;
   color:var(--ink);
-}
-.memory-archive-copy{
-  max-width:305px;
-  margin:10px 0 0;
-  font-size:11.5px;
-  line-height:1.5;
-  color:rgba(38,50,47,.54);
 }
 
 /*   archive list*/
@@ -91,8 +77,8 @@
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:11px;
-  align-content:center;
-  margin-top:17px;
+  align-content:start;
+  margin-top:18px;
 }
 
 /*   archive item*/
@@ -192,9 +178,8 @@
 /*   responsive*/
 @media (max-width:420px){
   .memory-archive-card{padding:25px 21px 21px;}
-  .memory-archive-title{font-size:27px;}
-  .memory-archive-copy{font-size:11px;}
-  .memory-archive-list{gap:9px;}
+  .memory-archive-title{font-size:23px;}
+  .memory-archive-list{gap:9px;margin-top:16px;}
   .memory-archive-item{min-height:116px;padding:14px;}
   .memory-archive-item-title{font-size:17px;}
   .memory-archive-item-count{margin-top:8px;}
