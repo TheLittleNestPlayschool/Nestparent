@@ -38,10 +38,6 @@ export function createNestCard(){
 
       <div class="nest-card-heading">
 
-        <span class="nest-card-kicker">
-          Explore
-        </span>
-
         <h2 class="nest-card-title">
           Where would you like to wander?
         </h2>
