@@ -62,11 +62,7 @@
       390px
     );
 
-  height:
-    min(
-      62vh,
-      480px
-    );
+  height:75dvh;
 
   transform:
     translate(
@@ -182,11 +178,7 @@
         370px
       );
 
-    height:
-      min(
-        58vh,
-        455px
-      );
+    height:75dvh;
   }
 
 }
