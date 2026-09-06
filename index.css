@@ -20,6 +20,7 @@
 @import url("./parent_memory_collection.css");
 @import url("./parent_memory_viewer.css");
 @import url("./parent_memory_archive.css");
+@import url("./parent_awards.css");
 
 /*   login spacing*/
 .parent-login-fields{
@@ -28,7 +29,10 @@
 
 /*   shared spatial stage motion*/
 .nest-experience,
-.memories-experience{
+.memories-experience,
+.awards-experience,
+.award-category-experience,
+.award-detail-experience{
   transition:
     transform 1.45s cubic-bezier(.20,.62,.18,1),
     opacity 1.05s ease,
