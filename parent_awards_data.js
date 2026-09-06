@@ -17,7 +17,7 @@ export async function loadAwardsData(){
   awardsPromise=(async()=>{
     const response=
       await fetch(
-        `${XANO_BASE_URL}/parent_awards`,
+        `${XANO_BASE_URL}/pa_awards`,
         {
           method:'GET',
           headers:{
