@@ -14,6 +14,12 @@ function getStudentName(){
   return student?.preferred_name||student?.name||"Your little one";
 }
 
+/*   award graphic*/
+function getAwardGraphic(category){
+  const src=category?.award_graphic||"";
+  return category?.code==="literacy"?`${src}?v=20260906-literacy-restore`:src;
+}
+
 /*   ordered categories*/
 function getCategories(){
   return [...getAwardCategories()]
@@ -90,7 +96,7 @@ function buildCategoryButton(category){
       data-award-category="${category.id}"
     >
       <span class="award-category-art">
-        <img src="${category.award_graphic}" alt="" />
+        <img src="${getAwardGraphic(category)}" alt="" />
       </span>
       <span class="award-category-title">
         ${category.award_short_name||category.name}
@@ -170,7 +176,7 @@ export function createAwardCategoryCard({categoryId,onAward}={}){
     <div class="awards-stage-card award-history-card">
       <div class="award-history-heading">
         <span class="award-history-art">
-          <img src="${category.award_graphic}" alt="" />
+          <img src="${getAwardGraphic(category)}" alt="" />
         </span>
         <div>
           <span class="awards-kicker">${studentName}'s journey</span>
@@ -235,7 +241,7 @@ export function createAwardDetailCard({categoryId,badgeId}={}){
     <div class="awards-stage-card award-detail-card">
       <span class="awards-kicker">A little milestone to celebrate</span>
       <div class="award-detail-art">
-        <img src="${category.award_graphic}" alt="" />
+        <img src="${getAwardGraphic(category)}" alt="" />
       </div>
       <span class="award-detail-category">
         ${category.award_short_name||category.name} · Level ${badge.level}
