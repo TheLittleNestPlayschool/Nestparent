@@ -1,36 +1,40 @@
-import {
+import{
   openMemoriesStage,
   closeMemoriesStage,
   isMemoriesStageOpen
-} from "./parent_memories_stage.js";
-
-import {
+}from"./parent_memories_stage.js";
+import{
   openMemoryArchiveStage,
   closeMemoryArchiveStage,
   isMemoryArchiveOpen
-} from "./parent_memory_archive_stage.js";
-
-import {
+}from"./parent_memory_archive_stage.js";
+import{
+  openAwardsStage,
+  closeAwardsStage,
+  isAwardsStageOpen
+}from"./parent_awards_stage.js";
+import{
+  loadAwardsData
+}from"./parent_awards_data.js";
+import{
   getNestCard
-} from "./parent_nest_stage.js";
+}from"./parent_nest_stage.js";
 
-const carousel =
+const carousel=
   document.getElementById(
     "carousel"
   );
 
 /*   open memories*/
-
 function openMemories(){
   if(
-    !carousel
-    ||
+    !carousel||
     isMemoriesStageOpen()
   ){
     return;
   }
 
-  const nestCard =
+  const nestCard=
     getNestCard();
 
   if(!nestCard){
@@ -44,17 +48,15 @@ function openMemories(){
 }
 
 /*   close memories*/
-
 export function closeMemories(){
   if(
-    !carousel
-    ||
+    !carousel||
     !isMemoriesStageOpen()
   ){
     return;
   }
 
-  const nestCard =
+  const nestCard=
     getNestCard();
 
   closeMemoriesStage({
@@ -62,20 +64,59 @@ export function closeMemories(){
   });
 }
 
-/*   open earlier memories*/
+/*   open awards*/
+async function openAwards(){
+  if(
+    !carousel||
+    isAwardsStageOpen()
+  ){
+    return;
+  }
 
+  const nestCard=
+    getNestCard();
+
+  if(!nestCard){
+    return;
+  }
+
+  try{
+    await loadAwardsData();
+    openAwardsStage({
+      carousel,
+      nestCard
+    });
+  }catch(error){
+    console.error(
+      "Unable to open Awards:",
+      error
+    );
+  }
+}
+
+/*   close awards*/
+export function closeAwards(){
+  if(
+    !carousel||
+    !isAwardsStageOpen()
+  ){
+    return;
+  }
+
+  closeAwardsStage();
+}
+
+/*   open earlier memories*/
 function openEarlierMemories(){
   if(
-    !carousel
-    ||
-    !isMemoriesStageOpen()
-    ||
+    !carousel||
+    !isMemoriesStageOpen()||
     isMemoryArchiveOpen()
   ){
     return;
   }
 
-  const memoriesCard =
+  const memoriesCard=
     carousel.querySelector(
       ".memories-experience"
     );
@@ -91,15 +132,12 @@ function openEarlierMemories(){
 }
 
 /*   close earlier memories*/
-
 export function closeEarlierMemories(){
-  if(
-    !isMemoryArchiveOpen()
-  ){
+  if(!isMemoryArchiveOpen()){
     return;
   }
 
-  const memoriesCard =
+  const memoriesCard=
     carousel?.querySelector(
       ".memories-experience"
     );
@@ -110,65 +148,47 @@ export function closeEarlierMemories(){
 }
 
 /*   route nest destination*/
-
-function routeDestination(
-  event
-){
-  const destination =
-    event.detail
-      ?.destination;
+function routeDestination(event){
+  const destination=
+    event.detail?.destination;
 
   if(!destination){
     return;
   }
 
-  if(
-    destination ===
-    "memories"
-  ){
+  if(destination==="memories"){
     openMemories();
     return;
   }
 
-  if(
-    destination ===
-    "journey"
-  ){
+  if(destination==="awards"){
+    openAwards();
     return;
   }
 
-  if(
-    destination ===
-    "together"
-  ){
+  if(destination==="journey"){
     return;
   }
 
-  if(
-    destination ===
-    "our-nest"
-  ){
+  if(destination==="together"){
+    return;
+  }
+
+  if(destination==="our-nest"){
     return;
   }
 }
 
 /*   route memory chapter*/
-
-function routeMemoryChapter(
-  event
-){
-  const chapter =
-    event.detail
-      ?.chapter;
+function routeMemoryChapter(event){
+  const chapter=
+    event.detail?.chapter;
 
   if(!chapter){
     return;
   }
 
-  if(
-    chapter ===
-    "earlier"
-  ){
+  if(chapter==="earlier"){
     openEarlierMemories();
     return;
   }
@@ -181,13 +201,9 @@ function routeMemoryChapter(
 }
 
 /*   route special collection*/
-
-function routeMemoryCollection(
-  event
-){
-  const collection =
-    event.detail
-      ?.collection;
+function routeMemoryCollection(event){
+  const collection=
+    event.detail?.collection;
 
   if(!collection){
     return;
@@ -205,7 +221,6 @@ function routeMemoryCollection(
 }
 
 /*   activate stage router*/
-
 export function activateStageRouter(){
   window.addEventListener(
     "parent:nest-destination",
