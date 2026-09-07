@@ -147,6 +147,7 @@ function buildMediaItem(item,index){
     <button class="memory-today-item" type="button" data-memory-media-index="${index}" aria-pressed="false">
       <span class="memory-today-thumb" style="background-image:url('${item.thumbnail}')"></span>
       ${isVideo?`<span class="memory-today-video" role="button" aria-label="Play video">▶</span>`:""}
+      ${item.sharable===true?`<span class="memory-today-share-item" role="button" aria-label="Share this memory">↗</span>`:""}
       <span class="memory-today-selected" aria-hidden="true">✓</span>
     </button>
   `;
@@ -213,10 +214,6 @@ export function createMemoryCollectionCard(collection="today"){
               <span class="memory-today-action-symbol">↓</span>
               <span class="memory-viewer-download-label">Download</span>
             </button>
-            <button class="memory-today-action memory-today-share" type="button">
-              <span class="memory-today-action-symbol">↗</span>
-              <span>Share</span>
-            </button>
           </div>`
         :buildEmptyState(studentName,collection)
       }
@@ -228,7 +225,6 @@ export function createMemoryCollectionCard(collection="today"){
   const selectionCount=article.querySelector(".memory-today-selection-count");
   const download=article.querySelector(".memory-today-download");
   const downloadLabel=download?.querySelector(".memory-viewer-download-label");
-  const share=article.querySelector(".memory-today-share");
   const buttons=[...article.querySelectorAll(".memory-today-item")];
 
   /*   update selection*/
@@ -246,10 +242,6 @@ export function createMemoryCollectionCard(collection="today"){
     }
     if(selectionCount)selectionCount.textContent=count===1?"1 selected":`${count} selected`;
     if(downloadLabel)downloadLabel.textContent=count>1?`Download ${count}`:"Download";
-
-    const singleIndex=count===1?[...selectedIndexes][0]:-1;
-    const singleMedia=singleIndex>=0?displayMedia[singleIndex]:null;
-    if(share)share.hidden=count!==1||singleMedia?.sharable!==true;
   }
 
   /*   toggle selection*/
@@ -286,12 +278,25 @@ export function createMemoryCollectionCard(collection="today"){
     video.play().catch(()=>{});
   }
 
+  /*   share one memory*/
+  function shareMemory(index){
+    const selectedMedia=displayMedia[index];
+    if(!selectedMedia||selectedMedia.sharable!==true)return;
+    window.dispatchEvent(new CustomEvent("parent:share-memory",{
+      detail:{media:selectedMedia,index,mediaItems:displayMedia,collection}
+    }));
+  }
+
   buttons.forEach(button=>{
     button.addEventListener("click",event=>{
       event.stopPropagation();
       const index=Number(button.dataset.memoryMediaIndex);
       if(event.target.closest(".memory-today-video")){
         playVideo(button,index);
+        return;
+      }
+      if(event.target.closest(".memory-today-share-item")){
+        shareMemory(index);
         return;
       }
       if(event.target.closest(".memory-today-inline-video"))return;
@@ -312,19 +317,6 @@ export function createMemoryCollectionCard(collection="today"){
 
     selectedIndexes.clear();
     updateSelection();
-  });
-
-  /*   share selected memory*/
-  share?.addEventListener("click",event=>{
-    event.stopPropagation();
-    if(selectedIndexes.size!==1)return;
-    const selectedIndex=[...selectedIndexes][0];
-    const selectedMedia=displayMedia[selectedIndex];
-    if(!selectedMedia||selectedMedia.sharable!==true)return;
-
-    window.dispatchEvent(new CustomEvent("parent:share-memory",{
-      detail:{media:selectedMedia,index:selectedIndex,mediaItems:displayMedia,collection}
-    }));
   });
 
   return article;
