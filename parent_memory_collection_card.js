@@ -147,7 +147,7 @@ function buildMediaItem(item,index){
     <button class="memory-today-item" type="button" data-memory-media-index="${index}" aria-pressed="false">
       <span class="memory-today-thumb" style="background-image:url('${item.thumbnail}')"></span>
       ${isVideo?`<span class="memory-today-video" role="button" aria-label="Play video">▶</span>`:""}
-      ${item.sharable===true?`<span class="memory-today-share-item" role="button" aria-label="Share this memory">↗</span>`:""}
+      <span class="memory-today-share-item" role="button" aria-label="Share this memory">↗</span>
       <span class="memory-today-selected" aria-hidden="true">✓</span>
     </button>
   `;
@@ -281,7 +281,7 @@ export function createMemoryCollectionCard(collection="today"){
   /*   share one memory*/
   function shareMemory(index){
     const selectedMedia=displayMedia[index];
-    if(!selectedMedia||selectedMedia.sharable!==true)return;
+    if(!selectedMedia)return;
     window.dispatchEvent(new CustomEvent("parent:share-memory",{
       detail:{media:selectedMedia,index,mediaItems:displayMedia,collection}
     }));
