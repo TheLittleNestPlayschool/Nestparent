@@ -56,6 +56,21 @@ export const memoryChapters = [
 
   {
     id:
+      "lastweek",
+
+    title:
+      "Last Week",
+
+    copy:
+      "A little look back at last week",
+
+    count:
+      0
+  },
+
+
+  {
+    id:
       "august",
 
     title:
