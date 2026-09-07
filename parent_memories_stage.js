@@ -79,6 +79,11 @@ function handleMemoryChapter(chapter){
     return true;
   }
 
+  if(chapter==="lastweek"){
+    openCollection("lastweek");
+    return true;
+  }
+
   if(chapter==="august"||chapter==="month"){
     openCollection("month");
     return true;
