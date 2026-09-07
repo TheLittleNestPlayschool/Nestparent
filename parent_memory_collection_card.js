@@ -46,7 +46,7 @@ function arrangeMedia(collection,media){if(media.length<2)return media;const off
 /*   build media item*/
 function buildMediaItem(item,index){
   const isVideo=item.media_kind==="video";
-  const shareControl=item.sharable===true?`<span class="memory-today-share-item" role="button" aria-label="Share this memory to Facebook" style="position:absolute;right:8px;bottom:8px;z-index:7;width:27px;height:27px;display:grid;place-items:center;border:2px solid rgba(255,255,255,.96);border-radius:50%;background:#1877f2;box-shadow:0 5px 14px rgba(31,43,37,.18);color:#fff;font-family:Arial,sans-serif;font-size:18px;font-weight:700;line-height:1;cursor:pointer">f</span>`:"";
+  const shareControl=item.sharable===true?`<span class="memory-today-share-item" role="button" aria-label="Share this memory to Facebook">f</span>`:"";
   return`<button class="memory-today-item" type="button" data-memory-media-index="${index}" aria-pressed="false"><span class="memory-today-thumb" style="background-image:url('${item.thumbnail}')"></span>${isVideo?`<span class="memory-today-video" role="button" aria-label="Play video">▶</span>`:""}${shareControl}<span class="memory-today-selected" aria-hidden="true">✓</span></button>`;
 }
 /*   build empty state*/
