@@ -118,9 +118,6 @@ export function createAwardsCard({onCategory}={}){
   const article=document.createElement("article");
   const studentName=getStudentName();
   const categories=getCategories();
-  const earnedCount=getStudentBadges()
-    .filter(item=>item.is_active!==false)
-    .length;
 
   article.className="experience awards-experience";
   article.dataset.type="awards";
@@ -128,9 +125,6 @@ export function createAwardsCard({onCategory}={}){
     <div class="awards-stage-card">
       <div class="awards-heading">
         <h2 class="awards-title">${studentName}'s Awards</h2>
-        <span class="awards-total">
-          ${earnedCount} ${earnedCount===1?"milestone":"milestones"} gathered
-        </span>
       </div>
       <div class="award-categories">
         ${categories.map(buildCategoryButton).join("")}
