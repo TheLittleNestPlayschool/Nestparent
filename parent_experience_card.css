@@ -187,7 +187,18 @@
 
   z-index:4;
 
+  max-height:calc(100% - 88px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+
   color:white;
+}
+
+.content::-webkit-scrollbar{
+  display:none;
 }
 
 .moment-label{
@@ -345,6 +356,7 @@
     left:23px;
     right:23px;
     bottom:23px;
+    max-height:calc(100% - 84px);
   }
 
 }
