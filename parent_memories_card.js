@@ -30,6 +30,16 @@ function getMediaDate(value){
   return new Date(timestamp);
 }
 
+/*   get week start*/
+function getWeekStart(offsetWeeks=0){
+  const now=new Date();
+  const start=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const day=start.getDay();
+  const daysFromMonday=day===0?6:day-1;
+  start.setDate(start.getDate()-daysFromMonday+(offsetWeeks*7));
+  return start;
+}
+
 /*   is today*/
 function isToday(value){
   const date=getMediaDate(value);
@@ -42,13 +52,18 @@ function isToday(value){
 function isThisWeek(value){
   const date=getMediaDate(value);
   if(!date){return false;}
-  const now=new Date();
-  const start=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  const day=start.getDay();
-  const daysFromMonday=day===0?6:day-1;
-  start.setDate(start.getDate()-daysFromMonday);
+  const start=getWeekStart();
   const end=new Date(start);
   end.setDate(end.getDate()+7);
+  return date>=start&&date<end;
+}
+
+/*   is last week*/
+function isLastWeek(value){
+  const date=getMediaDate(value);
+  if(!date){return false;}
+  const start=getWeekStart(-1);
+  const end=getWeekStart();
   return date>=start&&date<end;
 }
 
@@ -72,6 +87,7 @@ function getLiveMemories(){
   const studentName=student?.preferred_name||student?.name||"Your little one";
   const todayCount=media.filter(item=>isToday(item.created_at)).length;
   const weekCount=media.filter(item=>isThisWeek(item.created_at)).length;
+  const lastWeekCount=media.filter(item=>isLastWeek(item.created_at)).length;
   const monthCount=media.filter(item=>isCurrentMonth(item.created_at)).length;
   const newestMedia=[...media].sort((a,b)=>Number(b.created_at)-Number(a.created_at)).find(item=>item.thumbnail);
   const fallbackPhoto="https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1200&q=86";
@@ -82,6 +98,7 @@ function getLiveMemories(){
     photo:newestMedia?.thumbnail||fallbackPhoto,
     todayCount,
     weekCount,
+    lastWeekCount,
     monthCount,
     monthName:getCurrentMonth()
   };
@@ -96,6 +113,9 @@ function getLiveChapters(){
     }
     if(chapter.id==="week"){
       return{...chapter,title:"This Week",copy:live.weekCount===0?"No moments yet this week":"A little look at this week",count:live.weekCount};
+    }
+    if(chapter.id==="lastweek"){
+      return{...chapter,title:"Last Week",copy:live.lastWeekCount===0?"No moments from last week":"A little look back at last week",count:live.lastWeekCount};
     }
     if(chapter.id==="august"){
       return{...chapter,title:live.monthName,copy:live.monthCount===0?`No ${live.monthName} moments yet`:`${live.studentName}'s ${live.monthName} memories`,count:live.monthCount};
