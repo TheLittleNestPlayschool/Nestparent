@@ -310,6 +310,7 @@ export function createMemoryCollectionCard(collection="today"){
       await downloadMemoryMedia(displayMedia[indexes[i]],download);
     }
 
+    selectedIndexes.clear();
     updateSelection();
   });
 
