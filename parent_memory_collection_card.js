@@ -15,6 +15,16 @@ function getMediaDate(value){
   return new Date(timestamp);
 }
 
+/*   get week start*/
+function getWeekStart(offsetWeeks=0){
+  const now=new Date();
+  const start=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const day=start.getDay();
+  const daysFromMonday=day===0?6:day-1;
+  start.setDate(start.getDate()-daysFromMonday+(offsetWeeks*7));
+  return start;
+}
+
 /*   is today*/
 function isToday(value){
   const date=getMediaDate(value);
@@ -27,14 +37,17 @@ function isToday(value){
 function isThisWeek(value){
   const date=getMediaDate(value);
   if(!date)return false;
-  const now=new Date();
-  const start=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  const day=start.getDay();
-  const daysFromMonday=day===0?6:day-1;
-  start.setDate(start.getDate()-daysFromMonday);
+  const start=getWeekStart();
   const end=new Date(start);
   end.setDate(end.getDate()+7);
   return date>=start&&date<end;
+}
+
+/*   is last week*/
+function isLastWeek(value){
+  const date=getMediaDate(value);
+  if(!date)return false;
+  return date>=getWeekStart(-1)&&date<getWeekStart();
 }
 
 /*   is current month*/
@@ -98,6 +111,13 @@ function getCollectionDefinition(collection){
     };
   }
 
+  if(collection==="lastweek"){
+    return{
+      title:"Last week's little moments",
+      filter:item=>isLastWeek(item.created_at)
+    };
+  }
+
   if(collection==="month"){
     return{
       title:`${monthName}'s little moments`,
@@ -125,6 +145,30 @@ function getCollectionDefinition(collection){
     title:"Today's little moments",
     filter:item=>isToday(item.created_at)
   };
+}
+
+/*   stable collection key*/
+function getCollectionKey(collection){
+  if(collection&&typeof collection==="object"){
+    return`${collection.type||"collection"}-${collection.year||""}-${collection.month||""}`;
+  }
+  return String(collection||"today");
+}
+
+/*   stable layout seed*/
+function getLayoutSeed(collection,media){
+  const source=`${getCollectionKey(collection)}-${media.map(item=>item.id).join("-")}`;
+  let hash=0;
+  for(let i=0;i<source.length;i++)hash=((hash<<5)-hash+source.charCodeAt(i))|0;
+  return Math.abs(hash);
+}
+
+/*   arrange media for collection*/
+function arrangeMedia(collection,media){
+  if(media.length<2)return media;
+  const seed=getLayoutSeed(collection,media);
+  const offset=seed%media.length;
+  return[...media.slice(offset),...media.slice(0,offset)];
 }
 
 /*   build media item*/
@@ -169,6 +213,8 @@ export function createMemoryCollectionCard(collection="today",{onMedia}={}){
   const definition=getCollectionDefinition(collection);
   const studentName=student?.preferred_name||student?.name||"Your little one";
   const media=getMemoryMedia().filter(item=>definition.filter(item));
+  const displayMedia=arrangeMedia(collection,media);
+  const layout=(getLayoutSeed(collection,media)%6)+1;
   const article=document.createElement("article");
   const isArchiveMonth=collection&&typeof collection==="object"&&collection.type==="archive-month";
   const collectionType=isArchiveMonth?"archive-month":collection;
@@ -191,8 +237,8 @@ export function createMemoryCollectionCard(collection="today",{onMedia}={}){
       <div class="memory-today-heading">
         <h2 class="memory-today-title">${title}</h2>
       </div>
-      ${media.length>0
-        ?`<div class="memory-today-grid">${media.map(buildMediaItem).join("")}</div>`
+      ${displayMedia.length>0
+        ?`<div class="memory-today-grid" data-layout="${layout}">${displayMedia.map(buildMediaItem).join("")}</div>`
         :buildEmptyState(studentName,collection)
       }
     </div>
@@ -202,12 +248,12 @@ export function createMemoryCollectionCard(collection="today",{onMedia}={}){
     button.addEventListener("click",event=>{
       event.stopPropagation();
       const index=Number(button.dataset.memoryMediaIndex);
-      const selectedMedia=media[index];
+      const selectedMedia=displayMedia[index];
       if(!selectedMedia)return;
 
       const payload={
         media:selectedMedia,
-        mediaItems:media,
+        mediaItems:displayMedia,
         index,
         collection
       };
