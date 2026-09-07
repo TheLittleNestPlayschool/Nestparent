@@ -1,554 +1,184 @@
 /*   header*/
-
 .topbar{
   position:absolute;
-
-  top:
-    max(
-      22px,
-      env(safe-area-inset-top)
-    );
-
+  top:max(22px,env(safe-area-inset-top));
   left:23px;
   right:22px;
-
   z-index:50;
-
   display:flex;
-
   align-items:center;
   justify-content:space-between;
-
   pointer-events:none;
 }
-
-
 .identity{
   display:flex;
-
   flex-direction:column;
-
   gap:3px;
-
   max-width:310px;
-
   user-select:none;
-
   pointer-events:none;
 }
-
-
 .eyebrow{
   font-size:10px;
-
-  font-weight:700;
-
-  letter-spacing:.18em;
-
+  font-weight:800;
+  letter-spacing:.19em;
   text-transform:uppercase;
-
-  color:
-    rgba(
-      38,
-      50,
-      47,
-      .44
-    );
+  color:rgba(255,255,255,.90);
+  text-shadow:0 2px 10px rgba(1,20,42,.28);
 }
-
-
 .hello{
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
+  font-family:Georgia,"Times New Roman",serif;
   font-size:24px;
-
   line-height:1.06;
-
   font-weight:400;
-
   letter-spacing:-.028em;
+  color:#fff;
+  text-shadow:0 2px 16px rgba(1,20,42,.30);
 }
-
-
 .subhello{
   margin-top:5px;
-
   font-size:13px;
-
   line-height:1.4;
-
-  color:
-    rgba(
-      38,
-      50,
-      47,
-      .52
-    );
+  font-weight:650;
+  color:rgba(255,255,255,.88);
+  text-shadow:0 2px 10px rgba(1,20,42,.30);
 }
-
 
 /*   nest orb*/
-
 .profile{
   position:relative;
-
   z-index:60;
-
   display:grid;
-
   place-items:center;
-
   width:47px;
   height:47px;
-
   padding:0;
-
-  border:
-    1px solid
-    rgba(
-      255,
-      255,
-      255,
-      .74
-    );
-
+  border:1.5px solid rgba(255,255,255,.80);
   border-radius:50%;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .66
-    );
-
-  backdrop-filter:
-    blur(18px);
-
-  -webkit-backdrop-filter:
-    blur(18px);
-
-  box-shadow:
-    0 8px 28px
-    rgba(
-      43,
-      61,
-      54,
-      .08
-    );
-
+  background:rgba(255,255,255,.72);
+  backdrop-filter:blur(18px) saturate(1.15);
+  -webkit-backdrop-filter:blur(18px) saturate(1.15);
+  box-shadow:0 9px 28px rgba(0,24,44,.18),inset 0 1px 0 rgba(255,255,255,.90);
   cursor:pointer;
-
   pointer-events:auto;
-
   touch-action:manipulation;
-
-  -webkit-tap-highlight-color:
-    transparent;
+  -webkit-tap-highlight-color:transparent;
 }
-
-
-.nest-orb:active{
-  transform:
-    scale(.96);
-}
-
+.nest-orb:active{transform:scale(.96);}
 
 /*   little nest symbol*/
-
 .little-nest{
   position:relative;
-
   display:block;
-
   width:31px;
   height:29px;
-
   pointer-events:none;
-
-  transition:
-    transform .28s var(--ease);
+  transition:transform .28s var(--ease);
 }
-
-
-.nest-orb:active .little-nest{
-  transform:
-    scale(1.06);
-}
-
+.nest-orb:active .little-nest{transform:scale(1.06);}
 
 /*   branches*/
-
 .nest-branch{
   position:absolute;
-
   bottom:10px;
-
   width:14px;
   height:1.5px;
-
   border-radius:999px;
-
-  background:
-    #8b6c43;
-
-  transform-origin:
-    center;
-
+  background:#8b6c43;
+  transform-origin:center;
   pointer-events:none;
 }
-
-
-.nest-branch-left{
-  left:2px;
-
-  transform:
-    rotate(-58deg);
-}
-
-
-.nest-branch-right{
-  right:2px;
-
-  transform:
-    rotate(58deg);
-}
-
+.nest-branch-left{left:2px;transform:rotate(-58deg);}
+.nest-branch-right{right:2px;transform:rotate(58deg);}
 
 /*   leaves*/
-
 .nest-leaf{
   position:absolute;
-
   width:7px;
   height:4px;
-
-  border-radius:
-    100%
-    0
-    100%
-    0;
-
-  background:
-    #7f9b63;
-
-  transform-origin:
-    left center;
-
+  border-radius:100% 0 100% 0;
+  background:#7f9b63;
+  transform-origin:left center;
   pointer-events:none;
 }
-
-
-.nest-leaf-left-a{
-  left:2px;
-  top:6px;
-
-  transform:
-    rotate(-48deg);
-}
-
-
-.nest-leaf-left-b{
-  left:6px;
-  top:2px;
-
-  transform:
-    rotate(-18deg)
-    scale(.86);
-}
-
-
-.nest-leaf-right-a{
-  right:1px;
-  top:6px;
-
-  transform:
-    rotate(138deg);
-}
-
-
-.nest-leaf-right-b{
-  right:6px;
-  top:2px;
-
-  transform:
-    rotate(165deg)
-    scale(.86);
-}
-
+.nest-leaf-left-a{left:2px;top:6px;transform:rotate(-48deg);}
+.nest-leaf-left-b{left:6px;top:2px;transform:rotate(-18deg) scale(.86);}
+.nest-leaf-right-a{right:1px;top:6px;transform:rotate(138deg);}
+.nest-leaf-right-b{right:6px;top:2px;transform:rotate(165deg) scale(.86);}
 
 /*   nest body*/
-
 .nest-body{
   position:absolute;
-
   left:50%;
   bottom:3px;
-
   width:23px;
   height:11px;
-
   overflow:hidden;
-
-  border-radius:
-    5px
-    5px
-    12px
-    12px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #aa8350,
-      #89663f
-    );
-
-  box-shadow:
-    inset 0 2px 2px
-    rgba(
-      255,
-      255,
-      255,
-      .16
-    ),
-    0 1px 2px
-    rgba(
-      73,
-      53,
-      32,
-      .14
-    );
-
-  transform:
-    translateX(-50%);
-
+  border-radius:5px 5px 12px 12px;
+  background:linear-gradient(180deg,#aa8350,#89663f);
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.16),0 1px 2px rgba(73,53,32,.14);
+  transform:translateX(-50%);
   pointer-events:none;
-
-  animation:
-    littleNestBreathe
-    5.4s
-    ease-in-out
-    infinite;
+  animation:littleNestBreathe 5.4s ease-in-out infinite;
 }
-
 
 /*   nest weave*/
-
 .nest-weave{
   position:absolute;
-
   left:-3px;
-
   width:29px;
   height:1px;
-
   border-radius:999px;
-
-  background:
-    rgba(
-      102,
-      73,
-      42,
-      .55
-    );
-
+  background:rgba(102,73,42,.55);
   pointer-events:none;
 }
-
-
-.nest-weave-a{
-  top:3px;
-
-  transform:
-    rotate(9deg);
-}
-
-
-.nest-weave-b{
-  top:6px;
-
-  transform:
-    rotate(-8deg);
-}
-
-
-.nest-weave-c{
-  top:8px;
-
-  transform:
-    rotate(5deg);
-
-  opacity:.72;
-}
-
+.nest-weave-a{top:3px;transform:rotate(9deg);}
+.nest-weave-b{top:6px;transform:rotate(-8deg);}
+.nest-weave-c{top:8px;transform:rotate(5deg);opacity:.72;}
 
 /*   egg*/
-
 .nest-egg{
   position:absolute;
-
   z-index:3;
-
   left:50%;
   bottom:9px;
-
   width:7px;
   height:9px;
-
-  border-radius:
-    52%
-    52%
-    46%
-    46%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #f1d99d,
-      #d7b875
-    );
-
-  box-shadow:
-    0 1px 3px
-    rgba(
-      112,
-      83,
-      44,
-      .16
-    );
-
-  transform:
-    translateX(-50%);
-
+  border-radius:52% 52% 46% 46%;
+  background:linear-gradient(145deg,#f1d99d,#d7b875);
+  box-shadow:0 1px 3px rgba(112,83,44,.16);
+  transform:translateX(-50%);
   pointer-events:none;
-
-  animation:
-    littleEggFloat
-    4.8s
-    ease-in-out
-    infinite;
+  animation:littleEggFloat 4.8s ease-in-out infinite;
 }
-
 
 /*   idle movement*/
-
 @keyframes littleNestBreathe{
-
-  0%,
-  100%{
-    transform:
-      translateX(-50%)
-      scaleX(1);
-  }
-
-
-  50%{
-    transform:
-      translateX(-50%)
-      scaleX(1.035);
-  }
-
+  0%,100%{transform:translateX(-50%) scaleX(1);}
+  50%{transform:translateX(-50%) scaleX(1.035);}
 }
-
-
 @keyframes littleEggFloat{
-
-  0%,
-  100%{
-    transform:
-      translateX(-50%)
-      translateY(0);
-  }
-
-
-  50%{
-    transform:
-      translateX(-50%)
-      translateY(-1px);
-  }
-
+  0%,100%{transform:translateX(-50%) translateY(0);}
+  50%{transform:translateX(-50%) translateY(-1px);}
 }
-
 
 /*   leaf movement*/
-
-.nest-leaf-left-a{
-  animation:
-    leafLeftMove
-    5.6s
-    ease-in-out
-    infinite;
-}
-
-
-.nest-leaf-right-a{
-  animation:
-    leafRightMove
-    5.9s
-    ease-in-out
-    infinite;
-}
-
-
+.nest-leaf-left-a{animation:leafLeftMove 5.6s ease-in-out infinite;}
+.nest-leaf-right-a{animation:leafRightMove 5.9s ease-in-out infinite;}
 @keyframes leafLeftMove{
-
-  0%,
-  100%{
-    transform:
-      rotate(-48deg);
-  }
-
-
-  50%{
-    transform:
-      rotate(-42deg);
-  }
-
+  0%,100%{transform:rotate(-48deg);}
+  50%{transform:rotate(-42deg);}
 }
-
-
 @keyframes leafRightMove{
-
-  0%,
-  100%{
-    transform:
-      rotate(138deg);
-  }
-
-
-  50%{
-    transform:
-      rotate(132deg);
-  }
-
+  0%,100%{transform:rotate(138deg);}
+  50%{transform:rotate(132deg);}
 }
-
 
 /*   open nest*/
-
-.nest-orb.is-open{
-  transform:
-    scale(1.045);
-}
-
-
-.nest-orb.is-open .little-nest{
-  transform:
-    scale(1.08);
-}
-
+.nest-orb.is-open{transform:scale(1.045);}
+.nest-orb.is-open .little-nest{transform:scale(1.08);}
 
 /*   reduced motion*/
-
-@media (prefers-reduced-motion:reduce){
-
-  .nest-body,
-  .nest-egg,
-  .nest-leaf{
-    animation:none;
-  }
-
+@media(prefers-reduced-motion:reduce){
+  .nest-body,.nest-egg,.nest-leaf{animation:none;}
 }
