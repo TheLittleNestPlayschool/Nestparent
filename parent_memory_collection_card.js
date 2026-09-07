@@ -6,6 +6,7 @@ import{
   getStudentMediaCollections,
   getMediaCollectionTypes
 }from"./parent_data.js";
+import{downloadMemoryMedia}from"./parent_memory_download.js";
 
 /*   get media date*/
 function getMediaDate(value){
@@ -175,9 +176,10 @@ function arrangeMedia(collection,media){
 function buildMediaItem(item,index){
   const isVideo=item.media_kind==="video";
   return`
-    <button class="memory-today-item" type="button" data-memory-media-index="${index}">
+    <button class="memory-today-item" type="button" data-memory-media-index="${index}" aria-pressed="false">
       <span class="memory-today-thumb" style="background-image:url('${item.thumbnail}')"></span>
       ${isVideo?`<span class="memory-today-video">▶</span>`:""}
+      <span class="memory-today-selected" aria-hidden="true">✓</span>
     </button>
   `;
 }
@@ -208,7 +210,7 @@ function buildEmptyState(studentName,collection){
 }
 
 /*   create memory collection card*/
-export function createMemoryCollectionCard(collection="today",{onMedia}={}){
+export function createMemoryCollectionCard(collection="today"){
   const student=getStudent();
   const definition=getCollectionDefinition(collection);
   const studentName=student?.preferred_name||student?.name||"Your little one";
@@ -238,31 +240,79 @@ export function createMemoryCollectionCard(collection="today",{onMedia}={}){
         <h2 class="memory-today-title">${title}</h2>
       </div>
       ${displayMedia.length>0
-        ?`<div class="memory-today-grid" data-layout="${layout}">${displayMedia.map(buildMediaItem).join("")}</div>`
+        ?`<div class="memory-today-grid" data-layout="${layout}">${displayMedia.map(buildMediaItem).join("")}</div>
+          <div class="memory-today-actions" hidden>
+            <button class="memory-today-action memory-today-download" type="button">
+              <span class="memory-today-action-symbol">↓</span>
+              <span class="memory-viewer-download-label">Download</span>
+            </button>
+            <button class="memory-today-action memory-today-share" type="button">
+              <span class="memory-today-action-symbol">↗</span>
+              <span>Share</span>
+            </button>
+          </div>`
         :buildEmptyState(studentName,collection)
       }
     </div>
   `;
 
-  article.querySelectorAll(".memory-today-item").forEach(button=>{
+  let selectedIndex=-1;
+  const actionBar=article.querySelector(".memory-today-actions");
+  const download=article.querySelector(".memory-today-download");
+  const share=article.querySelector(".memory-today-share");
+  const buttons=[...article.querySelectorAll(".memory-today-item")];
+
+  /*   select memory*/
+  function selectMemory(index){
+    const selectedMedia=displayMedia[index];
+    if(!selectedMedia)return;
+
+    selectedIndex=index;
+    buttons.forEach((button,buttonIndex)=>{
+      const selected=buttonIndex===index;
+      button.classList.toggle("is-selected",selected);
+      button.setAttribute("aria-pressed",selected?"true":"false");
+    });
+
+    if(actionBar){
+      actionBar.hidden=false;
+      actionBar.classList.add("is-visible");
+    }
+
+    if(share){
+      share.hidden=selectedMedia.sharable!==true;
+    }
+  }
+
+  buttons.forEach(button=>{
     button.addEventListener("click",event=>{
       event.stopPropagation();
-      const index=Number(button.dataset.memoryMediaIndex);
-      const selectedMedia=displayMedia[index];
-      if(!selectedMedia)return;
-
-      const payload={
-        media:selectedMedia,
-        mediaItems:displayMedia,
-        index,
-        collection
-      };
-
-      const handled=typeof onMedia==="function"&&onMedia(payload)===true;
-      if(handled)return;
-
-      window.dispatchEvent(new CustomEvent("parent:memory-media",{detail:payload}));
+      selectMemory(Number(button.dataset.memoryMediaIndex));
     });
+  });
+
+  /*   download selected memory*/
+  download?.addEventListener("click",async event=>{
+    event.stopPropagation();
+    if(selectedIndex<0)return;
+    await downloadMemoryMedia(displayMedia[selectedIndex],download);
+  });
+
+  /*   share selected memory*/
+  share?.addEventListener("click",event=>{
+    event.stopPropagation();
+    if(selectedIndex<0)return;
+    const selectedMedia=displayMedia[selectedIndex];
+    if(!selectedMedia||selectedMedia.sharable!==true)return;
+
+    window.dispatchEvent(new CustomEvent("parent:share-memory",{
+      detail:{
+        media:selectedMedia,
+        index:selectedIndex,
+        mediaItems:displayMedia,
+        collection
+      }
+    }));
   });
 
   return article;
