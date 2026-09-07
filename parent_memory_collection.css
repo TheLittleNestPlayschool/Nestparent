@@ -139,7 +139,7 @@
   position:absolute;
   right:8px;
   top:8px;
-  z-index:4;
+  z-index:6;
   width:25px;
   height:25px;
   display:grid;
@@ -170,6 +170,7 @@
   z-index:8;
   flex:0 0 auto;
   display:flex;
+  align-items:center;
   justify-content:flex-end;
   gap:8px;
   margin:8px 1px 0;
@@ -182,6 +183,14 @@
   box-shadow:0 10px 28px rgba(38,54,48,.12),inset 0 1px 0 rgba(255,255,255,.90);
 }
 .memory-today-actions[hidden]{display:none;}
+.memory-today-selection-count{
+  margin-right:auto;
+  padding-left:4px;
+  color:rgba(38,50,47,.55);
+  font-size:9px;
+  font-weight:700;
+  white-space:nowrap;
+}
 .memory-today-action{
   min-height:34px;
   display:inline-flex;
@@ -220,7 +229,7 @@
   position:absolute;
   left:50%;
   top:50%;
-  z-index:3;
+  z-index:4;
   width:38px;
   height:38px;
   display:grid;
@@ -233,11 +242,27 @@
   box-shadow:0 7px 20px rgba(24,34,30,.16);
   color:rgba(38,50,47,.78);
   font-size:12px;
+  cursor:pointer;
 }
 .memory-today-item:first-child .memory-today-video{
   width:43px;
   height:43px;
   font-size:13px;
+}
+.memory-today-inline-video{
+  position:absolute;
+  inset:2px;
+  z-index:5;
+  width:calc(100% - 4px);
+  height:calc(100% - 4px);
+  border:0;
+  border-radius:14px;
+  background:#111;
+  object-fit:contain;
+}
+.memory-today-item:has(.memory-today-inline-video) .memory-today-video{
+  opacity:0;
+  pointer-events:none;
 }
 
 /*   memory collection placeholder*/
@@ -272,9 +297,10 @@
   .memory-today-title{max-width:270px;font-size:23px;}
   .memory-today-grid{grid-auto-rows:94px;gap:9px 8px;}
   .memory-today-item{border-radius:15px;padding:2px;}
-  .memory-today-thumb,.memory-today-item::after{border-radius:12px;}
+  .memory-today-thumb,.memory-today-item::after,.memory-today-inline-video{border-radius:12px;}
   .memory-today-selected{right:7px;top:7px;width:23px;height:23px;font-size:11px;}
   .memory-today-actions{gap:7px;margin-top:7px;padding:8px;border-radius:17px;}
+  .memory-today-selection-count{font-size:8px;padding-left:3px;}
   .memory-today-action{min-height:32px;padding:6px 10px;font-size:8px;}
   .memory-today-action-symbol{width:18px;height:18px;font-size:9px;}
   .memory-today-video{width:34px;height:34px;font-size:11px;}
