@@ -57,7 +57,7 @@
 .experience{
   position:absolute;
   left:50%;
-  top:50%;
+  top:calc(50% - 16px);
 
   width:
     min(
