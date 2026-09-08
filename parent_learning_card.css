@@ -1,0 +1,197 @@
+/*   expanded learning card*/
+.learning-detail-experience{
+  transition:
+    transform 1.45s cubic-bezier(.20,.62,.18,1),
+    opacity 1.05s ease,
+    filter 1.05s ease;
+}
+
+.learning-detail-card{
+  cursor:default;
+  border:1.5px solid rgba(255,255,255,.76);
+  background:
+    radial-gradient(ellipse at 14% 12%,rgba(42,224,217,.20) 0 15%,transparent 40%),
+    radial-gradient(ellipse at 86% 18%,rgba(137,90,255,.18) 0 14%,transparent 36%),
+    linear-gradient(155deg,rgba(10,46,65,.97),rgba(29,52,84,.95) 52%,rgba(52,44,83,.95));
+  box-shadow:
+    0 30px 82px rgba(0,18,44,.34),
+    0 0 34px rgba(67,217,215,.08),
+    inset 0 1px 0 rgba(255,255,255,.72);
+}
+
+.learning-detail-card::after{display:none;}
+
+.learning-detail-hero{
+  position:absolute;
+  inset:0 0 auto;
+  height:42%;
+  background-size:cover;
+  background-position:center;
+  transform:scale(1.015);
+}
+
+.learning-detail-hero-shade{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(to bottom,rgba(4,14,28,.03) 0 22%,rgba(7,20,39,.34) 34%,rgba(13,29,50,.93) 48%,rgba(18,31,52,.99) 100%);
+}
+
+.learning-detail-scroll{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  padding:31% 20px 28px;
+}
+
+.learning-detail-scroll::-webkit-scrollbar{display:none;}
+
+.learning-detail-header{
+  margin:0 0 14px;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.76);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 12% 28%,rgba(71,222,216,.25),transparent 34%),
+    radial-gradient(circle at 88% 22%,rgba(159,112,255,.18),transparent 35%),
+    linear-gradient(110deg,rgba(226,250,248,.96),rgba(231,235,252,.96) 52%,rgba(242,226,252,.96));
+  box-shadow:0 12px 30px rgba(1,17,35,.22),inset 0 1px 0 rgba(255,255,255,.92);
+  color:#20344d;
+}
+
+.learning-detail-label,
+.learning-detail-kicker{
+  font-size:9px;
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.learning-detail-label{
+  margin-bottom:8px;
+  color:rgba(31,63,86,.64);
+}
+
+.learning-detail-header h2{
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(25px,6.2vw,31px);
+  line-height:1.02;
+  font-weight:400;
+  letter-spacing:-.035em;
+}
+
+.learning-detail-lead{
+  margin:11px 0 0;
+  font-size:12.5px;
+  line-height:1.56;
+  color:rgba(31,52,77,.84);
+}
+
+.learning-detail-body{
+  display:grid;
+  gap:12px;
+}
+
+.learning-detail-section{
+  padding:16px;
+  border:1px solid rgba(255,255,255,.34);
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(12,78,91,.56),rgba(52,50,102,.48));
+  backdrop-filter:blur(18px) saturate(1.22);
+  -webkit-backdrop-filter:blur(18px) saturate(1.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
+  color:white;
+}
+
+.learning-detail-kicker{
+  margin-bottom:9px;
+  color:rgba(202,248,245,.74);
+}
+
+.learning-detail-objectives,
+.learning-detail-development{
+  display:grid;
+  gap:8px;
+}
+
+.learning-detail-objective,
+.learning-detail-development-item{
+  padding:12px 13px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:15px;
+  background:rgba(255,255,255,.08);
+}
+
+.learning-detail-objective{
+  font-size:12.5px;
+  line-height:1.54;
+  color:rgba(255,255,255,.90);
+}
+
+.learning-detail-development-item h3{
+  margin:0 0 5px;
+  font-size:13px;
+  line-height:1.25;
+  font-weight:700;
+}
+
+.learning-detail-development-item p{
+  margin:0;
+  font-size:12px;
+  line-height:1.55;
+  color:rgba(255,255,255,.82);
+}
+
+.learning-detail-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.learning-detail-chips span{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:7px 11px;
+  border:1px solid rgba(255,255,255,.30);
+  border-radius:999px;
+  background:rgba(255,255,255,.10);
+  font-size:10px;
+  line-height:1.2;
+  color:rgba(255,255,255,.92);
+}
+
+.learning-detail-media{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  grid-auto-rows:80px;
+  gap:8px;
+}
+
+.learning-detail-photo{
+  min-height:80px;
+  border:1px solid rgba(255,255,255,.34);
+  border-radius:15px;
+  background-size:cover;
+  background-position:center;
+}
+
+.learning-detail-photo.is-primary{
+  grid-row:span 2;
+  min-height:168px;
+}
+
+@media (max-width:420px){
+  .learning-detail-scroll{
+    padding-left:17px;
+    padding-right:17px;
+    padding-bottom:24px;
+  }
+}
