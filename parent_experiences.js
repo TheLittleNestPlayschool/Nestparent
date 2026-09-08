@@ -18,13 +18,13 @@ const fallbackPhotos=[
 
 const growthCategories=[
   ["literacy","Literacy"],
-  ["oral_language","Oral Language"],
+  ["oral_lang","Oral Language"],
   ["numeracy","Numeracy"],
   ["gross_motor","Gross Motor"],
   ["fine_motor","Fine Motor"],
   ["creative_arts","Creative Arts"],
   ["personal","Personal Growth"],
-  ["receptive_language","Receptive Language"],
+  ["receptive_lang","Receptive Language"],
   ["my_world","My World"]
 ];
 
@@ -86,11 +86,7 @@ function getJsonList(value){
 }
 
 function getSessionExperiences(parentData,session){
-  const candidates=[
-    parentData?.session_experiences,
-    parentData?.session_experience,
-    parentData?.current_session_experiences
-  ];
+  const candidates=[parentData?.session_experiences,parentData?.session_experience,parentData?.current_session_experiences];
   const source=candidates.find(Array.isArray)||[];
   const sessionId=Number(session?.id)||0;
   return source.filter(item=>{
@@ -98,6 +94,16 @@ function getSessionExperiences(parentData,session){
     if(!sessionId){return true;}
     return Number(item?.session_id||item?.session)===sessionId;
   });
+}
+
+function getStudentMoments(parentData,session){
+  const source=[parentData?.student_moments,parentData?.student_moment].find(Array.isArray)||[];
+  const sessionId=Number(session?.id)||0;
+  return source.filter(item=>item?.is_active!==false&&(!sessionId||Number(item?.session_id||item?.session)===sessionId));
+}
+
+function getStudentBadges(parentData){
+  return [parentData?.student_badges,parentData?.student_badge].find(Array.isArray)||[];
 }
 
 function buildStoryTitle(session,studentName){
@@ -110,66 +116,35 @@ function buildStoryTitle(session,studentName){
 }
 
 function buildStoryCopy(session,experiences,studentName){
-  const teacherStory=experiences
-    .map(item=>firstText(item?.parent_description,item?.experience_summary))
-    .find(Boolean);
-  return firstText(
-    teacherStory,
-    session?.todays_description,
-    session?.session_description,
-    `A little look at what was woven into ${studentName}'s day.`
-  );
+  const teacherStory=experiences.map(item=>firstText(item?.parent_description,item?.experience_summary)).find(Boolean);
+  return firstText(teacherStory,session?.todays_description,session?.session_description,`A little look at what was woven into ${studentName}'s day.`);
 }
 
 function buildStoryDetail(session,experiences,studentName,photos){
-  const teacherDetails=experiences
-    .map(item=>({
-      title:firstText(item?.experience_name,"A class experience"),
-      copy:firstText(item?.parent_description,item?.experience_summary,item?.class_context)
-    }))
-    .filter(item=>item.copy);
-  const classDetails=[
-    getText(session?.lesson_1_title),
-    getText(session?.lesson_2_title),
-    getText(session?.manner_topic)
-  ].filter(Boolean);
-  return{
-    eyebrow:"Today's Story",
-    title:buildStoryTitle(session,studentName),
-    lead:buildStoryCopy(session,experiences,studentName),
-    narrative:firstText(session?.session_description,session?.todays_description),
-    classDetails,
-    teacherDetails,
-    media:photos.slice(0,6)
-  };
+  const teacherDetails=experiences.map(item=>({title:firstText(item?.experience_name,"A class experience"),copy:firstText(item?.parent_description,item?.experience_summary,item?.class_context)})).filter(item=>item.copy);
+  const classDetails=[getText(session?.lesson_1_title),getText(session?.lesson_2_title),getText(session?.manner_topic)].filter(Boolean);
+  return{eyebrow:"Today's Story",title:buildStoryTitle(session,studentName),lead:buildStoryCopy(session,experiences,studentName),narrative:firstText(session?.session_description,session?.todays_description),classDetails,teacherDetails,media:photos.slice(0,6)};
 }
 
 function getGrowthWeights(session){
   const source=session?.category_weights;
   let weights={};
-  if(source&&typeof source==="object"&&!Array.isArray(source)){
-    weights=source;
-  }else if(typeof source==="string"){
-    try{
-      const parsed=JSON.parse(source);
-      if(parsed&&typeof parsed==="object"){weights=parsed;}
-    }catch(error){weights={};}
+  if(source&&typeof source==="object"&&!Array.isArray(source)){weights=source;}
+  else if(typeof source==="string"){
+    try{const parsed=JSON.parse(source);if(parsed&&typeof parsed==="object"){weights=parsed;}}catch(error){weights={};}
   }
-  return growthCategories
-    .map(([key,label])=>{
-      const aliases={oral_language:["oral_language","oral_lang"],receptive_language:["receptive_language","receptive_lang"]}[key]||[key];
-      const value=aliases
-        .map(alias=>Number(weights?.[alias]??session?.[alias]??session?.[`${alias}_weight`]??0))
-        .find(number=>Number.isFinite(number)&&number>0)||0;
-      return{key,label,value};
-    })
-    .filter(item=>item.value>0)
-    .sort((a,b)=>b.value-a.value);
+  return growthCategories.map(([key,label])=>{
+    const value=Number(weights?.[key]??session?.[key]??session?.[`${key}_weight`]??0)||0;
+    return{key,label,value};
+  }).filter(item=>item.value>0).sort((a,b)=>b.value-a.value);
+}
+
+function getStudentGrowth(student){
+  return growthCategories.map(([key,label])=>({key,label,value:Number(student?.[key]??0)||0})).filter(item=>item.value>0).sort((a,b)=>b.value-a.value);
 }
 
 function getCategoryDescription(session,key){
-  const aliases={oral_language:["oral_lang"],receptive_language:["receptive_lang"]}[key]||[key];
-  return aliases.map(alias=>getText(session?.[`${alias}_desc`])).find(Boolean)||"";
+  return getText(session?.[`${key}_desc`]);
 }
 
 function buildLearningTitle(session){
@@ -180,29 +155,61 @@ function buildLearningTitle(session){
 }
 
 function buildLearningDetail(session,experiences,objectives,growthWeights,photos){
-  const development=growthWeights.slice(0,3).map(item=>({
-    label:item.label,
-    description:getCategoryDescription(session,item.key)
-  }));
+  const development=growthWeights.slice(0,3).map(item=>({label:item.label,description:getCategoryDescription(session,item.key)}));
   const teacherConcepts=[];
   experiences.forEach(item=>{
     getJsonList(item?.inferred_concepts).forEach(value=>teacherConcepts.push(String(value)));
     getJsonList(item?.learning_tags).forEach(value=>teacherConcepts.push(String(value)));
   });
-  return{
-    eyebrow:"Learning",
-    title:buildLearningTitle(session),
-    lead:firstText(objectives[0],session?.session_description,"A little look at what today's session was designed to explore."),
-    objectives:objectives.slice(0,3),
-    development,
-    concepts:[...new Set([...getJsonList(session?.core_concepts).map(String),...teacherConcepts])].slice(0,6),
-    media:photos.slice(0,4)
-  };
+  return{eyebrow:"Learning",title:buildLearningTitle(session),lead:firstText(objectives[0],session?.session_description,"A little look at what today's session was designed to explore."),objectives:objectives.slice(0,3),development,concepts:[...new Set([...getJsonList(session?.core_concepts).map(String),...teacherConcepts])].slice(0,6),media:photos.slice(0,4)};
 }
 
 function buildGoalCopy(objectives,studentName){
   if(objectives.length){return objectives[0];}
   return `Today's learning gave ${studentName} something clear to explore and practice.`;
+}
+
+function getActivityExperience(experiences){
+  return experiences.find(item=>["activity","mixed"].includes(getText(item?.experience_type).toLowerCase()))||experiences.find(item=>getText(item?.experience_name)||getJsonList(item?.class_actions).length)||null;
+}
+
+function buildActivityTitle(session,experience){
+  return firstText(experience?.experience_name,session?.physical_activity,session?.lesson_1_title,"Today's Activity");
+}
+
+function buildActivityCopy(session,experience){
+  return firstText(experience?.parent_description,experience?.experience_summary,session?.physical_activity,session?.worksheet_description,"A hands-on part of today's classroom experience.");
+}
+
+function buildActivityDetail(session,experience,photos){
+  const actions=getJsonList(experience?.class_actions).map(String).slice(0,6);
+  const materials=getJsonList(experience?.explicit_materials).map(String).slice(0,6);
+  const concepts=[...new Set([...getJsonList(experience?.inferred_concepts).map(String),...getJsonList(experience?.learning_tags).map(String)])].slice(0,6);
+  return{
+    eyebrow:"Activity",
+    title:buildActivityTitle(session,experience),
+    lead:buildActivityCopy(session,experience),
+    context:firstText(experience?.class_context,session?.physical_activity,session?.worksheet_description),
+    actions,
+    materials,
+    concepts,
+    media:photos.slice(0,6)
+  };
+}
+
+function buildGrowthDetail(studentName,studentGrowth,sessionGrowth,session,moments,badges,photos){
+  const current=studentGrowth.slice(0,4).map(item=>({label:item.label,value:item.value}));
+  const today=sessionGrowth.slice(0,3).map(item=>({label:item.label,value:item.value,description:getCategoryDescription(session,item.key)}));
+  return{
+    eyebrow:"Growth",
+    title:studentGrowth[0]?`${studentName}'s ${studentGrowth[0].label} journey`:`${studentName}'s growing journey`,
+    lead:studentGrowth[0]?`${studentName} is continuing to build experience in ${studentGrowth[0].label.toLowerCase()} across their Little Nest journey.`:`A look at the developmental experiences building over time.`,
+    current,
+    today,
+    moments:moments.map(item=>getText(item?.moment)).filter(Boolean).slice(0,3),
+    badges:badges.filter(item=>item?.is_active!==false).slice(0,3).map(item=>({earned_at:item?.earned_at||"",award_reason:getText(item?.award_reason),parent_note:getText(item?.parent_note)})),
+    media:photos.slice(0,4)
+  };
 }
 
 /*   build experiences*/
@@ -211,6 +218,8 @@ export function getExperiences(){
   const student=getStudent();
   const session=getCurrentSessionDetails()||{};
   const sessionExperiences=getSessionExperiences(parentData,session);
+  const studentMoments=getStudentMoments(parentData,session);
+  const studentBadges=getStudentBadges(parentData);
   const media=getStudentMedia();
   const thumbnails=getSignedThumbnails();
   const latestMedia=getLatestMedia(media,thumbnails);
@@ -223,17 +232,16 @@ export function getExperiences(){
   const lessonTwo=getText(session?.lesson_2_title);
   const manner=getText(session?.manner_topic);
   const objectives=[getText(session?.obj_text_1),getText(session?.obj_text_2),getText(session?.obj_text_3)].filter(Boolean);
-  const learningTopics=[lessonOne,lessonTwo,manner].filter(Boolean);
 
   const storyTitle=buildStoryTitle(session,studentName);
   const storyCopy=buildStoryCopy(session,sessionExperiences,studentName);
   const storyPhoto=todayPhotos[0]||getExperiencePhoto(livePhotos,0);
   const storyMedia=todayPhotos.length?todayPhotos:livePhotos;
 
-  const physicalActivity=firstText(session?.physical_activity,session?.activity_title,session?.activity_name);
-  const growthWeights=getGrowthWeights(session);
-  const strongestGrowth=growthWeights.slice(0,3);
-  const strongestGrowthName=strongestGrowth[0]?.label||"growing skills";
+  const sessionGrowth=getGrowthWeights(session);
+  const studentGrowth=getStudentGrowth(student);
+  const strongestSessionGrowth=sessionGrowth.slice(0,3);
+  const strongestStudentGrowth=studentGrowth[0];
   const todayCount=todayMedia.length;
   const todayMomentWord=todayCount===1?"moment":"moments";
   const todayPhoto=todayPhotos[0]||fallbackPhotos[4];
@@ -242,6 +250,11 @@ export function getExperiences(){
   const togetherHasHome=Boolean(homeActivity);
   const learningPhoto=todayPhotos[1]||todayPhotos[0]||getExperiencePhoto(livePhotos,1);
   const learningMedia=todayPhotos.length?todayPhotos:livePhotos;
+  const activityExperience=getActivityExperience(sessionExperiences);
+  const activityPhoto=todayPhotos[2]||todayPhotos[0]||getExperiencePhoto(livePhotos,2);
+  const activityMedia=todayPhotos.length?todayPhotos:livePhotos;
+  const growthPhoto=todayPhotos[3]||todayPhotos[0]||getExperiencePhoto(livePhotos,3);
+  const growthMedia=todayPhotos.length?todayPhotos:livePhotos;
 
   return[
     {
@@ -263,36 +276,34 @@ export function getExperiences(){
       label:"Learning",
       copy:buildGoalCopy(objectives,studentName),
       photo:learningPhoto,
-      categories:strongestGrowth.slice(0,2).map(item=>item.label),
-      detail:buildLearningDetail(session,sessionExperiences,objectives,growthWeights,learningMedia),
+      categories:strongestSessionGrowth.slice(0,2).map(item=>item.label),
+      detail:buildLearningDetail(session,sessionExperiences,objectives,sessionGrowth,learningMedia),
       deeper:objectives.join(" "),
       learning:[]
     },
     {
       type:"activity",
       experience_type_code:"activity",
-      title:physicalActivity||"A little look at what they did.",
-      label:"What We Did",
-      copy:physicalActivity?`${studentName} had this activity woven into today's session.`:`Today's session gave ${studentName} something concrete to do, move through and join in.`,
-      photo:getExperiencePhoto(livePhotos,2),
-      categories:[physicalActivity,lessonOne,lessonTwo].filter(Boolean).slice(0,3),
-      deeper:firstText(session?.full_lesson_plan,session?.session_description),
-      learning:[
-        ["🎈",physicalActivity||"Today's activity","A concrete part of today's classroom experience."],
-        ["💬","Participation","A chance to join in with the group experience."],
-        ["✨","Learning by doing","A hands-on part of the session."]
-      ]
+      title:buildActivityTitle(session,activityExperience),
+      label:"Activity",
+      copy:buildActivityCopy(session,activityExperience),
+      photo:activityPhoto,
+      categories:getJsonList(activityExperience?.class_actions).map(String).slice(0,2),
+      detail:buildActivityDetail(session,activityExperience,activityMedia),
+      deeper:firstText(activityExperience?.class_context,session?.physical_activity,session?.worksheet_description),
+      learning:[]
     },
     {
       type:"personal",
       experience_type_code:"growth",
-      title:`Today gave ${studentName} chances to grow through ${strongestGrowthName.toLowerCase()}.`,
+      title:strongestStudentGrowth?`${strongestStudentGrowth.label} is growing`:`${studentName}'s growing journey`,
       label:"Growth",
-      copy:strongestGrowth.length?`The strongest developmental threads today were ${strongestGrowth.map(item=>item.label).join(", ")}.`:`Today's session created opportunities for ${studentName} to practice a mix of growing skills.`,
-      photo:getExperiencePhoto(livePhotos,3),
-      categories:strongestGrowth.map(item=>item.label),
-      deeper:"The Growth card is driven by today's nine developmental category weights. These describe what the session emphasized, not a claim that the child mastered the skill today.",
-      learning:strongestGrowth.map(item=>["🌱",item.label,`Today's session placed a ${item.value} weight on ${item.label.toLowerCase()}.`])
+      copy:strongestStudentGrowth?`${studentName} has been building experience in ${strongestStudentGrowth.label.toLowerCase()} over time.`:`A look at the developmental experiences building across ${studentName}'s Little Nest journey.`,
+      photo:growthPhoto,
+      categories:studentGrowth.slice(0,2).map(item=>item.label),
+      detail:buildGrowthDetail(studentName,studentGrowth,sessionGrowth,session,studentMoments,studentBadges,growthMedia),
+      deeper:"",
+      learning:[]
     },
     {
       type:"moments",
