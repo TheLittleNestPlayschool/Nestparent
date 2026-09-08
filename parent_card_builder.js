@@ -1,6 +1,6 @@
 import{
-  getExperiences
-}from"./parent_experiences.js";
+  getParentExperiences
+}from"./parent_experience_feed.js";
 
 /*   get card type label*/
 function getTypeLabel(type){
@@ -10,7 +10,8 @@ function getTypeLabel(type){
     activity:"Activity",
     personal:"Growth",
     moments:"Moments",
-    home:"Together"
+    home:"Together",
+    celebration:"Celebration"
   })[type]||"Story";
 }
 
@@ -104,7 +105,7 @@ export function buildExperienceCards(
   }
 
   const experiences=
-    getExperiences();
+    getParentExperiences();
 
   experiences.forEach(
     (
