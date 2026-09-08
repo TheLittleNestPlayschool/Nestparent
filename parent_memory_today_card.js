@@ -149,7 +149,7 @@ export function createMemoryTodayCard(){
         </span>
 
         <h2 class="memory-today-title">
-          ${studentName}'s little moments
+          ${studentName}'s Little Moments
         </h2>
 
         <p class="memory-today-copy">
