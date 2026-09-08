@@ -73,6 +73,7 @@ export function createStoryCard(item){
     <div class="card story-detail-card">
       <div class="story-detail-hero" style="background-image:url('${escapeHtml(hero)}')"></div>
       <div class="story-detail-hero-shade"></div>
+      <div class="type-mark">Story</div>
       <div class="story-detail-scroll">
         <header class="story-detail-header">
           <div class="story-detail-label">${escapeHtml(detail.eyebrow||"Today's Story")}</div>
