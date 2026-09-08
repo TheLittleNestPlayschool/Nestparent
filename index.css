@@ -64,7 +64,7 @@
   line-height:1.04;
 }
 
-/*   shared painterly card world*/
+/*   shared cosmic glass world*/
 .nest-stage-card,
 .memories-stage-card,
 .memory-archive-card,
@@ -72,16 +72,17 @@
 .memory-today-stage-card{
   border:1.5px solid rgba(255,255,255,.76);
   background:
-    radial-gradient(ellipse at 12% 14%,rgba(10,198,214,.28) 0 16%,transparent 40%),
-    radial-gradient(ellipse at 84% 18%,rgba(245,63,126,.22) 0 12%,transparent 34%),
-    radial-gradient(ellipse at 82% 80%,rgba(255,166,38,.23) 0 14%,transparent 38%),
-    radial-gradient(ellipse at 18% 82%,rgba(91,72,202,.22) 0 14%,transparent 40%),
-    linear-gradient(145deg,rgba(241,248,248,.92) 0%,rgba(215,235,233,.90) 35%,rgba(226,214,239,.90) 67%,rgba(244,216,202,.89) 100%);
-  backdrop-filter:blur(28px) saturate(1.18);
-  -webkit-backdrop-filter:blur(28px) saturate(1.18);
+    radial-gradient(ellipse at 12% 10%,rgba(0,224,229,.26) 0 16%,transparent 42%),
+    radial-gradient(ellipse at 88% 18%,rgba(255,54,128,.20) 0 13%,transparent 36%),
+    radial-gradient(ellipse at 80% 88%,rgba(255,157,28,.20) 0 14%,transparent 40%),
+    radial-gradient(ellipse at 18% 84%,rgba(94,63,214,.22) 0 15%,transparent 42%),
+    linear-gradient(145deg,rgba(14,57,78,.64) 0%,rgba(22,89,96,.55) 34%,rgba(49,54,102,.54) 66%,rgba(91,53,77,.52) 100%);
+  backdrop-filter:blur(30px) saturate(1.35) brightness(.92);
+  -webkit-backdrop-filter:blur(30px) saturate(1.35) brightness(.92);
   box-shadow:
-    0 28px 76px rgba(0,24,47,.24),
-    inset 0 1px 0 rgba(255,255,255,.82);
+    0 30px 82px rgba(0,18,44,.34),
+    0 0 36px rgba(27,210,221,.08),
+    inset 0 1px 0 rgba(255,255,255,.74);
 }
 
 /*   protected card headings*/
@@ -90,12 +91,12 @@
 .memory-archive-heading,
 .awards-heading,
 .memory-today-heading{
-  border:1px solid rgba(255,255,255,.76);
+  border:1px solid rgba(255,255,255,.78);
   border-radius:20px;
-  background:rgba(250,248,242,.86);
-  backdrop-filter:blur(18px) saturate(1.08);
-  -webkit-backdrop-filter:blur(18px) saturate(1.08);
-  box-shadow:0 8px 22px rgba(24,45,57,.12),inset 0 1px 0 rgba(255,255,255,.90);
+  background:rgba(250,248,242,.90);
+  backdrop-filter:blur(18px) saturate(1.10);
+  -webkit-backdrop-filter:blur(18px) saturate(1.10);
+  box-shadow:0 9px 24px rgba(5,28,50,.18),inset 0 1px 0 rgba(255,255,255,.92);
 }
 
 .nest-card-heading{
@@ -148,67 +149,90 @@
   color:rgba(36,50,47,.66);
 }
 
-/*   give destination and archive tiles more separation*/
+/*   luminous tile material*/
 .nest-destination,
 .memory-chapter,
 .memory-archive-item,
 .award-category{
-  border:1.5px solid rgba(255,255,255,.90);
+  border:1.5px solid rgba(255,255,255,.92);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.88),
-    0 10px 28px rgba(9,36,60,.16);
+    inset 0 1px 0 rgba(255,255,255,.90),
+    inset 0 -14px 24px rgba(0,20,46,.10),
+    0 11px 28px rgba(2,26,54,.22),
+    0 0 20px var(--tile-glow,rgba(255,255,255,.04));
 }
 
 /*   cosmic destination palette*/
 .nest-destination[data-destination="memories"]{
-  --nest-card-start:#ffb1b2;
-  --nest-card-end:#e8657d;
-  --nest-accent:#8f2940;
-  --nest-orb:rgba(255,225,228,.38);
+  --nest-card-start:#ff6f93;
+  --nest-card-end:#c92f69;
+  --nest-accent:#7c163c;
+  --nest-orb:rgba(255,210,225,.34);
+  --tile-glow:rgba(255,76,137,.24);
 }
 .nest-destination[data-destination="journey"]{
-  --nest-card-start:#9fe8e3;
-  --nest-card-end:#38b9c1;
-  --nest-accent:#0c6570;
-  --nest-orb:rgba(228,255,255,.38);
+  --nest-card-start:#57e2df;
+  --nest-card-end:#1199b6;
+  --nest-accent:#075f72;
+  --nest-orb:rgba(222,255,255,.34);
+  --tile-glow:rgba(47,221,231,.24);
 }
 .nest-destination[data-destination="awards"]{
-  --nest-card-start:#ffe18e;
-  --nest-card-end:#e9a52f;
-  --nest-accent:#765019;
-  --nest-orb:rgba(255,247,207,.40);
+  --nest-card-start:#ffd95d;
+  --nest-card-end:#f09b16;
+  --nest-accent:#75430c;
+  --nest-orb:rgba(255,247,205,.36);
+  --tile-glow:rgba(255,190,37,.24);
 }
 .nest-destination[data-destination="home"]{
-  --nest-card-start:#ffd77e;
-  --nest-card-end:#f28b2f;
-  --nest-accent:#7d4018;
-  --nest-orb:rgba(255,241,208,.38);
+  --nest-card-start:#ffc85c;
+  --nest-card-end:#ef6c22;
+  --nest-accent:#7c3211;
+  --nest-orb:rgba(255,239,205,.34);
+  --tile-glow:rgba(255,125,36,.22);
 }
 .nest-destination[data-destination="more"]{
-  --nest-card-start:#c9b6ff;
-  --nest-card-end:#8265d3;
-  --nest-accent:#463176;
-  --nest-orb:rgba(241,235,255,.38);
+  --nest-card-start:#a88cff;
+  --nest-card-end:#5f46be;
+  --nest-accent:#35206f;
+  --nest-orb:rgba(238,232,255,.34);
+  --tile-glow:rgba(133,97,236,.24);
 }
 
 /*   cosmic memories palette*/
-.memory-chapter:nth-child(1){--chapter-start:#ffb3b4;--chapter-end:#e66d83;--chapter-orb:rgba(255,229,232,.34);}
-.memory-chapter:nth-child(2){--chapter-start:#a7e8e3;--chapter-end:#42bfc5;--chapter-orb:rgba(231,255,255,.34);}
-.memory-chapter:nth-child(3){--chapter-start:#ffe39b;--chapter-end:#e6a53a;--chapter-orb:rgba(255,248,219,.34);}
-.memory-chapter:nth-child(4){--chapter-start:#c9b8f8;--chapter-end:#8b70d6;--chapter-orb:rgba(243,238,255,.34);}
+.memory-chapter:nth-child(1){--chapter-start:#ff7395;--chapter-end:#ca356d;--chapter-orb:rgba(255,224,233,.30);--tile-glow:rgba(255,76,137,.22);}
+.memory-chapter:nth-child(2){--chapter-start:#62e3df;--chapter-end:#179db7;--chapter-orb:rgba(227,255,255,.30);--tile-glow:rgba(47,221,231,.22);}
+.memory-chapter:nth-child(3){--chapter-start:#ffdc64;--chapter-end:#efa119;--chapter-orb:rgba(255,248,215,.30);--tile-glow:rgba(255,190,37,.22);}
+.memory-chapter:nth-child(4){--chapter-start:#ad91ff;--chapter-end:#6048c3;--chapter-orb:rgba(241,236,255,.30);--tile-glow:rgba(133,97,236,.22);}
 .memory-chapter:nth-child(5){
-  --chapter-start:#a8ddd5;
-  --chapter-end:#5aa8a3;
-  --chapter-orb:rgba(235,255,251,.34);
+  --chapter-start:#54cfc3;
+  --chapter-end:#287d85;
+  --chapter-orb:rgba(229,255,252,.30);
+  --tile-glow:rgba(44,205,197,.20);
+}
+
+/*   tile highlights*/
+.nest-destination::after,
+.memory-chapter::before{
+  opacity:.72;
+}
+
+.nest-destination-icon{
+  background:rgba(255,255,255,.78);
+  border-color:rgba(255,255,255,.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.96),
+    0 5px 14px rgba(0,25,52,.16);
 }
 
 .nest-destination-title,
 .memory-chapter-title{
-  color:rgba(24,38,43,.94);
+  color:rgba(20,31,39,.96);
+  text-shadow:0 1px 0 rgba(255,255,255,.18);
 }
 
 .nest-destination-copy,
 .memory-chapter-copy,
 .memory-chapter-count{
-  color:rgba(24,38,43,.64);
+  color:rgba(20,31,39,.70);
 }
