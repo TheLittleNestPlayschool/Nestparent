@@ -30,12 +30,12 @@ function getSpecialCollectionMediaIds(collectionCode){const collectionTypes=getM
 function getCollectionDefinition(collection){
   const monthName=new Intl.DateTimeFormat("en",{month:"long"}).format(new Date());
   if(collection&&typeof collection==="object"&&collection.type==="archive-month"){const year=Number(collection.year);const month=Number(collection.month);const title=new Intl.DateTimeFormat("en",{month:"long",year:"numeric"}).format(new Date(year,month,1));return{title,filter:item=>isArchiveMonth(item.created_at,year,month)};}
-  if(collection==="week")return{title:"This week's little moments",filter:item=>isThisWeek(item.created_at)};
-  if(collection==="lastweek")return{title:"Last week's little moments",filter:item=>isLastWeek(item.created_at)};
-  if(collection==="month")return{title:`${monthName}'s little moments`,filter:item=>isCurrentMonth(item.created_at)};
+  if(collection==="week")return{title:"This Week's Little Moments",filter:item=>isThisWeek(item.created_at)};
+  if(collection==="lastweek")return{title:"Last Week's Little Moments",filter:item=>isLastWeek(item.created_at)};
+  if(collection==="month")return{title:`${monthName}'s Little Moments`,filter:item=>isCurrentMonth(item.created_at)};
   if(collection==="recognition"){const mediaIds=getSpecialCollectionMediaIds("recognition");return{title:"Recognition Days",filter:item=>mediaIds.has(Number(item.id))};}
   if(collection==="birthday"){const mediaIds=getSpecialCollectionMediaIds("birthday");return{title:"Birthdays",filter:item=>mediaIds.has(Number(item.id))};}
-  return{title:"Today's little moments",filter:item=>isToday(item.created_at)};
+  return{title:"Today's Little Moments",filter:item=>isToday(item.created_at)};
 }
 /*   stable collection key*/
 function getCollectionKey(collection){if(collection&&typeof collection==="object")return`${collection.type||"collection"}-${collection.year||""}-${collection.month||""}`;return String(collection||"today");}
