@@ -42,12 +42,11 @@ export function getCelebrationExperience(){
   const studentName=student?.preferred_name||student?.name||"Your little one";
   const birthday=isBirthdayToday(student?.date_of_birth);
   const source=getCelebrationExperienceSource(parentData);
-  if(!birthday&&!source){return null;}
-
+  const hasLiveCelebration=birthday||Boolean(source);
   const photo=getLatestPhoto();
-  const title=birthday?`Happy Birthday, ${studentName}!`:firstText(source?.experience_name,"A Special Little Nest Celebration");
-  const copy=birthday?`Today is a special day for ${studentName}, and we're celebrating right along with you.`:firstText(source?.parent_description,source?.experience_summary,source?.class_context,`Something special happened in ${studentName}'s Little Nest day.`);
-  const message=birthday?`A little day worth celebrating, remembering, and smiling about together.`:firstText(source?.parent_description,source?.experience_summary,source?.class_context);
+  const title=birthday?`Happy Birthday, ${studentName}!`:source?firstText(source?.experience_name,"A Special Little Nest Celebration"):`A Special Moment for ${studentName}`;
+  const copy=birthday?`Today is a special day for ${studentName}, and we're celebrating right along with you.`:source?firstText(source?.parent_description,source?.experience_summary,source?.class_context,`Something special happened in ${studentName}'s Little Nest day.`):`This Celebration card is staying visible while we shape the Parent App experience.`;
+  const message=birthday?`A little day worth celebrating, remembering, and smiling about together.`:source?firstText(source?.parent_description,source?.experience_summary,source?.class_context):`When a birthday, Recognition Day, class celebration, or other special occasion happens, it will become the heart of this experience.`;
 
   return{
     type:"celebration",
@@ -56,13 +55,13 @@ export function getCelebrationExperience(){
     label:"Celebration",
     copy,
     photo,
-    categories:birthday?["Birthday","Special day"]:["Special moment","Celebrate together"],
+    categories:birthday?["Birthday","Special day"]:source?["Special moment","Celebrate together"]:["Special occasion","Celebration"],
     detail:{
       eyebrow:"Celebration",
       title,
       lead:copy,
       message,
-      kind:birthday?"birthday":"special",
+      kind:birthday?"birthday":hasLiveCelebration?"special":"preview",
       media:photo?[photo]:[]
     },
     deeper:message,
