@@ -273,19 +273,38 @@
   z-index:1;
   display:block;
   margin-top:4px;
-  max-width:150px;
+  max-width:118px;
   font-size:8.5px;
   line-height:1.3;
   color:rgba(38,50,47,.56);
 }
-.memory-chapter-count{
+.memory-chapter-total{
   position:absolute;
-  right:12px;
-  bottom:9px;
-  z-index:1;
-  font-size:9px;
+  right:11px;
+  bottom:8px;
+  z-index:2;
+  display:flex;
+  align-items:baseline;
+  justify-content:flex-end;
+  gap:4px;
+  max-width:104px;
+  text-align:right;
+}
+.memory-chapter-count{
+  flex:0 0 auto;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:18px;
+  line-height:.9;
+  font-weight:400;
+  letter-spacing:-.04em;
+  color:rgba(20,31,39,.86);
+}
+.memory-chapter-count-label{
+  max-width:72px;
+  font-size:7.5px;
+  line-height:1.05;
   font-weight:700;
-  color:rgba(38,50,47,.36);
+  color:rgba(20,31,39,.58);
 }
 
 /*   responsive*/
@@ -299,4 +318,6 @@
   .memory-chapters{gap:7px;padding:9px 12px 12px;}
   .memory-chapter{padding:9px 11px;}
   .memory-chapter-title{font-size:15px;}
+  .memory-chapter-count{font-size:17px;}
+  .memory-chapter-count-label{font-size:7px;}
 }
