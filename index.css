@@ -91,12 +91,19 @@
 .memory-archive-heading,
 .awards-heading,
 .memory-today-heading{
-  border:1px solid rgba(255,255,255,.78);
+  border:1.25px solid rgba(255,255,255,.88);
   border-radius:20px;
-  background:rgba(250,248,242,.90);
-  backdrop-filter:blur(18px) saturate(1.10);
-  -webkit-backdrop-filter:blur(18px) saturate(1.10);
-  box-shadow:0 9px 24px rgba(5,28,50,.18),inset 0 1px 0 rgba(255,255,255,.92);
+  background:
+    radial-gradient(circle at 14% 18%,rgba(89,232,226,.32) 0 18%,transparent 46%),
+    radial-gradient(circle at 88% 20%,rgba(255,105,157,.24) 0 16%,transparent 42%),
+    radial-gradient(circle at 82% 86%,rgba(255,185,65,.22) 0 17%,transparent 44%),
+    linear-gradient(135deg,rgba(226,255,252,.94) 0%,rgba(214,239,255,.92) 34%,rgba(236,220,255,.92) 67%,rgba(255,226,214,.92) 100%);
+  backdrop-filter:blur(20px) saturate(1.28);
+  -webkit-backdrop-filter:blur(20px) saturate(1.28);
+  box-shadow:
+    0 10px 28px rgba(4,27,52,.20),
+    0 0 22px rgba(81,221,226,.10),
+    inset 0 1px 0 rgba(255,255,255,.96);
 }
 
 .nest-card-heading{
@@ -139,7 +146,8 @@
 .memory-archive-title,
 .awards-title,
 .memory-today-title{
-  color:#24322f;
+  color:#1f3441;
+  text-shadow:0 1px 0 rgba(255,255,255,.28);
 }
 
 .nest-card-copy,
