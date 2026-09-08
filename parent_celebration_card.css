@@ -1,0 +1,131 @@
+/*   celebration detail card*/
+.celebration-detail-experience{
+  transition:transform 1.45s cubic-bezier(.20,.62,.18,1),opacity 1.05s ease,filter 1.05s ease;
+}
+
+.celebration-detail-card{
+  cursor:default;
+  border:1.5px solid rgba(255,255,255,.78);
+  background:
+    radial-gradient(circle at 18% 16%,rgba(255,214,91,.20),transparent 34%),
+    radial-gradient(circle at 82% 18%,rgba(255,106,154,.18),transparent 34%),
+    linear-gradient(155deg,rgba(13,42,62,.97),rgba(47,48,87,.95) 52%,rgba(83,47,72,.95));
+  box-shadow:0 30px 82px rgba(0,18,44,.34),0 0 40px rgba(255,188,67,.10),inset 0 1px 0 rgba(255,255,255,.74);
+}
+
+.celebration-detail-card::after{display:none;}
+
+.celebration-detail-hero{
+  position:absolute;
+  inset:0 0 auto;
+  height:45%;
+  background-size:cover;
+  background-position:center;
+  transform:scale(1.015);
+}
+
+.celebration-detail-hero-shade{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(to bottom,rgba(4,14,28,.02) 0 22%,rgba(9,18,36,.28) 33%,rgba(24,29,55,.90) 49%,rgba(31,31,57,.99) 100%);
+}
+
+.celebration-detail-scroll{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:none;
+  padding:31% 20px 28px;
+}
+.celebration-detail-scroll::-webkit-scrollbar{display:none;}
+
+.celebration-detail-header{
+  margin:0 0 16px;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.78);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 10% 20%,rgba(255,229,127,.32),transparent 34%),
+    linear-gradient(110deg,rgba(255,246,214,.96),rgba(244,228,249,.96) 50%,rgba(255,211,220,.96));
+  box-shadow:0 12px 30px rgba(1,17,35,.22),0 0 22px rgba(255,194,70,.10),inset 0 1px 0 rgba(255,255,255,.94);
+  color:#26334a;
+}
+
+.celebration-detail-label,
+.celebration-detail-kicker{
+  font-size:9px;
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.celebration-detail-label{margin-bottom:8px;color:rgba(74,62,44,.62);}
+.celebration-detail-kicker{margin-bottom:9px;color:rgba(255,236,174,.80);}
+
+.celebration-detail-header h2{
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(26px,6.5vw,33px);
+  line-height:1.02;
+  font-weight:400;
+  letter-spacing:-.035em;
+}
+
+.celebration-detail-lead{
+  margin:11px 0 0;
+  font-size:12.5px;
+  line-height:1.56;
+  color:rgba(43,48,67,.82);
+}
+
+.celebration-detail-body{display:grid;gap:12px;}
+
+.celebration-detail-section{
+  position:relative;
+  overflow:hidden;
+  padding:17px;
+  border:1px solid rgba(255,255,255,.38);
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(104,73,133,.56),rgba(34,89,105,.48));
+  backdrop-filter:blur(18px) saturate(1.24);
+  -webkit-backdrop-filter:blur(18px) saturate(1.24);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24);
+  color:white;
+}
+
+.celebration-detail-message{
+  background:
+    radial-gradient(circle at 88% 15%,rgba(255,221,105,.18),transparent 34%),
+    linear-gradient(145deg,rgba(113,71,131,.66),rgba(53,84,111,.54));
+}
+
+.celebration-detail-keepsake{
+  background:
+    radial-gradient(circle at 14% 20%,rgba(255,122,163,.18),transparent 34%),
+    linear-gradient(145deg,rgba(41,103,104,.62),rgba(82,68,119,.52));
+}
+
+.celebration-detail-message p,
+.celebration-detail-keepsake p{
+  margin:0;
+  font-size:12.5px;
+  line-height:1.62;
+  color:rgba(255,255,255,.88);
+}
+
+.celebration-detail-sparkles{
+  position:absolute;
+  right:15px;
+  top:12px;
+  font-size:18px;
+  letter-spacing:.12em;
+  color:rgba(255,222,117,.70);
+}
+
+@media(max-width:420px){
+  .celebration-detail-scroll{padding-left:17px;padding-right:17px;padding-bottom:24px;}
+}
