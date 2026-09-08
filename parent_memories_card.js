@@ -109,18 +109,21 @@ function getLiveChapters(){
   const live=getLiveMemories();
   return memoryChapters.map(chapter=>{
     if(chapter.id==="today"){
-      return{...chapter,title:"Today",copy:live.todayCount===0?"No new moments yet":live.todayCount===1?"1 new little moment":`${live.todayCount} new little moments`,count:live.todayCount};
+      return{...chapter,title:"Today",copy:live.todayCount===0?"No new moments yet":live.todayCount===1?"1 new little moment":`${live.todayCount} new little moments`,count:live.todayCount,countLabel:live.todayCount===1?"moment today":"moments today"};
     }
     if(chapter.id==="week"){
-      return{...chapter,title:"This Week",copy:live.weekCount===0?"No moments yet this week":"A little look at this week",count:live.weekCount};
+      return{...chapter,title:"This Week",copy:live.weekCount===0?"No moments yet this week":"A little look at this week",count:live.weekCount,countLabel:live.weekCount===1?"moment this week":"moments this week"};
     }
     if(chapter.id==="lastweek"){
-      return{...chapter,title:"Last Week",copy:live.lastWeekCount===0?"No moments from last week":"A little look back at last week",count:live.lastWeekCount};
+      return{...chapter,title:"Last Week",copy:live.lastWeekCount===0?"No moments from last week":"A little look back at last week",count:live.lastWeekCount,countLabel:live.lastWeekCount===1?"moment last week":"moments last week"};
     }
     if(chapter.id==="august"){
-      return{...chapter,title:live.monthName,copy:live.monthCount===0?`No ${live.monthName} moments yet`:`${live.studentName}'s ${live.monthName} memories`,count:live.monthCount};
+      return{...chapter,title:live.monthName,copy:live.monthCount===0?`No ${live.monthName} moments yet`:`${live.studentName}'s ${live.monthName} memories`,count:live.monthCount,countLabel:live.monthCount===1?`${live.monthName} moment`:`${live.monthName} moments`};
     }
-    return chapter;
+    if(chapter.id==="earlier"){
+      return{...chapter,countLabel:chapter.count===1?"earlier memory":"earlier memories"};
+    }
+    return{...chapter,countLabel:chapter.count===1?"memory":"memories"};
   });
 }
 
@@ -167,7 +170,7 @@ export function createMemoriesCard({onChapter,onCollection}={}){
         </div>
       </div>
       <div class="memory-chapters">
-        ${chapters.map(chapter=>`<button class="memory-chapter" type="button" data-memory-chapter="${chapter.id}"><span class="memory-chapter-title">${chapter.title}</span><span class="memory-chapter-copy">${chapter.copy}</span><span class="memory-chapter-count">${chapter.count}</span></button>`).join("")}
+        ${chapters.map(chapter=>`<button class="memory-chapter" type="button" data-memory-chapter="${chapter.id}"><span class="memory-chapter-title">${chapter.title}</span><span class="memory-chapter-copy">${chapter.copy}</span><span class="memory-chapter-total"><span class="memory-chapter-count">${chapter.count}</span><span class="memory-chapter-count-label">${chapter.countLabel}</span></span></button>`).join("")}
       </div>
     </div>`;
 
