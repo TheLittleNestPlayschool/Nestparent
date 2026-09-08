@@ -1,6 +1,6 @@
 import{
-  getExperiences
-}from"./parent_experiences.js";
+  getParentExperiences
+}from"./parent_experience_feed.js";
 
 import{
   buildExperienceCards
@@ -54,6 +54,11 @@ import{
 }from"./parent_together_stage.js";
 
 import{
+  openCelebrationStage,
+  isCelebrationStageOpen
+}from"./parent_celebration_stage.js";
+
+import{
   openNestStage as openNestStageView,
   closeNestStage as closeNestStageView,
   isNestStageOpen
@@ -68,13 +73,13 @@ let hasInteracted=false;
 
 /*   experience stage open*/
 function isExperienceStageOpen(){
-  return isStoryStageOpen()||isLearningStageOpen()||isActivityStageOpen()||isGrowthStageOpen()||isMomentsStageOpen()||isTogetherStageOpen();
+  return isStoryStageOpen()||isLearningStageOpen()||isActivityStageOpen()||isGrowthStageOpen()||isMomentsStageOpen()||isTogetherStageOpen()||isCelebrationStageOpen();
 }
 
 /*   build cards*/
 export function buildCards(){
   if(!carousel){return;}
-  const experiences=getExperiences();
+  const experiences=getParentExperiences();
   buildExperienceCards(carousel,openExperience);
   activateRestingAtmosphere(experiences[activeIndex]);
   renderPositions();
@@ -98,7 +103,7 @@ function openExperience(index){
 
   if(index!==activeIndex){return;}
 
-  const experiences=getExperiences();
+  const experiences=getParentExperiences();
   const item=experiences[index];
   const mainCard=carousel?.querySelector(`.experience[data-index="${index}"]`);
   if(!item||!mainCard){return;}
@@ -136,6 +141,12 @@ function openExperience(index){
   if(item.experience_type_code==="together"){
     openTogetherStage({carousel,activeIndex:index,item,mainCard});
     hideHint();
+    return;
+  }
+
+  if(item.experience_type_code==="celebration"){
+    openCelebrationStage({carousel,activeIndex:index,item,mainCard});
+    hideHint();
   }
 }
 
@@ -154,7 +165,7 @@ function move(direction){
     return;
   }
 
-  const experiences=getExperiences();
+  const experiences=getParentExperiences();
   const next=Math.min(experiences.length-1,Math.max(0,activeIndex+direction));
   if(next===activeIndex){return;}
 
