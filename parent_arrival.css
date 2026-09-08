@@ -17,6 +17,7 @@
 .arrival-copy{
   position:relative;
   z-index:2;
+  isolation:isolate;
   width:min(88vw,420px);
   display:flex;
   flex-direction:column;
@@ -26,17 +27,42 @@
   will-change:transform,filter;
 }
 
+/*   glowing cloud*/
+.arrival-copy::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:-1;
+  width:min(112vw,540px);
+  height:210px;
+  transform:translate(-50%,-49%);
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse at 50% 50%,rgba(16,69,126,.68) 0%,rgba(22,107,161,.56) 30%,rgba(77,188,220,.34) 52%,rgba(205,240,255,.15) 68%,transparent 82%),
+    radial-gradient(ellipse at 38% 55%,rgba(72,209,228,.30) 0%,transparent 58%),
+    radial-gradient(ellipse at 68% 42%,rgba(92,122,232,.30) 0%,transparent 56%);
+  filter:blur(17px);
+  opacity:.94;
+  box-shadow:
+    0 0 34px rgba(85,210,238,.22),
+    0 0 74px rgba(39,111,194,.18);
+  pointer-events:none;
+}
+
 /*   arrival text*/
 .arrival-eyebrow{
   display:inline-block;
   width:max-content;
   margin-bottom:14px;
   font-size:11px;
-  font-weight:800;
+  font-weight:900;
   letter-spacing:.20em;
   text-transform:uppercase;
-  color:rgba(255,255,255,.94);
-  text-shadow:0 2px 12px rgba(2,22,44,.30);
+  color:#fff;
+  text-shadow:
+    0 2px 12px rgba(0,16,38,.72),
+    0 0 16px rgba(173,231,255,.42);
   transform-origin:left top;
   will-change:transform;
 }
@@ -48,10 +74,12 @@
   font-family:Georgia,"Times New Roman",serif;
   font-size:36px;
   line-height:1.06;
-  font-weight:400;
+  font-weight:500;
   letter-spacing:-.028em;
   color:#fff;
-  text-shadow:0 2px 18px rgba(2,22,44,.30);
+  text-shadow:
+    0 3px 18px rgba(0,14,36,.78),
+    0 0 20px rgba(179,235,255,.34);
   transform-origin:left top;
   will-change:transform;
 }
@@ -62,9 +90,11 @@
   margin:12px 0 0;
   font-size:15px;
   line-height:1.4;
-  font-weight:700;
-  color:rgba(255,255,255,.92);
-  text-shadow:0 2px 12px rgba(2,22,44,.30);
+  font-weight:800;
+  color:#fff;
+  text-shadow:
+    0 2px 12px rgba(0,16,38,.76),
+    0 0 14px rgba(184,235,255,.30);
   transform-origin:left top;
   will-change:transform;
 }
@@ -148,4 +178,5 @@
 @media(max-width:420px){
   .arrival-greeting{font-size:33px;}
   .arrival-message{font-size:14px;}
+  .arrival-copy::before{height:190px;}
 }
