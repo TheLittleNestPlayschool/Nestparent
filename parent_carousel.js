@@ -29,6 +29,11 @@ import{
 }from"./parent_story_stage.js";
 
 import{
+  openLearningStage,
+  isLearningStageOpen
+}from"./parent_learning_stage.js";
+
+import{
   openNestStage as openNestStageView,
   closeNestStage as closeNestStageView,
   isNestStageOpen
@@ -41,6 +46,11 @@ const deepSheet=document.getElementById("deepSheet");
 let activeIndex=0;
 let hasInteracted=false;
 
+/*   experience stage open*/
+function isExperienceStageOpen(){
+  return isStoryStageOpen()||isLearningStageOpen();
+}
+
 /*   build cards*/
 export function buildCards(){
   if(!carousel){return;}
@@ -52,7 +62,7 @@ export function buildCards(){
 
 /*   open experience*/
 function openExperience(index){
-  if(isNestStageOpen()||isStoryStageOpen()||isStageMotionLocked()){
+  if(isNestStageOpen()||isExperienceStageOpen()||isStageMotionLocked()){
     return;
   }
 
@@ -71,16 +81,16 @@ function openExperience(index){
   const experiences=getExperiences();
   const item=experiences[index];
   const mainCard=carousel?.querySelector(`.experience[data-index="${index}"]`);
-
   if(!item||!mainCard){return;}
 
   if(item.experience_type_code==="today_story"){
-    openStoryStage({
-      carousel,
-      activeIndex:index,
-      item,
-      mainCard
-    });
+    openStoryStage({carousel,activeIndex:index,item,mainCard});
+    hideHint();
+    return;
+  }
+
+  if(item.experience_type_code==="learning_discovery"){
+    openLearningStage({carousel,activeIndex:index,item,mainCard});
     hideHint();
   }
 }
@@ -96,7 +106,7 @@ function renderPositions(){
 
 /*   move*/
 function move(direction){
-  if(isNestStageOpen()||isStoryStageOpen()||isStageMotionLocked()){
+  if(isNestStageOpen()||isExperienceStageOpen()||isStageMotionLocked()){
     return;
   }
 
@@ -119,7 +129,7 @@ export function hideHint(){
 
 /*   open nest stage*/
 export function openNestStage(){
-  if(isStageMotionLocked()||isStoryStageOpen()){
+  if(isStageMotionLocked()||isExperienceStageOpen()){
     return;
   }
 
@@ -143,7 +153,7 @@ export function activateCarousel(){
   activateCarouselInput({
     carousel,
     deepSheet,
-    canMove:()=>!isNestStageOpen()&&!isStoryStageOpen()&&!isStageMotionLocked(),
+    canMove:()=>!isNestStageOpen()&&!isExperienceStageOpen()&&!isStageMotionLocked(),
     onMove:move
   });
 }
