@@ -40,15 +40,26 @@
 .grain::after{
   content:"";
   position:absolute;
-  width:34px;
-  height:34px;
+  width:30px;
+  height:30px;
   background:
-    linear-gradient(90deg,transparent 0 42%,rgba(210,246,255,.10) 46%,rgba(255,255,255,.96) 49.5% 50.5%,rgba(210,246,255,.10) 54%,transparent 58% 100%),
-    linear-gradient(0deg,transparent 0 42%,rgba(210,246,255,.10) 46%,rgba(255,255,255,.96) 49.5% 50.5%,rgba(210,246,255,.10) 54%,transparent 58% 100%);
-  border-radius:50%;
-  filter:drop-shadow(0 0 6px rgba(197,241,255,.72));
-  opacity:.72;
-  transform:scale(.72);
+    radial-gradient(circle at center,
+      rgba(255,255,255,1) 0 8%,
+      rgba(226,249,255,.98) 9% 18%,
+      rgba(157,229,255,.74) 30%,
+      rgba(111,198,255,.18) 52%,
+      transparent 72%);
+  clip-path:polygon(
+    50% 0%,56% 37%,78% 20%,62% 43%,
+    100% 50%,62% 57%,78% 80%,56% 63%,
+    50% 100%,44% 63%,22% 80%,38% 57%,
+    0% 50%,38% 43%,22% 20%,44% 37%
+  );
+  filter:
+    drop-shadow(0 0 4px rgba(255,255,255,.95))
+    drop-shadow(0 0 9px rgba(116,218,255,.72));
+  opacity:.74;
+  transform:scale(.72) rotate(0deg);
   transform-origin:center;
 }
 
@@ -65,9 +76,9 @@
 }
 
 @keyframes brightTwinkle{
-  from{opacity:.28;transform:scale(.58);}
-  50%{opacity:1;transform:scale(1.08);}
-  to{opacity:.42;transform:scale(.74);}
+  from{opacity:.30;transform:scale(.56) rotate(-5deg);}
+  50%{opacity:1;transform:scale(1.12) rotate(4deg);}
+  to{opacity:.44;transform:scale(.76) rotate(-2deg);}
 }
 
 @media(prefers-reduced-motion:reduce){
