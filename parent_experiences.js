@@ -73,6 +73,18 @@ function firstText(...values){
   return values.map(getText).find(Boolean)||"";
 }
 
+function getJsonList(value){
+  if(Array.isArray(value)){return value.filter(Boolean);}
+  if(value&&typeof value==="object"){return Object.values(value).filter(Boolean);}
+  if(typeof value!=="string"||!value.trim()){return[];}
+  try{
+    const parsed=JSON.parse(value);
+    if(Array.isArray(parsed)){return parsed.filter(Boolean);}
+    if(parsed&&typeof parsed==="object"){return Object.values(parsed).filter(Boolean);}
+  }catch(error){return[];}
+  return[];
+}
+
 function getSessionExperiences(parentData,session){
   const candidates=[
     parentData?.session_experiences,
@@ -155,9 +167,42 @@ function getGrowthWeights(session){
     .sort((a,b)=>b.value-a.value);
 }
 
+function getCategoryDescription(session,key){
+  const aliases={oral_language:["oral_lang"],receptive_language:["receptive_lang"]}[key]||[key];
+  return aliases.map(alias=>getText(session?.[`${alias}_desc`])).find(Boolean)||"";
+}
+
+function buildLearningTitle(session){
+  const lessonOne=getText(session?.lesson_1_title);
+  const lessonTwo=getText(session?.lesson_2_title);
+  if(lessonOne&&lessonTwo){return `${lessonOne} & ${lessonTwo}`;}
+  return firstText(lessonOne,lessonTwo,session?.session_theme,"Today's Learning");
+}
+
+function buildLearningDetail(session,experiences,objectives,growthWeights,photos){
+  const development=growthWeights.slice(0,3).map(item=>({
+    label:item.label,
+    description:getCategoryDescription(session,item.key)
+  }));
+  const teacherConcepts=[];
+  experiences.forEach(item=>{
+    getJsonList(item?.inferred_concepts).forEach(value=>teacherConcepts.push(String(value)));
+    getJsonList(item?.learning_tags).forEach(value=>teacherConcepts.push(String(value)));
+  });
+  return{
+    eyebrow:"Learning",
+    title:buildLearningTitle(session),
+    lead:firstText(objectives[0],session?.session_description,"A little look at what today's session was designed to explore."),
+    objectives:objectives.slice(0,3),
+    development,
+    concepts:[...new Set([...getJsonList(session?.core_concepts).map(String),...teacherConcepts])].slice(0,6),
+    media:photos.slice(0,4)
+  };
+}
+
 function buildGoalCopy(objectives,studentName){
-  if(objectives.length){return objectives.slice(0,2).join(" ");}
-  return `Today's learning gave ${studentName} a few clear things to explore and practice.`;
+  if(objectives.length){return objectives[0];}
+  return `Today's learning gave ${studentName} something clear to explore and practice.`;
 }
 
 /*   build experiences*/
@@ -195,6 +240,8 @@ export function getExperiences(){
   const homeActivity=getText(session?.home_time_activity);
   const nextDescription=getText(session?.next_description);
   const togetherHasHome=Boolean(homeActivity);
+  const learningPhoto=todayPhotos[1]||todayPhotos[0]||getExperiencePhoto(livePhotos,1);
+  const learningMedia=todayPhotos.length?todayPhotos:livePhotos;
 
   return[
     {
@@ -212,17 +259,14 @@ export function getExperiences(){
     {
       type:"learning",
       experience_type_code:"learning_discovery",
-      title:"What today's learning was building.",
-      label:"Learning Discovery",
+      title:buildLearningTitle(session),
+      label:"Learning",
       copy:buildGoalCopy(objectives,studentName),
-      photo:getExperiencePhoto(livePhotos,1),
-      categories:learningTopics.slice(0,3),
+      photo:learningPhoto,
+      categories:strongestGrowth.slice(0,2).map(item=>item.label),
+      detail:buildLearningDetail(session,sessionExperiences,objectives,growthWeights,learningMedia),
       deeper:objectives.join(" "),
-      learning:[
-        ["✨",lessonOne||"Learning goal",getText(session?.obj_text_1)],
-        ["✨",lessonTwo||"Learning goal",getText(session?.obj_text_2)],
-        ["✨",manner||"Learning goal",getText(session?.obj_text_3)]
-      ].filter(item=>item[2])
+      learning:[]
     },
     {
       type:"activity",
