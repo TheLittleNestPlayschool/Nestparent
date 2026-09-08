@@ -72,16 +72,16 @@
 .memory-today-stage-card{
   border:1.5px solid rgba(255,255,255,.76);
   background:
-    radial-gradient(ellipse at 12% 14%,rgba(26,198,194,.28) 0 16%,transparent 40%),
-    radial-gradient(ellipse at 84% 18%,rgba(245,77,114,.20) 0 12%,transparent 34%),
-    radial-gradient(ellipse at 82% 80%,rgba(246,169,50,.22) 0 14%,transparent 38%),
-    radial-gradient(ellipse at 18% 82%,rgba(89,81,190,.18) 0 14%,transparent 40%),
-    linear-gradient(145deg,rgba(249,247,239,.94) 0%,rgba(222,240,233,.92) 38%,rgba(225,221,241,.91) 68%,rgba(244,222,207,.91) 100%);
-  backdrop-filter:blur(28px) saturate(1.10);
-  -webkit-backdrop-filter:blur(28px) saturate(1.10);
+    radial-gradient(ellipse at 12% 14%,rgba(10,198,214,.28) 0 16%,transparent 40%),
+    radial-gradient(ellipse at 84% 18%,rgba(245,63,126,.22) 0 12%,transparent 34%),
+    radial-gradient(ellipse at 82% 80%,rgba(255,166,38,.23) 0 14%,transparent 38%),
+    radial-gradient(ellipse at 18% 82%,rgba(91,72,202,.22) 0 14%,transparent 40%),
+    linear-gradient(145deg,rgba(241,248,248,.92) 0%,rgba(215,235,233,.90) 35%,rgba(226,214,239,.90) 67%,rgba(244,216,202,.89) 100%);
+  backdrop-filter:blur(28px) saturate(1.18);
+  -webkit-backdrop-filter:blur(28px) saturate(1.18);
   box-shadow:
-    0 28px 76px rgba(0,24,47,.20),
-    inset 0 1px 0 rgba(255,255,255,.78);
+    0 28px 76px rgba(0,24,47,.24),
+    inset 0 1px 0 rgba(255,255,255,.82);
 }
 
 /*   protected card headings*/
@@ -90,12 +90,12 @@
 .memory-archive-heading,
 .awards-heading,
 .memory-today-heading{
-  border:1px solid rgba(255,255,255,.74);
+  border:1px solid rgba(255,255,255,.76);
   border-radius:20px;
-  background:rgba(250,248,242,.82);
-  backdrop-filter:blur(18px) saturate(1.05);
-  -webkit-backdrop-filter:blur(18px) saturate(1.05);
-  box-shadow:0 8px 22px rgba(24,45,57,.10),inset 0 1px 0 rgba(255,255,255,.88);
+  background:rgba(250,248,242,.86);
+  backdrop-filter:blur(18px) saturate(1.08);
+  -webkit-backdrop-filter:blur(18px) saturate(1.08);
+  box-shadow:0 8px 22px rgba(24,45,57,.12),inset 0 1px 0 rgba(255,255,255,.90);
 }
 
 .nest-card-heading{
@@ -153,8 +153,62 @@
 .memory-chapter,
 .memory-archive-item,
 .award-category{
-  border:1.5px solid rgba(255,255,255,.88);
+  border:1.5px solid rgba(255,255,255,.90);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.84),
-    0 10px 26px rgba(20,44,56,.12);
+    inset 0 1px 0 rgba(255,255,255,.88),
+    0 10px 28px rgba(9,36,60,.16);
+}
+
+/*   cosmic destination palette*/
+.nest-destination[data-destination="memories"]{
+  --nest-card-start:#ffb1b2;
+  --nest-card-end:#e8657d;
+  --nest-accent:#8f2940;
+  --nest-orb:rgba(255,225,228,.38);
+}
+.nest-destination[data-destination="journey"]{
+  --nest-card-start:#9fe8e3;
+  --nest-card-end:#38b9c1;
+  --nest-accent:#0c6570;
+  --nest-orb:rgba(228,255,255,.38);
+}
+.nest-destination[data-destination="awards"]{
+  --nest-card-start:#ffe18e;
+  --nest-card-end:#e9a52f;
+  --nest-accent:#765019;
+  --nest-orb:rgba(255,247,207,.40);
+}
+.nest-destination[data-destination="home"]{
+  --nest-card-start:#ffd77e;
+  --nest-card-end:#f28b2f;
+  --nest-accent:#7d4018;
+  --nest-orb:rgba(255,241,208,.38);
+}
+.nest-destination[data-destination="more"]{
+  --nest-card-start:#c9b6ff;
+  --nest-card-end:#8265d3;
+  --nest-accent:#463176;
+  --nest-orb:rgba(241,235,255,.38);
+}
+
+/*   cosmic memories palette*/
+.memory-chapter:nth-child(1){--chapter-start:#ffb3b4;--chapter-end:#e66d83;--chapter-orb:rgba(255,229,232,.34);}
+.memory-chapter:nth-child(2){--chapter-start:#a7e8e3;--chapter-end:#42bfc5;--chapter-orb:rgba(231,255,255,.34);}
+.memory-chapter:nth-child(3){--chapter-start:#ffe39b;--chapter-end:#e6a53a;--chapter-orb:rgba(255,248,219,.34);}
+.memory-chapter:nth-child(4){--chapter-start:#c9b8f8;--chapter-end:#8b70d6;--chapter-orb:rgba(243,238,255,.34);}
+.memory-chapter:nth-child(5){
+  --chapter-start:#a8ddd5;
+  --chapter-end:#5aa8a3;
+  --chapter-orb:rgba(235,255,251,.34);
+}
+
+.nest-destination-title,
+.memory-chapter-title{
+  color:rgba(24,38,43,.94);
+}
+
+.nest-destination-copy,
+.memory-chapter-copy,
+.memory-chapter-count{
+  color:rgba(24,38,43,.64);
 }
