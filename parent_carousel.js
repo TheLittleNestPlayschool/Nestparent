@@ -34,6 +34,16 @@ import{
 }from"./parent_learning_stage.js";
 
 import{
+  openActivityStage,
+  isActivityStageOpen
+}from"./parent_activity_stage.js";
+
+import{
+  openGrowthStage,
+  isGrowthStageOpen
+}from"./parent_growth_stage.js";
+
+import{
   openNestStage as openNestStageView,
   closeNestStage as closeNestStageView,
   isNestStageOpen
@@ -48,7 +58,7 @@ let hasInteracted=false;
 
 /*   experience stage open*/
 function isExperienceStageOpen(){
-  return isStoryStageOpen()||isLearningStageOpen();
+  return isStoryStageOpen()||isLearningStageOpen()||isActivityStageOpen()||isGrowthStageOpen();
 }
 
 /*   build cards*/
@@ -91,6 +101,18 @@ function openExperience(index){
 
   if(item.experience_type_code==="learning_discovery"){
     openLearningStage({carousel,activeIndex:index,item,mainCard});
+    hideHint();
+    return;
+  }
+
+  if(item.experience_type_code==="activity"){
+    openActivityStage({carousel,activeIndex:index,item,mainCard});
+    hideHint();
+    return;
+  }
+
+  if(item.experience_type_code==="growth"){
+    openGrowthStage({carousel,activeIndex:index,item,mainCard});
     hideHint();
   }
 }
