@@ -251,15 +251,15 @@
   content:"";
   position:absolute;
   left:50%;
-  top:166px;
-  width:min(300px,92%);
-  height:118px;
+  top:143px;
+  width:min(286px,90%);
+  height:104px;
   transform:translateX(-50%);
-  border-radius:48% 52% 50% 50% / 55% 48% 52% 45%;
+  border-radius:49% 51% 48% 52% / 52% 47% 53% 48%;
   background:
-    radial-gradient(ellipse at 34% 42%,rgba(255,255,255,.88),rgba(233,251,249,.72) 40%,rgba(191,236,233,.42) 67%,rgba(255,255,255,0) 82%),
-    radial-gradient(ellipse at 76% 58%,rgba(255,167,181,.28),rgba(255,255,255,0) 66%);
-  filter:drop-shadow(0 8px 18px rgba(4,30,52,.16));
+    radial-gradient(ellipse at 36% 44%,rgba(255,255,255,.88),rgba(233,251,249,.70) 42%,rgba(191,236,233,.36) 68%,rgba(255,255,255,0) 84%),
+    radial-gradient(ellipse at 76% 58%,rgba(255,167,181,.22),rgba(255,255,255,0) 68%);
+  filter:drop-shadow(0 8px 18px rgba(4,30,52,.14));
   backdrop-filter:blur(16px) saturate(1.12);
   -webkit-backdrop-filter:blur(16px) saturate(1.12);
   pointer-events:none;
