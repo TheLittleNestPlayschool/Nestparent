@@ -86,6 +86,7 @@ export function createLearningCard(item){
     <div class="card learning-detail-card">
       <div class="learning-detail-hero" style="background-image:url('${escapeHtml(hero)}')"></div>
       <div class="learning-detail-hero-shade"></div>
+      <div class="type-mark">LEARNING</div>
       <div class="learning-detail-scroll">
         <header class="learning-detail-header">
           <div class="learning-detail-label">${escapeHtml(detail.eyebrow||"Learning")}</div>
