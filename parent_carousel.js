@@ -24,84 +24,65 @@ import{
 }from"./parent_stage_motion.js";
 
 import{
+  openStoryStage,
+  isStoryStageOpen
+}from"./parent_story_stage.js";
+
+import{
   openNestStage as openNestStageView,
   closeNestStage as closeNestStageView,
   isNestStageOpen
 }from"./parent_nest_stage.js";
 
-const carousel=
-  document.getElementById(
-    "carousel"
-  );
-
-const hint=
-  document.getElementById(
-    "hint"
-  );
-
-const deepSheet=
-  document.getElementById(
-    "deepSheet"
-  );
+const carousel=document.getElementById("carousel");
+const hint=document.getElementById("hint");
+const deepSheet=document.getElementById("deepSheet");
 
 let activeIndex=0;
 let hasInteracted=false;
 
 /*   build cards*/
 export function buildCards(){
-  if(!carousel){
-    return;
-  }
-
-  const experiences=
-    getExperiences();
-
-  buildExperienceCards(
-    carousel,
-    openExperience
-  );
-
-  activateRestingAtmosphere(
-    experiences[
-      activeIndex
-    ]
-  );
-
+  if(!carousel){return;}
+  const experiences=getExperiences();
+  buildExperienceCards(carousel,openExperience);
+  activateRestingAtmosphere(experiences[activeIndex]);
   renderPositions();
 }
 
 /*   open experience*/
 function openExperience(index){
-  if(
-    isNestStageOpen()||
-    isStageMotionLocked()
-  ){
+  if(isNestStageOpen()||isStoryStageOpen()||isStageMotionLocked()){
     return;
   }
 
-  if(
-    index===
-    activeIndex+1
-  ){
+  if(index===activeIndex+1){
     move(1);
     return;
   }
 
-  if(
-    index===
-    activeIndex-1
-  ){
+  if(index===activeIndex-1){
     move(-1);
     return;
   }
 
-  /*
-    Center card intentionally does
-    nothing for now.
+  if(index!==activeIndex){return;}
 
-    Later this becomes the entrance
-    into the card's real experience.
-  */
+  const experiences=getExperiences();
+  const item=experiences[index];
+  const mainCard=carousel?.querySelector(`.experience[data-index="${index}"]`);
+
+  if(!item||!mainCard){return;}
+
+  if(item.experience_type_code==="today_story"){
+    openStoryStage({
+      carousel,
+      activeIndex:index,
+      item,
+      mainCard
+    });
+    hideHint();
+  }
 }
 
 /*   render positions*/
@@ -109,64 +90,36 @@ function renderPositions(){
   renderCardPositions({
     carousel,
     activeIndex,
-    nestOpen:
-      isNestStageOpen()
+    nestOpen:isNestStageOpen()
   });
 }
 
 /*   move*/
 function move(direction){
-  if(
-    isNestStageOpen()||
-    isStageMotionLocked()
-  ){
+  if(isNestStageOpen()||isStoryStageOpen()||isStageMotionLocked()){
     return;
   }
 
-  const experiences=
-    getExperiences();
-
-  const next=
-    Math.min(
-      experiences.length-1,
-      Math.max(
-        0,
-        activeIndex+direction
-      )
-    );
-
-  if(next===activeIndex){
-    return;
-  }
+  const experiences=getExperiences();
+  const next=Math.min(experiences.length-1,Math.max(0,activeIndex+direction));
+  if(next===activeIndex){return;}
 
   activeIndex=next;
-
-  setRestingAtmosphere(
-    experiences[
-      activeIndex
-    ]
-  );
-
+  setRestingAtmosphere(experiences[activeIndex]);
   renderPositions();
   hideHint();
 }
 
 /*   hide hint*/
 export function hideHint(){
-  if(hasInteracted){
-    return;
-  }
-
+  if(hasInteracted){return;}
   hasInteracted=true;
-
-  if(hint){
-    hint.style.opacity="0";
-  }
+  if(hint){hint.style.opacity="0";}
 }
 
 /*   open nest stage*/
 export function openNestStage(){
-  if(isStageMotionLocked()){
+  if(isStageMotionLocked()||isStoryStageOpen()){
     return;
   }
 
@@ -179,31 +132,18 @@ export function openNestStage(){
 
 /*   close nest stage*/
 export function closeNestStage(){
-  closeNestStageView({
-    carousel,
-    activeIndex
-  });
+  closeNestStageView({carousel,activeIndex});
 }
 
 /*   expose nest state*/
-export{
-  isNestStageOpen
-};
+export{isNestStageOpen};
 
 /*   activate carousel*/
 export function activateCarousel(){
   activateCarouselInput({
     carousel,
     deepSheet,
-
-    canMove:()=>{
-      return(
-        !isNestStageOpen()&&
-        !isStageMotionLocked()
-      );
-    },
-
-    onMove:
-      move
+    canMove:()=>!isNestStageOpen()&&!isStoryStageOpen()&&!isStageMotionLocked(),
+    onMove:move
   });
 }
