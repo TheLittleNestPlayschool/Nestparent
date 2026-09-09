@@ -9,6 +9,7 @@ let celebrationData=null;
 function text(value){return typeof value==="string"?value.trim():"";}
 function timestamp(value){let time=Number(value)||0;if(time&&time<1000000000000){time*=1000;}return time;}
 function positiveId(value){const id=Number(value);return Number.isFinite(id)&&id>0?id:0;}
+function keyPart(value){return text(value).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");}
 
 /*   load celebration data*/
 export async function loadCelebrationData(){
@@ -61,12 +62,24 @@ function getCelebrationId(celebration){
   return candidates.map(positiveId).find(Boolean)||0;
 }
 
+/*   get celebration key*/
+function getCelebrationKey(celebration){
+  const date=text(celebration?.date)||"undated";
+  const name=keyPart(celebration?.name||celebration?.type||"celebration")||"celebration";
+  return`${date}:${name}`;
+}
+
 /*   prepare celebration media*/
-function getCelebrationMedia(celebration,celebrationId){
+function getCelebrationMedia(celebration,identity){
   const media=Array.isArray(celebration?.media)?celebration.media:[];
   return media.map(item=>({
     id:positiveId(item?.id),
-    celebration_id:celebrationId||positiveId(item?.celebration_id),
+    celebration_id:identity.id||positiveId(item?.celebration_id),
+    celebration_key:identity.key,
+    celebration_name:identity.name,
+    celebration_date:identity.date,
+    celebration_type:identity.type,
+    media_collection_type_id:positiveId(item?.media_collection_type_id),
     kind:text(item?.media_kind)||"media",
     url:getMediaUrl(item),
     thumbnail_filename:text(item?.thumbnail_filename),
@@ -80,9 +93,15 @@ export function getCelebrationExperience(){
   const celebration=celebrationData?.celebration;
   if(!celebration||!text(celebration?.name)){return null;}
 
-  const celebrationId=getCelebrationId(celebration);
-  const media=getCelebrationMedia(celebration,celebrationId);
   const title=text(celebration?.name)||"A Special Day to Celebrate";
+  const identity={
+    id:getCelebrationId(celebration),
+    key:getCelebrationKey(celebration),
+    name:title,
+    date:text(celebration?.date),
+    type:text(celebration?.type)
+  };
+  const media=getCelebrationMedia(celebration,identity);
   const parentTitle=text(celebration?.parent_title);
   const copy=text(celebration?.parent_message)||"A special Little Nest memory worth celebrating together.";
   const hero=media.find(item=>item.url)?.url||getLatestPhoto();
@@ -94,10 +113,11 @@ export function getCelebrationExperience(){
     label:"Celebration",
     copy,
     photo:hero,
-    celebration_id:celebrationId,
-    celebration_name:title,
-    celebration_date:text(celebration?.date),
-    celebration_type:text(celebration?.type),
+    celebration_id:identity.id,
+    celebration_key:identity.key,
+    celebration_name:identity.name,
+    celebration_date:identity.date,
+    celebration_type:identity.type,
     celebration_parent_title:parentTitle,
     celebration_media:media,
     celebration_media_count:media.length,
