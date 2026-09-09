@@ -106,24 +106,32 @@ function getStudentBadges(parentData){
   return [parentData?.student_badges,parentData?.student_badge].find(Array.isArray)||[];
 }
 
+/*   parent-facing story*/
 function buildStoryTitle(session,studentName){
-  const lessonOne=getText(session?.lesson_1_title);
-  const lessonTwo=getText(session?.lesson_2_title);
-  const theme=getText(session?.session_theme);
-  if(theme){return theme;}
-  if(lessonOne&&lessonTwo){return `${lessonOne} & ${lessonTwo}`;}
-  return firstText(lessonOne,lessonTwo,session?.todays_description,`${studentName}'s day at The Little Nest`);
+  return firstText(session?.story_main_heading,session?.session_theme,`${studentName}'s day at The Little Nest`);
 }
 
 function buildStoryCopy(session,experiences,studentName){
   const teacherStory=experiences.map(item=>firstText(item?.parent_description,item?.experience_summary)).find(Boolean);
-  return firstText(teacherStory,session?.todays_description,session?.session_description,`A little look at what was woven into ${studentName}'s day.`);
+  return firstText(session?.story_main_text,teacherStory,session?.todays_description,`A little look at what was woven into ${studentName}'s day.`);
 }
 
 function buildStoryDetail(session,experiences,studentName,photos){
   const teacherDetails=experiences.map(item=>({title:firstText(item?.experience_name,"A class experience"),copy:firstText(item?.parent_description,item?.experience_summary,item?.class_context)})).filter(item=>item.copy);
-  const classDetails=[getText(session?.lesson_1_title),getText(session?.lesson_2_title),getText(session?.manner_topic)].filter(Boolean);
-  return{eyebrow:"Today's Story",title:buildStoryTitle(session,studentName),lead:buildStoryCopy(session,experiences,studentName),narrative:firstText(session?.session_description,session?.todays_description),classDetails,teacherDetails,media:photos.slice(0,6)};
+  const littleDetails=[
+    {title:getText(session?.story_detail_1_heading),copy:getText(session?.story_detail_1_text)},
+    {title:getText(session?.story_detail_2_heading),copy:getText(session?.story_detail_2_text)},
+    {title:getText(session?.story_detail_3_heading),copy:getText(session?.story_detail_3_text)}
+  ].filter(item=>item.title||item.copy);
+  return{
+    eyebrow:"Today's Story",
+    title:firstText(session?.story_detail_heading,session?.story_main_heading,`${studentName}'s day at The Little Nest`),
+    lead:firstText(session?.story_detail_intro,session?.story_main_text),
+    narrative:firstText(session?.story_detail_story,session?.story_detail_intro,session?.story_main_text),
+    littleDetails,
+    teacherDetails,
+    media:photos.slice(0,6)
+  };
 }
 
 function getGrowthWeights(session){
@@ -266,7 +274,7 @@ export function getExperiences(){
       photo:storyPhoto,
       categories:[],
       detail:buildStoryDetail(session,sessionExperiences,studentName,storyMedia),
-      deeper:firstText(session?.session_description,session?.todays_description),
+      deeper:firstText(session?.story_detail_story,session?.story_detail_intro,session?.story_main_text),
       learning:[]
     },
     {
