@@ -63,16 +63,27 @@ function buildTogetherCard(item,typeLabel){
   `;
 }
 
+/*   celebration attributes*/
+function celebrationAttributes(item){
+  const celebrationId=Number(item?.celebration_id)||0;
+  const celebrationKey=String(item?.celebration_key||"").trim();
+  const celebrationName=String(item?.celebration_name||"").trim();
+  const celebrationDate=String(item?.celebration_date||"").trim();
+  const celebrationType=String(item?.celebration_type||"").trim();
+  return`${celebrationId?` data-celebration-id="${celebrationId}"`:""}${celebrationKey?` data-celebration-key="${escapeHtml(celebrationKey)}"`:""}${celebrationName?` data-celebration-name="${escapeHtml(celebrationName)}"`:""}${celebrationDate?` data-celebration-date="${escapeHtml(celebrationDate)}"`:""}${celebrationType?` data-celebration-type="${escapeHtml(celebrationType)}"`:""}`;
+}
+
 /*   celebration card*/
 function buildCelebrationCard(item,typeLabel){
   const media=Array.isArray(item?.celebration_media)?item.celebration_media:[];
-  const celebrationId=Number(item?.celebration_id)||0;
+  const cardAttributes=celebrationAttributes(item);
   const mediaItems=media.map((entry,index)=>{
     const kind=String(entry?.kind||"media").toLowerCase();
     const hasImage=Boolean(entry?.url);
     const mediaId=Number(entry?.id)||0;
+    const mediaCollectionTypeId=Number(entry?.media_collection_type_id)||0;
     return`
-      <div class="celebration-media-item${hasImage?" has-image":""}"${celebrationId?` data-celebration-id="${celebrationId}"`:""}${mediaId?` data-celebration-media-id="${mediaId}" data-media-id="${mediaId}"`:""}${hasImage?` style="background-image:url('${escapeHtml(entry.url)}')"`:""}>
+      <div class="celebration-media-item${hasImage?" has-image":""}" data-action="open_media"${cardAttributes}${mediaId?` data-celebration-media-id="${mediaId}" data-media-id="${mediaId}"`:""}${mediaCollectionTypeId?` data-media-collection-type-id="${mediaCollectionTypeId}"`:""}${hasImage?` style="background-image:url('${escapeHtml(entry.url)}')"`:""}>
         ${kind==="video"?`<span class="celebration-media-play">▶</span>`:""}
         ${!hasImage?`<span class="celebration-media-kind">${kind==="video"?"Video":"Photo"} ${index+1}</span>`:""}
       </div>
@@ -80,7 +91,7 @@ function buildCelebrationCard(item,typeLabel){
   }).join("");
 
   return`
-    <div class="card main-stage-card celebration-main-card"${celebrationId?` data-celebration-id="${celebrationId}"`:""}>
+    <div class="card main-stage-card celebration-main-card"${cardAttributes}>
       <div class="photo" style="background-image:url('${escapeHtml(item.photo)}')"></div>
       <div class="type-mark">${escapeHtml(typeLabel)}</div>
       <div class="content main-stage-content celebration-main-content">
@@ -161,8 +172,14 @@ function createExperienceCard(item,index,onOpen){
   const typeClass=getTypeClass(item?.type);
   article.className=`experience experience-${typeClass}${item?.type==="session"?" story-main-experience":""}`;
   article.dataset.index=index;
-  const celebrationId=Number(item?.celebration_id)||0;
-  if(celebrationId){article.dataset.celebrationId=String(celebrationId);}
+  if(item?.type==="celebration"){
+    const celebrationId=Number(item?.celebration_id)||0;
+    if(celebrationId){article.dataset.celebrationId=String(celebrationId);}
+    if(item?.celebration_key){article.dataset.celebrationKey=String(item.celebration_key);}
+    if(item?.celebration_name){article.dataset.celebrationName=String(item.celebration_name);}
+    if(item?.celebration_date){article.dataset.celebrationDate=String(item.celebration_date);}
+    if(item?.celebration_type){article.dataset.celebrationType=String(item.celebration_type);}
+  }
 
   const typeLabel=getTypeLabel(item.type);
   article.innerHTML=buildMainCard(item,typeLabel);
