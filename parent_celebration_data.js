@@ -8,6 +8,7 @@ let celebrationData=null;
 
 function text(value){return typeof value==="string"?value.trim():"";}
 function timestamp(value){let time=Number(value)||0;if(time&&time<1000000000000){time*=1000;}return time;}
+function positiveId(value){const id=Number(value);return Number.isFinite(id)&&id>0?id:0;}
 
 /*   load celebration data*/
 export async function loadCelebrationData(){
@@ -48,11 +49,24 @@ function getMediaUrl(item){
   ].map(text).find(value=>/^https?:\/\//i.test(value))||"";
 }
 
+/*   get celebration id*/
+function getCelebrationId(celebration){
+  const media=Array.isArray(celebration?.media)?celebration.media:[];
+  const candidates=[
+    celebration?.id,
+    celebration?.celebration_id,
+    celebrationData?.celebration_id,
+    ...media.map(item=>item?.celebration_id)
+  ];
+  return candidates.map(positiveId).find(Boolean)||0;
+}
+
 /*   prepare celebration media*/
-function getCelebrationMedia(celebration){
+function getCelebrationMedia(celebration,celebrationId){
   const media=Array.isArray(celebration?.media)?celebration.media:[];
   return media.map(item=>({
-    id:Number(item?.id)||0,
+    id:positiveId(item?.id),
+    celebration_id:celebrationId||positiveId(item?.celebration_id),
     kind:text(item?.media_kind)||"media",
     url:getMediaUrl(item),
     thumbnail_filename:text(item?.thumbnail_filename),
@@ -66,7 +80,8 @@ export function getCelebrationExperience(){
   const celebration=celebrationData?.celebration;
   if(!celebration||!text(celebration?.name)){return null;}
 
-  const media=getCelebrationMedia(celebration);
+  const celebrationId=getCelebrationId(celebration);
+  const media=getCelebrationMedia(celebration,celebrationId);
   const title=text(celebration?.name)||"A Special Day to Celebrate";
   const parentTitle=text(celebration?.parent_title);
   const copy=text(celebration?.parent_message)||"A special Little Nest memory worth celebrating together.";
@@ -79,7 +94,7 @@ export function getCelebrationExperience(){
     label:"Celebration",
     copy,
     photo:hero,
-    celebration_id:Number(celebration?.id)||0,
+    celebration_id:celebrationId,
     celebration_name:title,
     celebration_date:text(celebration?.date),
     celebration_type:text(celebration?.type),
