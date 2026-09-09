@@ -63,6 +63,40 @@ function buildTogetherCard(item,typeLabel){
   `;
 }
 
+/*   celebration card*/
+function buildCelebrationCard(item,typeLabel){
+  const media=Array.isArray(item?.celebration_media)?item.celebration_media:[];
+  const mediaItems=media.map((entry,index)=>{
+    const kind=String(entry?.kind||"media").toLowerCase();
+    const hasImage=Boolean(entry?.url);
+    return`
+      <div class="celebration-media-item${hasImage?" has-image":""}"${hasImage?` style="background-image:url('${escapeHtml(entry.url)}')"`:""}>
+        ${kind==="video"?`<span class="celebration-media-play">▶</span>`:""}
+        ${!hasImage?`<span class="celebration-media-kind">${kind==="video"?"Video":"Photo"} ${index+1}</span>`:""}
+      </div>
+    `;
+  }).join("");
+
+  return`
+    <div class="card main-stage-card celebration-main-card">
+      <div class="photo" style="background-image:url('${escapeHtml(item.photo)}')"></div>
+      <div class="type-mark">${escapeHtml(typeLabel)}</div>
+      <div class="content main-stage-content celebration-main-content">
+        <h2 class="moment-title main-stage-title">${escapeHtml(item.title||"")}</h2>
+        ${item?.celebration_parent_title?`<div class="celebration-parent-title">${escapeHtml(item.celebration_parent_title)}</div>`:""}
+        <p class="moment-copy main-stage-copy">${escapeHtml(item.copy||"")}</p>
+        ${mediaItems?`
+          <div class="celebration-media-head">
+            <span>From the celebration</span>
+            <strong>${media.length} ${media.length===1?"memory":"memories"}</strong>
+          </div>
+          <div class="celebration-media-strip">${mediaItems}</div>
+        `:""}
+      </div>
+    </div>
+  `;
+}
+
 /*   award card*/
 function buildAwardCard(item,typeLabel){
   const awards=Array.isArray(item?.award_items)?item.award_items:[];
@@ -99,6 +133,9 @@ function buildAwardCard(item,typeLabel){
 function buildMainCard(item,typeLabel){
   if(item?.type==="home"){
     return buildTogetherCard(item,typeLabel);
+  }
+  if(item?.type==="celebration"){
+    return buildCelebrationCard(item,typeLabel);
   }
   if(item?.type==="award"){
     return buildAwardCard(item,typeLabel);
