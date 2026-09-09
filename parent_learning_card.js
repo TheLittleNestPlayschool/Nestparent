@@ -8,19 +8,31 @@ function escapeHtml(value){
     .replaceAll("'","&#039;");
 }
 
+/*   learning rows*/
+function buildRows(items,type){
+  if(!items.length){return"";}
+  return items.map((item,index)=>`
+    <article class="learning-detail-row learning-detail-row-${type}">
+      <div class="learning-detail-index">${index+1}</div>
+      <div class="learning-detail-row-copy">
+        ${item.title?`<h3>${escapeHtml(item.title)}</h3>`:""}
+        ${item.copy?`<p>${escapeHtml(item.copy)}</p>`:""}
+      </div>
+    </article>
+  `).join("");
+}
+
 /*   explored*/
 function buildExplored(items){
   if(!items.length){return"";}
   return`
-    <section class="learning-detail-section">
-      <div class="learning-detail-kicker">What We Explored</div>
-      <div class="learning-detail-explored">
-        ${items.map(item=>`
-          <article class="learning-detail-item">
-            ${item.title?`<h3>${escapeHtml(item.title)}</h3>`:""}
-            ${item.copy?`<p>${escapeHtml(item.copy)}</p>`:""}
-          </article>
-        `).join("")}
+    <section class="learning-detail-section learning-detail-explored-section">
+      <div class="learning-detail-section-head">
+        <div class="learning-detail-kicker">What We Explored</div>
+        <p>The ideas and concepts woven through today's learning.</p>
+      </div>
+      <div class="learning-detail-rows">
+        ${buildRows(items,"explored")}
       </div>
     </section>
   `;
@@ -30,29 +42,13 @@ function buildExplored(items){
 function buildConnections(items){
   if(!items.length){return"";}
   return`
-    <section class="learning-detail-section">
-      <div class="learning-detail-kicker">Learning Connections</div>
-      <div class="learning-detail-connections">
-        ${items.map(item=>`
-          <article class="learning-detail-item">
-            ${item.title?`<h3>${escapeHtml(item.title)}</h3>`:""}
-            ${item.copy?`<p>${escapeHtml(item.copy)}</p>`:""}
-          </article>
-        `).join("")}
+    <section class="learning-detail-section learning-detail-connections-section">
+      <div class="learning-detail-section-head">
+        <div class="learning-detail-kicker">Learning Connections</div>
+        <p>How those experiences connect with broader development.</p>
       </div>
-    </section>
-  `;
-}
-
-/*   media*/
-function buildMedia(media){
-  if(!media.length){return"";}
-  return`
-    <section class="learning-detail-section learning-detail-media-section">
-      <div class="learning-detail-media">
-        ${media.slice(0,4).map((url,index)=>`
-          <div class="learning-detail-photo${index===0?" is-primary":""}" style="background-image:url('${escapeHtml(url)}')"></div>
-        `).join("")}
+      <div class="learning-detail-rows">
+        ${buildRows(items,"connection")}
       </div>
     </section>
   `;
@@ -70,7 +66,6 @@ export function createLearningCard(item){
   const hero=item?.photo||detail.media?.[0]||"";
   const explored=Array.isArray(detail.explored)?detail.explored:[];
   const connections=Array.isArray(detail.connections)?detail.connections:[];
-  const media=Array.isArray(detail.media)?detail.media:[];
 
   article.innerHTML=`
     <div class="card learning-detail-card">
@@ -85,7 +80,6 @@ export function createLearningCard(item){
         <div class="learning-detail-body">
           ${buildExplored(explored)}
           ${buildConnections(connections)}
-          ${buildMedia(media)}
         </div>
       </div>
     </div>
