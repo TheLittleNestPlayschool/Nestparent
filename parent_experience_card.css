@@ -107,9 +107,20 @@
 }
 .experience-growth .type-mark{background:linear-gradient(135deg,rgba(229,248,237,.96),rgba(244,239,206,.96));color:#405f4d;}
 .experience-moments .main-stage-card::after{
-  background:linear-gradient(to bottom,rgba(126,63,103,.01) 18%,rgba(149,95,151,.08) 42%,rgba(79,54,86,.45) 66%,rgba(42,35,56,.88) 100%);
+  background:linear-gradient(to bottom,rgba(126,63,103,.01) 16%,rgba(155,87,141,.09) 39%,rgba(88,52,88,.48) 64%,rgba(43,31,55,.91) 100%);
 }
 .experience-moments .type-mark{background:linear-gradient(135deg,rgba(252,235,244,.96),rgba(238,231,251,.96));color:#66506a;}
+.experience-moments .moments-main-card{cursor:default;}
+.experience-moments .main-stage-title{max-width:305px;}
+.experience-moments .main-stage-copy{max-width:310px;font-size:14px;line-height:1.62;}
+.moments-main-time{
+  margin-top:14px;
+  font-size:10.5px;
+  line-height:1.2;
+  font-weight:700;
+  letter-spacing:.04em;
+  color:rgba(255,240,248,.74);
+}
 .experience-together .main-stage-card::after{
   background:linear-gradient(to bottom,rgba(79,113,137,.01) 18%,rgba(228,147,108,.07) 42%,rgba(76,72,76,.45) 66%,rgba(38,43,53,.88) 100%);
 }
