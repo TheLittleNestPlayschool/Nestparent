@@ -184,31 +184,37 @@ function buildLearningDetail(session,photos){
   };
 }
 
+/*   parent-facing activity*/
 function getActivityExperience(experiences){
   return experiences.find(item=>["activity","mixed"].includes(getText(item?.experience_type).toLowerCase()))||experiences.find(item=>getText(item?.experience_name)||getJsonList(item?.class_actions).length)||null;
 }
 
 function buildActivityTitle(session,experience){
-  return firstText(experience?.experience_name,session?.physical_activity,session?.lesson_1_title,"Today's Activity");
+  return firstText(session?.activity_main_heading,experience?.experience_name,session?.physical_activity,session?.lesson_1_title,"Today's Activity");
 }
 
 function buildActivityCopy(session,experience){
-  return firstText(experience?.parent_description,experience?.experience_summary,session?.physical_activity,session?.worksheet_description,"A hands-on part of today's classroom experience.");
+  return firstText(session?.activity_main_text,experience?.parent_description,experience?.experience_summary,session?.physical_activity,session?.worksheet_description,"A hands-on part of today's classroom experience.");
 }
 
-function buildActivityDetail(session,experience,photos){
-  const actions=getJsonList(experience?.class_actions).map(String).slice(0,6);
-  const materials=getJsonList(experience?.explicit_materials).map(String).slice(0,6);
-  const concepts=[...new Set([...getJsonList(experience?.inferred_concepts).map(String),...getJsonList(experience?.learning_tags).map(String)])].slice(0,6);
+function buildActivityDetail(session,experience){
+  const actions=[
+    {title:getText(session?.activity_action_1_heading),copy:getText(session?.activity_action_1_text)},
+    {title:getText(session?.activity_action_2_heading),copy:getText(session?.activity_action_2_text)},
+    {title:getText(session?.activity_action_3_heading),copy:getText(session?.activity_action_3_text)}
+  ].filter(item=>item.title||item.copy);
   return{
-    eyebrow:"Activity",
-    title:buildActivityTitle(session,experience),
-    lead:buildActivityCopy(session,experience),
-    context:firstText(experience?.class_context,session?.physical_activity,session?.worksheet_description),
+    title:firstText(session?.activity_detail_heading,session?.activity_main_heading,experience?.experience_name,"Today's Activity"),
+    lead:firstText(session?.activity_detail_intro,session?.activity_main_text,experience?.parent_description,experience?.experience_summary),
     actions,
-    materials,
-    concepts,
-    media:photos.slice(0,6)
+    materials:{
+      title:getText(session?.activity_materials_heading),
+      copy:getText(session?.activity_materials_text)
+    },
+    teacherContext:{
+      title:getText(session?.activity_teacher_context_heading),
+      copy:getText(session?.activity_teacher_context_text)
+    }
   };
 }
 
@@ -264,7 +270,6 @@ export function getExperiences(){
   const learningConnections=[getText(session?.learning_connection_1_heading),getText(session?.learning_connection_2_heading),getText(session?.learning_connection_3_heading)].filter(Boolean);
   const activityExperience=getActivityExperience(sessionExperiences);
   const activityPhoto=todayPhotos[2]||todayPhotos[0]||getExperiencePhoto(livePhotos,2);
-  const activityMedia=todayPhotos.length?todayPhotos:livePhotos;
   const growthPhoto=todayPhotos[3]||todayPhotos[0]||getExperiencePhoto(livePhotos,3);
   const growthMedia=todayPhotos.length?todayPhotos:livePhotos;
 
@@ -300,9 +305,9 @@ export function getExperiences(){
       label:"Activity",
       copy:buildActivityCopy(session,activityExperience),
       photo:activityPhoto,
-      categories:getJsonList(activityExperience?.class_actions).map(String).slice(0,2),
-      detail:buildActivityDetail(session,activityExperience,activityMedia),
-      deeper:firstText(activityExperience?.class_context,session?.physical_activity,session?.worksheet_description),
+      categories:[],
+      detail:buildActivityDetail(session,activityExperience),
+      deeper:firstText(session?.activity_detail_intro,session?.activity_main_text),
       learning:[]
     },
     {
