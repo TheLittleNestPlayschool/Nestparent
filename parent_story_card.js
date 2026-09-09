@@ -1,3 +1,8 @@
+import{
+  getStudentMedia,
+  getSignedThumbnails
+}from"./parent_data.js";
+
 /*   escape html*/
 function escapeHtml(value){
   return String(value??"")
@@ -8,15 +13,30 @@ function escapeHtml(value){
     .replaceAll("'","&#039;");
 }
 
+/*   story media ids*/
+function getStoryMediaIds(){
+  const media=getStudentMedia();
+  const thumbnails=getSignedThumbnails();
+  const ids=new Map();
+  media.forEach((item,index)=>{
+    const url=thumbnails[index]||"";
+    const id=Number(item?.id)||0;
+    if(url&&id&&!ids.has(url)){ids.set(url,id);}
+  });
+  return ids;
+}
+
 /*   story media*/
 function buildMedia(media){
   if(!media.length){return"";}
+  const mediaIds=getStoryMediaIds();
   return`
     <section class="story-detail-section story-detail-media-section">
       <div class="story-detail-media">
-        ${media.slice(0,4).map((url,index)=>`
-          <div class="story-detail-photo${index===0?" is-primary":""}" style="background-image:url('${escapeHtml(url)}')"></div>
-        `).join("")}
+        ${media.slice(0,4).map((url,index)=>{
+          const mediaId=mediaIds.get(url)||0;
+          return`<div class="story-detail-photo${index===0?" is-primary":""}"${mediaId?` data-media-id="${mediaId}"`:""} style="background-image:url('${escapeHtml(url)}')"></div>`;
+        }).join("")}
       </div>
     </section>
   `;
