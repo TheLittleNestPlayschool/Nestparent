@@ -256,9 +256,8 @@ export function getExperiences(){
   const studentGrowth=getStudentGrowth(student);
   const latestMoment=getLatestStudentMoment();
   const latestMomentText=getText(latestMoment?.moment);
+  const parentPrompt=getText(session?.parent_prompt);
   const homeActivity=getText(session?.home_time_activity);
-  const nextDescription=getText(session?.next_description);
-  const togetherHasHome=Boolean(homeActivity);
   const learningPhoto=todayPhotos[1]||todayPhotos[0]||getExperiencePhoto(livePhotos,1);
   const learningMedia=todayPhotos.length?todayPhotos:livePhotos;
   const learningConnections=[getText(session?.learning_connection_1_heading),getText(session?.learning_connection_2_heading),getText(session?.learning_connection_3_heading)].filter(Boolean);
@@ -332,13 +331,15 @@ export function getExperiences(){
     {
       type:"home",
       experience_type_code:"together",
-      title:togetherHasHome?"One tiny bridge back home.":"A little look at what comes next.",
-      label:togetherHasHome?"Together":"Coming Up",
-      copy:togetherHasHome?homeActivity:nextDescription||`A gentle way to stay connected with ${studentName}'s Little Nest journey.`,
+      title:"A Little Bridge Back Home",
+      label:"Together",
+      copy:parentPrompt||homeActivity||`A gentle way to stay connected with ${studentName}'s Little Nest journey.`,
       photo:getExperiencePhoto(livePhotos,5),
-      categories:togetherHasHome?["At home","Keep it playful"]:["Coming next"],
-      deeper:togetherHasHome?"This comes directly from the session's home-time activity and should always feel optional and light.":nextDescription,
-      learning:togetherHasHome?[["🏡","At home",homeActivity]]:nextDescription?[["→","Coming next",nextDescription]]:[]
+      together_prompt:parentPrompt,
+      together_activity:homeActivity,
+      categories:[],
+      deeper:"",
+      learning:[]
     }
   ];
 }
