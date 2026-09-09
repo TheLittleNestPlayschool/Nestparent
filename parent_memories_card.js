@@ -75,6 +75,15 @@ function isCurrentMonth(value){
   return date.getFullYear()===now.getFullYear()&&date.getMonth()===now.getMonth();
 }
 
+/*   is earlier memory*/
+function isEarlierMemory(value){
+  const date=getMediaDate(value);
+  if(!date){return false;}
+  const now=new Date();
+  const currentMonthStart=new Date(now.getFullYear(),now.getMonth(),1);
+  return date<currentMonthStart;
+}
+
 /*   get current month*/
 function getCurrentMonth(){
   return new Intl.DateTimeFormat("en",{month:"long"}).format(new Date());
@@ -89,6 +98,7 @@ function getLiveMemories(){
   const weekCount=media.filter(item=>isThisWeek(item.created_at)).length;
   const lastWeekCount=media.filter(item=>isLastWeek(item.created_at)).length;
   const monthCount=media.filter(item=>isCurrentMonth(item.created_at)).length;
+  const earlierCount=media.filter(item=>isEarlierMemory(item.created_at)).length;
   const newestMedia=[...media].sort((a,b)=>Number(b.created_at)-Number(a.created_at)).find(item=>item.thumbnail);
   const fallbackPhoto="https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=1200&q=86";
   return{
@@ -100,6 +110,7 @@ function getLiveMemories(){
     weekCount,
     lastWeekCount,
     monthCount,
+    earlierCount,
     monthName:getCurrentMonth()
   };
 }
@@ -121,7 +132,7 @@ function getLiveChapters(){
       return{...chapter,title:live.monthName,copy:live.monthCount===0?`No ${live.monthName} moments yet`:`${live.studentName}'s ${live.monthName} memories`,count:live.monthCount,countLabel:live.monthCount===1?`${live.monthName} moment`:`${live.monthName} moments`};
     }
     if(chapter.id==="earlier"){
-      return{...chapter,countLabel:chapter.count===1?"earlier memory":"earlier memories"};
+      return{...chapter,copy:live.earlierCount===0?"No earlier memories yet":`Wander further back through ${live.studentName}'s story`,count:live.earlierCount,countLabel:live.earlierCount===1?"earlier memory":"earlier memories"};
     }
     return{...chapter,countLabel:chapter.count===1?"memory":"memories"};
   });
