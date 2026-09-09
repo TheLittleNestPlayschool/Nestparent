@@ -2,6 +2,7 @@ import{applyTimeAtmosphere}from"./parent_time.js";
 import{applyParentGreeting}from"./parent_greeting.js";
 import{loadParentData}from"./parent_data.js";
 import{loadAwardsData}from"./parent_awards_data.js";
+import{loadRecentAwardsData}from"./parent_recent_awards_data.js";
 import{loadMomentsData}from"./parent_moments_data.js";
 import{buildCards,activateCarousel}from"./parent_carousel.js";
 import{activateSheet}from"./parent_sheet.js";
@@ -26,6 +27,15 @@ async function startParentApp(){
     }catch(error){
       console.error(
         "Unable to preload Parent Awards:",
+        error
+      );
+    }
+
+    try{
+      await loadRecentAwardsData();
+    }catch(error){
+      console.error(
+        "Unable to preload recent Parent Awards:",
         error
       );
     }
