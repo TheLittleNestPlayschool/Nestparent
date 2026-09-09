@@ -181,6 +181,7 @@ export function createAwardCategoryCard({categoryId,onAward}={}){
               class="award-milestone${earned?" is-earned":""}"
               type="button"
               data-award-badge="${badge.id}"
+              ${earned?`data-student-badge-id="${earned.id}"`:""}
               ${earned?"":"disabled"}
             >
               <span class="award-milestone-level">Level ${badge.level}</span>
@@ -225,6 +226,10 @@ export function createAwardDetailCard({categoryId,badgeId}={}){
     article.innerHTML=`<div class="awards-stage-card"></div>`;
     return article;
   }
+
+  article.dataset.categoryId=String(categoryId);
+  article.dataset.awardBadge=String(badgeId);
+  article.dataset.studentBadgeId=String(earned.id);
 
   article.innerHTML=`
     <div class="awards-stage-card award-detail-card">
