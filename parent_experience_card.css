@@ -67,75 +67,31 @@
   color:white;
 }
 .content::-webkit-scrollbar{display:none;}
-.moment-label{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:9px;
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.76);
-}
-.moment-label::before{
-  content:"";
-  width:20px;
-  height:1px;
-  background:rgba(255,255,255,.54);
-}
 .moment-title{
   margin:0;
-  max-width:330px;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:clamp(27px,7vw,36px);
-  line-height:.98;
-  font-weight:400;
-  letter-spacing:-.035em;
-}
-.moment-copy{
-  margin:14px 0 0;
-  max-width:330px;
-  font-size:13px;
-  line-height:1.55;
-  color:rgba(255,255,255,.88);
-}
-
-/*   learning pills*/
-.learn-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px;}
-.learn-pill{
-  display:inline-flex;
-  align-items:center;
-  min-height:29px;
-  padding:6px 11px;
-  border:1px solid rgba(255,255,255,.30);
-  border-radius:999px;
-  background:rgba(255,255,255,.15);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  font-size:10px;
-  color:rgba(255,255,255,.94);
-}
-
-/*   story main card*/
-.story-main-card::after{
-  background:linear-gradient(to bottom,rgba(13,20,19,.01) 20%,rgba(13,20,19,.08) 43%,rgba(12,19,18,.42) 64%,rgba(9,15,14,.84) 100%);
-}
-.story-main-content{bottom:29px;}
-.story-main-label{margin-bottom:10px;color:rgba(255,255,255,.78);}
-.story-main-title{
   max-width:325px;
+  font-family:Georgia,"Times New Roman",serif;
   font-size:clamp(25px,6.2vw,31px);
   line-height:1.04;
+  font-weight:400;
+  letter-spacing:-.035em;
   text-wrap:balance;
 }
-.story-main-copy{
+.moment-copy{
+  margin:13px 0 0;
   max-width:325px;
-  margin-top:13px;
   font-size:13px;
   line-height:1.58;
   color:rgba(255,255,255,.90);
 }
+
+/*   main stage cards*/
+.main-stage-card::after{
+  background:linear-gradient(to bottom,rgba(13,20,19,.01) 20%,rgba(13,20,19,.08) 43%,rgba(12,19,18,.42) 64%,rgba(9,15,14,.84) 100%);
+}
+.main-stage-content{bottom:29px;}
+.main-stage-title{max-width:325px;}
+.main-stage-copy{max-width:325px;}
 
 /*   expanded story card*/
 .story-detail-experience{
@@ -222,6 +178,6 @@
 /*   responsive*/
 @media (max-width:420px){
   .content{left:23px;right:23px;bottom:23px;max-height:calc(100% - 84px);}
-  .story-main-content{bottom:27px;}
+  .main-stage-content{bottom:27px;}
   .story-detail-scroll{padding-left:17px;padding-right:17px;padding-bottom:26px;}
 }
