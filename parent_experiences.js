@@ -318,7 +318,7 @@ export function getExperiences(){
     {
       type:"moments",
       experience_type_code:"moments",
-      title:latestMomentText?`A little moment from ${studentName}'s day`:`Little moments from ${studentName}'s day`,
+      title:latestMomentText?`A Little Moment From ${studentName}'s Day`:`Little Moments From ${studentName}'s Day`,
       label:"Moment",
       copy:latestMomentText||"When a teacher notices a little moment worth remembering, it will appear here for you.",
       photo:momentPhoto,
