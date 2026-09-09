@@ -5,6 +5,7 @@ import{
   getStudentMedia,
   getSignedThumbnails
 }from"./parent_data.js";
+import{getLatestStudentMoment}from"./parent_moments_data.js";
 
 /*   experience photos*/
 const fallbackPhotos=[
@@ -96,12 +97,6 @@ function getSessionExperiences(parentData,session){
   });
 }
 
-function getStudentMoments(parentData,session){
-  const source=[parentData?.student_moments,parentData?.student_moment].find(Array.isArray)||[];
-  const sessionId=Number(session?.id)||0;
-  return source.filter(item=>item?.is_active!==false&&(!sessionId||Number(item?.session_id||item?.session)===sessionId));
-}
-
 function getStudentBadges(parentData){
   return [parentData?.student_badges,parentData?.student_badge].find(Array.isArray)||[];
 }
@@ -149,10 +144,6 @@ function getGrowthWeights(session){
 
 function getStudentGrowth(student){
   return growthCategories.map(([key,label])=>({key,label,value:Number(student?.[key]??0)||0})).filter(item=>item.value>0).sort((a,b)=>b.value-a.value);
-}
-
-function getCategoryDescription(session,key){
-  return getText(session?.[`${key}_desc`]);
 }
 
 /*   parent-facing learning*/
@@ -207,14 +198,8 @@ function buildActivityDetail(session,experience){
     title:firstText(session?.activity_detail_heading,session?.activity_main_heading,experience?.experience_name,"Today's Activity"),
     lead:firstText(session?.activity_detail_intro,session?.activity_main_text,experience?.parent_description,experience?.experience_summary),
     actions,
-    materials:{
-      title:getText(session?.activity_materials_heading),
-      copy:getText(session?.activity_materials_text)
-    },
-    teacherContext:{
-      title:getText(session?.activity_teacher_context_heading),
-      copy:getText(session?.activity_teacher_context_text)
-    }
+    materials:{title:getText(session?.activity_materials_heading),copy:getText(session?.activity_materials_text)},
+    teacherContext:{title:getText(session?.activity_teacher_context_heading),copy:getText(session?.activity_teacher_context_text)}
   };
 }
 
@@ -241,10 +226,7 @@ function buildGrowthDetail(studentGrowth,session){
     currentText:getText(session?.growth_current_text),
     current,
     contributions,
-    personalEvidence:{
-      title:getText(session?.growth_personal_evidence_heading),
-      copy:getText(session?.growth_personal_evidence_text)
-    }
+    personalEvidence:{title:getText(session?.growth_personal_evidence_heading),copy:getText(session?.growth_personal_evidence_text)}
   };
 }
 
@@ -254,7 +236,6 @@ export function getExperiences(){
   const student=getStudent();
   const session=getCurrentSessionDetails()||{};
   const sessionExperiences=getSessionExperiences(parentData,session);
-  const studentMoments=getStudentMoments(parentData,session);
   const studentBadges=getStudentBadges(parentData);
   const media=getStudentMedia();
   const thumbnails=getSignedThumbnails();
@@ -273,9 +254,8 @@ export function getExperiences(){
 
   const sessionGrowth=getGrowthWeights(session);
   const studentGrowth=getStudentGrowth(student);
-  const todayCount=todayMedia.length;
-  const todayMomentWord=todayCount===1?"moment":"moments";
-  const todayPhoto=todayPhotos[0]||fallbackPhotos[4];
+  const latestMoment=getLatestStudentMoment();
+  const latestMomentText=getText(latestMoment?.moment);
   const homeActivity=getText(session?.home_time_activity);
   const nextDescription=getText(session?.next_description);
   const togetherHasHome=Boolean(homeActivity);
@@ -285,6 +265,7 @@ export function getExperiences(){
   const activityExperience=getActivityExperience(sessionExperiences);
   const activityPhoto=todayPhotos[2]||todayPhotos[0]||getExperiencePhoto(livePhotos,2);
   const growthPhoto=todayPhotos[3]||todayPhotos[0]||getExperiencePhoto(livePhotos,3);
+  const momentPhoto=todayPhotos[0]||getExperiencePhoto(livePhotos,4);
 
   return[
     {
@@ -338,13 +319,14 @@ export function getExperiences(){
     {
       type:"moments",
       experience_type_code:"moments",
-      title:todayCount?`${todayCount} little ${todayMomentWord} from today.`:"Today's moments are coming soon!",
-      label:"Today's Moments",
-      copy:todayCount?`A little of ${studentName}'s day is ready to look through.`:"As today's little moments arrive, they'll gather here for you.",
-      photo:todayPhoto,
-      categories:todayCount?[`${todayCount} ${todayMomentWord}`,"Photos & videos"]:["Today","Moments"],
+      title:latestMomentText?`A little moment from ${studentName}'s day`:`Little moments from ${studentName}'s day`,
+      label:"Moment",
+      copy:latestMomentText||"When a teacher notices a little moment worth remembering, it will appear here for you.",
+      photo:momentPhoto,
+      moment_created_at:Number(latestMoment?.created_at)||0,
+      moment_id:Number(latestMoment?.id)||0,
+      categories:[],
       deeper:"",
-      destination:"memories_today",
       learning:[]
     },
     {
