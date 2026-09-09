@@ -8,38 +8,45 @@ function escapeHtml(value){
     .replaceAll("'","&#039;");
 }
 
-function buildProgress(items){
-  if(!items.length){return"";}
+function buildProgress(items,heading,text){
+  if(!items.length&&!heading&&!text){return"";}
   const max=Math.max(...items.map(item=>Number(item.value)||0),1);
   return`
-    <section class="growth-detail-section">
-      <div class="growth-detail-kicker">Current Growth</div>
-      <div class="growth-detail-progress">
-        ${items.map(item=>{
-          const value=Number(item.value)||0;
-          const width=Math.max(10,Math.min(100,(value/max)*100));
-          return`
-            <div class="growth-progress-row">
-              <div class="growth-progress-head"><span>${escapeHtml(item.label)}</span><span>${escapeHtml(value)}</span></div>
-              <div class="growth-progress-track"><span style="width:${width}%"></span></div>
-            </div>
-          `;
-        }).join("")}
+    <section class="growth-detail-section growth-detail-current">
+      <div class="growth-detail-section-head">
+        ${heading?`<div class="growth-detail-kicker">${escapeHtml(heading)}</div>`:""}
+        ${text?`<p>${escapeHtml(text)}</p>`:""}
       </div>
+      ${items.length?`
+        <div class="growth-detail-progress">
+          ${items.map(item=>{
+            const value=Number(item.value)||0;
+            const width=Math.max(10,Math.min(100,(value/max)*100));
+            return`
+              <div class="growth-progress-row">
+                <div class="growth-progress-head"><span>${escapeHtml(item.label)}</span><span>${escapeHtml(value)}</span></div>
+                <div class="growth-progress-track"><span style="width:${width}%"></span></div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `:""}
     </section>
   `;
 }
 
-function buildToday(items){
+function buildContributions(items){
   if(!items.length){return"";}
   return`
-    <section class="growth-detail-section">
-      <div class="growth-detail-kicker">What Today Supported</div>
-      <div class="growth-detail-notes">
+    <section class="growth-detail-section growth-detail-contributions">
+      <div class="growth-detail-section-head">
+        <div class="growth-detail-kicker">What Today Supported</div>
+      </div>
+      <div class="growth-detail-rows">
         ${items.map(item=>`
-          <article class="growth-detail-note">
-            <h3>${escapeHtml(item.label)}</h3>
-            ${item.description?`<p>${escapeHtml(item.description)}</p>`:""}
+          <article class="growth-detail-row">
+            ${item.title?`<h3>${escapeHtml(item.title)}</h3>`:""}
+            ${item.copy?`<p>${escapeHtml(item.copy)}</p>`:""}
           </article>
         `).join("")}
       </div>
@@ -47,26 +54,14 @@ function buildToday(items){
   `;
 }
 
-function buildMoments(items){
-  if(!items.length){return"";}
+function buildPersonalEvidence(item){
+  if(!item?.title&&!item?.copy){return"";}
   return`
-    <section class="growth-detail-section">
-      <div class="growth-detail-kicker">Teacher Moments</div>
-      <div class="growth-detail-moments">
-        ${items.map(item=>`<p>${escapeHtml(item)}</p>`).join("")}
-      </div>
-    </section>
-  `;
-}
-
-function buildMedia(media){
-  if(!media.length){return"";}
-  return`
-    <section class="growth-detail-section">
-      <div class="growth-detail-kicker">Little Glimpses</div>
-      <div class="growth-detail-media">
-        ${media.slice(0,4).map((url,index)=>`<div class="growth-detail-photo${index===0?" is-primary":""}" style="background-image:url('${escapeHtml(url)}')"></div>`).join("")}
-      </div>
+    <section class="growth-detail-section growth-detail-evidence">
+      <article class="growth-detail-info">
+        ${item.title?`<h3>${escapeHtml(item.title)}</h3>`:""}
+        ${item.copy?`<p>${escapeHtml(item.copy)}</p>`:""}
+      </article>
     </section>
   `;
 }
@@ -80,11 +75,9 @@ export function createGrowthCard(item){
 
   const title=detail.title||item?.title||"Growth";
   const lead=detail.lead||item?.copy||"";
-  const hero=item?.photo||detail.media?.[0]||"";
+  const hero=item?.photo||"";
   const current=Array.isArray(detail.current)?detail.current:[];
-  const today=Array.isArray(detail.today)?detail.today:[];
-  const moments=Array.isArray(detail.moments)?detail.moments:[];
-  const media=Array.isArray(detail.media)?detail.media:[];
+  const contributions=Array.isArray(detail.contributions)?detail.contributions:[];
 
   article.innerHTML=`
     <div class="card growth-detail-card">
@@ -93,15 +86,13 @@ export function createGrowthCard(item){
       <div class="growth-detail-hero-shade"></div>
       <div class="growth-detail-scroll">
         <header class="growth-detail-header">
-          <div class="growth-detail-label">${escapeHtml(detail.eyebrow||"Growth")}</div>
           <h2>${escapeHtml(title)}</h2>
           ${lead?`<p class="growth-detail-lead">${escapeHtml(lead)}</p>`:""}
         </header>
         <div class="growth-detail-body">
-          ${buildProgress(current)}
-          ${buildToday(today)}
-          ${buildMoments(moments)}
-          ${buildMedia(media)}
+          ${buildProgress(current,detail.currentHeading||"",detail.currentText||"")}
+          ${buildContributions(contributions)}
+          ${buildPersonalEvidence(detail.personalEvidence)}
         </div>
       </div>
     </div>
