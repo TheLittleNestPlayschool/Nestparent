@@ -167,9 +167,76 @@
 }
 .experience-celebration .type-mark{background:linear-gradient(135deg,rgba(255,247,216,.97),rgba(255,229,240,.96));color:#735466;}
 .experience-award .main-stage-card::after{
-  background:linear-gradient(to bottom,rgba(65,72,135,.01) 18%,rgba(189,151,66,.08) 42%,rgba(55,57,100,.48) 66%,rgba(27,29,62,.90) 100%);
+  background:radial-gradient(circle at 50% 46%,rgba(255,213,116,.16),transparent 27%),linear-gradient(to bottom,rgba(65,72,135,.02) 16%,rgba(189,151,66,.10) 40%,rgba(55,57,100,.50) 65%,rgba(25,27,59,.94) 100%);
 }
 .experience-award .type-mark{background:linear-gradient(135deg,rgba(240,237,255,.97),rgba(255,244,207,.97));color:#554f76;}
+.experience-award .award-main-card{cursor:default;}
+.award-main-content{bottom:24px;max-height:calc(100% - 82px);}
+.award-main-crown{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:42px;
+  height:42px;
+  margin-bottom:12px;
+  border:1px solid rgba(255,239,184,.75);
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.52),rgba(255,212,105,.24) 42%,rgba(139,111,222,.22));
+  box-shadow:0 0 28px rgba(255,211,110,.26),inset 0 1px 0 rgba(255,255,255,.55);
+  font-size:22px;
+  color:#ffe7a2;
+}
+.experience-award .main-stage-title{max-width:315px;}
+.experience-award .main-stage-copy{max-width:315px;color:rgba(255,249,232,.92);}
+.award-main-list{
+  display:grid;
+  gap:8px;
+  margin-top:16px;
+  padding-bottom:2px;
+}
+.award-main-item{
+  display:grid;
+  grid-template-columns:40px 1fr;
+  gap:11px;
+  align-items:center;
+  padding:9px 11px;
+  border:1px solid rgba(255,255,255,.56);
+  border-radius:17px;
+  background:linear-gradient(125deg,rgba(245,241,255,.91),rgba(255,244,210,.90));
+  box-shadow:0 8px 20px rgba(18,20,52,.16),inset 0 1px 0 rgba(255,255,255,.90);
+  color:#393855;
+}
+.award-main-item.is-first{background:linear-gradient(125deg,rgba(241,237,255,.96),rgba(255,239,188,.95));}
+.award-main-icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid rgba(162,127,42,.22);
+  background:radial-gradient(circle at 35% 28%,#fffdf3,#f5d77f 62%,#d5b45a);
+  box-shadow:0 5px 13px rgba(91,73,30,.16),inset 0 1px 0 rgba(255,255,255,.78);
+  font-size:15px;
+  color:#765c1f;
+  background-size:cover;
+  background-position:center;
+}
+.award-main-icon.has-image{font-size:0;background-color:#fff8df;}
+.award-main-item-copy{min-width:0;}
+.award-main-item-copy strong{
+  display:block;
+  font-size:12.5px;
+  line-height:1.25;
+  color:#34344f;
+}
+.award-main-item-copy span{
+  display:block;
+  margin-top:3px;
+  font-size:10.5px;
+  line-height:1.25;
+  color:#6f6a78;
+}
 
 /*   expanded story card*/
 .story-detail-experience{
@@ -257,5 +324,6 @@
 @media (max-width:420px){
   .content{left:23px;right:23px;bottom:23px;max-height:calc(100% - 84px);}
   .main-stage-content{bottom:27px;}
+  .award-main-content{bottom:21px;max-height:calc(100% - 78px);}
   .story-detail-scroll{padding-left:17px;padding-right:17px;padding-bottom:26px;}
 }
