@@ -25,34 +25,15 @@ function getTypeLabel(type){
   })[type]||"Story";
 }
 
-/*   story main card*/
-function buildStoryMainCard(item){
+/*   main card*/
+function buildMainCard(item,typeLabel){
   return`
-    <div class="card story-main-card">
-      <div class="photo story-main-photo" style="background-image:url('${escapeHtml(item.photo)}')"></div>
-      <div class="type-mark">Story</div>
-      <div class="content story-main-content">
-        <h2 class="moment-title story-main-title">${escapeHtml(item.title||"{story_title}")}</h2>
-        <p class="moment-copy story-main-copy">${escapeHtml(item.copy||"{story_teaser}")}</p>
-      </div>
-    </div>
-  `;
-}
-
-/*   standard main card*/
-function buildStandardMainCard(item,typeLabel){
-  const categories=Array.isArray(item.categories)?item.categories:[];
-  return`
-    <div class="card">
+    <div class="card main-stage-card">
       <div class="photo" style="background-image:url('${escapeHtml(item.photo)}')"></div>
       <div class="type-mark">${escapeHtml(typeLabel)}</div>
-      <div class="content">
-        <div class="moment-label">${escapeHtml(item.label)}</div>
-        <h2 class="moment-title">${escapeHtml(item.title)}</h2>
-        <p class="moment-copy">${escapeHtml(item.copy)}</p>
-        <div class="learn-row">
-          ${categories.map(category=>`<span class="learn-pill">${escapeHtml(category)}</span>`).join("")}
-        </div>
+      <div class="content main-stage-content">
+        <h2 class="moment-title main-stage-title">${escapeHtml(item.title||"")}</h2>
+        <p class="moment-copy main-stage-copy">${escapeHtml(item.copy||"")}</p>
       </div>
     </div>
   `;
@@ -65,7 +46,7 @@ function createExperienceCard(item,index,onOpen){
   article.dataset.index=index;
 
   const typeLabel=getTypeLabel(item.type);
-  article.innerHTML=item?.type==="session"?buildStoryMainCard(item):buildStandardMainCard(item,typeLabel);
+  article.innerHTML=buildMainCard(item,typeLabel);
 
   article.addEventListener("click",()=>{
     if(typeof onOpen==="function"){onOpen(index);}
