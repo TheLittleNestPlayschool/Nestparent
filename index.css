@@ -306,3 +306,12 @@
   background:rgba(255,255,255,.94);
   box-shadow:0 8px 20px rgba(18,35,52,.22),0 0 0 7px rgba(255,255,255,.20);
 }
+
+/*   keep Award panels aligned*/
+.experience-award .main-stage-copy,
+.award-main-list,
+.award-main-item{
+  width:100%;
+  max-width:none;
+  box-sizing:border-box;
+}
