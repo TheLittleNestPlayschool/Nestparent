@@ -21,7 +21,8 @@ function getTypeLabel(type){
     personal:"Growth",
     moments:"Moment",
     home:"Together",
-    celebration:"Celebration"
+    celebration:"Celebration",
+    award:"Award"
   })[type]||"Story";
 }
 
@@ -62,10 +63,45 @@ function buildTogetherCard(item,typeLabel){
   `;
 }
 
+/*   award card*/
+function buildAwardCard(item,typeLabel){
+  const awards=Array.isArray(item?.award_items)?item.award_items:[];
+  const awardRows=awards.map((award,index)=>{
+    const icon=award?.iconUrl
+      ?`<span class="award-main-icon has-image" style="background-image:url('${escapeHtml(award.iconUrl)}')"></span>`
+      :`<span class="award-main-icon">★</span>`;
+    return`
+      <div class="award-main-item${index===0?" is-first":""}">
+        ${icon}
+        <div class="award-main-item-copy">
+          <strong>${escapeHtml(award?.name||"Award")}</strong>
+          ${award?.category?`<span>${escapeHtml(award.category)}</span>`:""}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  return`
+    <div class="card main-stage-card award-main-card">
+      <div class="photo" style="background-image:url('${escapeHtml(item.photo)}')"></div>
+      <div class="type-mark">${escapeHtml(typeLabel)}</div>
+      <div class="content main-stage-content award-main-content">
+        <div class="award-main-crown">✦</div>
+        <h2 class="moment-title main-stage-title">${escapeHtml(item.title||"")}</h2>
+        <p class="moment-copy main-stage-copy">${escapeHtml(item.copy||"")}</p>
+        ${awardRows?`<div class="award-main-list">${awardRows}</div>`:""}
+      </div>
+    </div>
+  `;
+}
+
 /*   main card*/
 function buildMainCard(item,typeLabel){
   if(item?.type==="home"){
     return buildTogetherCard(item,typeLabel);
+  }
+  if(item?.type==="award"){
+    return buildAwardCard(item,typeLabel);
   }
 
   return`
