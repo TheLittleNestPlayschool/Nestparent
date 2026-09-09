@@ -96,16 +96,7 @@ export async function downloadMemoryMedia(
         item
       );
 
-    link.style.display=
-      "none";
-
-    document.body.appendChild(
-      link
-    );
-
     link.click();
-
-    link.remove();
 
     window.setTimeout(
       ()=>{
