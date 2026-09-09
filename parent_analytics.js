@@ -12,10 +12,10 @@ const APP_VERSION='1.0.0';
 const DB_NAME='nestparent_usage';
 const DB_VERSION=1;
 const STORE_NAME='sessions';
-const SCHEMA_VERSION=2;
+const SCHEMA_VERSION=3;
 const IDLE_TIMEOUT_MS=60000;
 const PERSIST_DELAY_MS=250;
-const IDENTITY_SELECTOR='[data-memory-media-id],[data-media-id],[data-selected-media-ids],[data-memory-archive],[data-memory-collection],[data-memory-chapter],[data-award-category],[data-category-id],[data-award-badge],[data-student-badge-id],[data-celebration-id],[data-celebration-media-id]';
+const IDENTITY_SELECTOR='[data-memory-media-id],[data-media-id],[data-selected-media-ids],[data-memory-archive],[data-memory-collection],[data-memory-chapter],[data-award-category],[data-category-id],[data-award-badge],[data-student-badge-id],[data-celebration-id],[data-celebration-key],[data-celebration-name],[data-celebration-date],[data-celebration-type],[data-celebration-media-id],[data-media-collection-type-id]';
 
 let currentSession=null;
 let activeStartedAt=null;
@@ -230,6 +230,7 @@ function getTargetInfo(target){
   else if(navItem){action='navigate';control=`nav_${slug(navText||'item')}`;}
   else if(target.id==='sheetClose'){action='close_sheet';control='close_sheet';}
   else if(card?.classList.contains('is-stage-back')){action='back';control='back_card';}
+  else if(target.classList?.contains('celebration-media-item')){action='open_media';control='celebration_media';}
   else if(card?.dataset?.index!==undefined){
     action=String(position)==='0'?'open_experience':'move_to_experience';
     control='experience_card';
@@ -262,7 +263,7 @@ function getElementIdentity(target,card=null){
     media_index:toInteger(dataset.memoryMediaIndex),
     memory_chapter:dataset.memoryChapter||null,
     memory_collection:dataset.memoryCollection||null,
-    memory_collection_type_id:toPositiveNumber(dataset.memoryCollectionTypeId),
+    memory_collection_type_id:toPositiveNumber(dataset.memoryCollectionTypeId||dataset.mediaCollectionTypeId),
     memory_archive:dataset.memoryArchive||null,
     memory_year:toInteger(dataset.memoryYear),
     memory_month:toInteger(dataset.memoryMonth),
@@ -270,6 +271,10 @@ function getElementIdentity(target,card=null){
     badge_id:toPositiveNumber(dataset.awardBadge||dataset.badgeId),
     student_badge_id:toPositiveNumber(dataset.studentBadgeId),
     celebration_id:toPositiveNumber(dataset.celebrationId),
+    celebration_key:dataset.celebrationKey||null,
+    celebration_name:dataset.celebrationName||null,
+    celebration_date:dataset.celebrationDate||null,
+    celebration_type:dataset.celebrationType||null,
     celebration_media_id:celebrationMediaId
   });
 }
@@ -293,7 +298,7 @@ function bindViewObserver(){
     childList:true,
     subtree:true,
     attributes:true,
-    attributeFilter:['data-pos','class','data-memory-media-id','data-category-id','data-award-badge','data-student-badge-id','data-celebration-id']
+    attributeFilter:['data-pos','class','data-memory-media-id','data-category-id','data-award-badge','data-student-badge-id','data-celebration-id','data-celebration-key']
   });
   scheduleActiveViewCheck();
 }
@@ -349,6 +354,7 @@ function getViewKey(card,context){
     context.development_category_id,
     context.badge_id,
     context.student_badge_id,
+    context.celebration_key,
     context.celebration_id,
     context.memory_collection,
     context.memory_archive
@@ -374,7 +380,11 @@ function getExperienceContext(card){
     experience_type_code:experienceCode,
     session_id:sessionBound.has(experienceCode)?sessionId:null,
     moment_id:toPositiveNumber(item?.moment_id),
-    celebration_id:toPositiveNumber(item?.celebration_id||item?.id),
+    celebration_id:toPositiveNumber(item?.celebration_id),
+    celebration_key:item?.celebration_key||null,
+    celebration_name:item?.celebration_name||null,
+    celebration_date:item?.celebration_date||null,
+    celebration_type:item?.celebration_type||null,
     ...getElementIdentity(card,card)
   });
 }
