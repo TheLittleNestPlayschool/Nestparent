@@ -32,7 +32,6 @@ function buildStoryMainCard(item){
       <div class="photo story-main-photo" style="background-image:url('${escapeHtml(item.photo)}')"></div>
       <div class="type-mark">Story</div>
       <div class="content story-main-content">
-        <div class="moment-label story-main-label">${escapeHtml(item.label||"Today's Story")}</div>
         <h2 class="moment-title story-main-title">${escapeHtml(item.title||"{story_title}")}</h2>
         <p class="moment-copy story-main-copy">${escapeHtml(item.copy||"{story_teaser}")}</p>
       </div>
