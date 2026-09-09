@@ -218,18 +218,33 @@ function buildActivityDetail(session,experience){
   };
 }
 
-function buildGrowthDetail(studentName,studentGrowth,sessionGrowth,session,moments,badges,photos){
+/*   parent-facing growth*/
+function buildGrowthTitle(session,studentName,studentGrowth){
+  return firstText(session?.growth_main_heading,studentGrowth[0]?`${studentGrowth[0].label} is growing`:"",`${studentName}'s growing journey`);
+}
+
+function buildGrowthCopy(session,studentName,studentGrowth){
+  return firstText(session?.growth_main_text,studentGrowth[0]?`${studentName} has been building experience in ${studentGrowth[0].label.toLowerCase()} over time.`:"",`A look at the developmental experiences building across ${studentName}'s Little Nest journey.`);
+}
+
+function buildGrowthDetail(studentGrowth,session){
   const current=studentGrowth.slice(0,4).map(item=>({label:item.label,value:item.value}));
-  const today=sessionGrowth.slice(0,3).map(item=>({label:item.label,value:item.value,description:getCategoryDescription(session,item.key)}));
+  const contributions=[
+    {title:getText(session?.growth_contribution_1_heading),copy:getText(session?.growth_contribution_1_text)},
+    {title:getText(session?.growth_contribution_2_heading),copy:getText(session?.growth_contribution_2_text)},
+    {title:getText(session?.growth_contribution_3_heading),copy:getText(session?.growth_contribution_3_text)}
+  ].filter(item=>item.title||item.copy);
   return{
-    eyebrow:"Growth",
-    title:studentGrowth[0]?`${studentName}'s ${studentGrowth[0].label} journey`:`${studentName}'s growing journey`,
-    lead:studentGrowth[0]?`${studentName} is continuing to build experience in ${studentGrowth[0].label.toLowerCase()} across their Little Nest journey.`:`A look at the developmental experiences building over time.`,
+    title:firstText(session?.growth_detail_heading,session?.growth_main_heading,"Growing Over Time"),
+    lead:firstText(session?.growth_detail_intro,session?.growth_main_text),
+    currentHeading:firstText(session?.growth_current_heading,"Current Growth"),
+    currentText:getText(session?.growth_current_text),
     current,
-    today,
-    moments:moments.map(item=>getText(item?.moment)).filter(Boolean).slice(0,3),
-    badges:badges.filter(item=>item?.is_active!==false).slice(0,3).map(item=>({earned_at:item?.earned_at||"",award_reason:getText(item?.award_reason),parent_note:getText(item?.parent_note)})),
-    media:photos.slice(0,4)
+    contributions,
+    personalEvidence:{
+      title:getText(session?.growth_personal_evidence_heading),
+      copy:getText(session?.growth_personal_evidence_text)
+    }
   };
 }
 
@@ -258,7 +273,6 @@ export function getExperiences(){
 
   const sessionGrowth=getGrowthWeights(session);
   const studentGrowth=getStudentGrowth(student);
-  const strongestStudentGrowth=studentGrowth[0];
   const todayCount=todayMedia.length;
   const todayMomentWord=todayCount===1?"moment":"moments";
   const todayPhoto=todayPhotos[0]||fallbackPhotos[4];
@@ -271,7 +285,6 @@ export function getExperiences(){
   const activityExperience=getActivityExperience(sessionExperiences);
   const activityPhoto=todayPhotos[2]||todayPhotos[0]||getExperiencePhoto(livePhotos,2);
   const growthPhoto=todayPhotos[3]||todayPhotos[0]||getExperiencePhoto(livePhotos,3);
-  const growthMedia=todayPhotos.length?todayPhotos:livePhotos;
 
   return[
     {
@@ -313,13 +326,13 @@ export function getExperiences(){
     {
       type:"personal",
       experience_type_code:"growth",
-      title:strongestStudentGrowth?`${strongestStudentGrowth.label} is growing`:`${studentName}'s growing journey`,
+      title:buildGrowthTitle(session,studentName,studentGrowth),
       label:"Growth",
-      copy:strongestStudentGrowth?`${studentName} has been building experience in ${strongestStudentGrowth.label.toLowerCase()} over time.`:`A look at the developmental experiences building across ${studentName}'s Little Nest journey.`,
+      copy:buildGrowthCopy(session,studentName,studentGrowth),
       photo:growthPhoto,
-      categories:studentGrowth.slice(0,2).map(item=>item.label),
-      detail:buildGrowthDetail(studentName,studentGrowth,sessionGrowth,session,studentMoments,studentBadges,growthMedia),
-      deeper:"",
+      categories:[],
+      detail:buildGrowthDetail(studentGrowth,session),
+      deeper:firstText(session?.growth_detail_intro,session?.growth_main_text),
       learning:[]
     },
     {
