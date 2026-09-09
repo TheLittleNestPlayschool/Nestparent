@@ -125,8 +125,8 @@
 .story-main-label{margin-bottom:10px;color:rgba(255,255,255,.78);}
 .story-main-title{
   max-width:325px;
-  font-size:clamp(30px,7.5vw,38px);
-  line-height:1.01;
+  font-size:clamp(25px,6.2vw,31px);
+  line-height:1.04;
   text-wrap:balance;
 }
 .story-main-copy{
