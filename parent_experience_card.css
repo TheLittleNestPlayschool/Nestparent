@@ -93,6 +93,36 @@
 .main-stage-title{max-width:325px;}
 .main-stage-copy{max-width:325px;}
 
+/*   category atmosphere*/
+.experience-learning .main-stage-card::after{
+  background:linear-gradient(to bottom,rgba(33,92,102,.02) 18%,rgba(70,93,151,.09) 42%,rgba(34,63,94,.48) 67%,rgba(18,35,63,.88) 100%);
+}
+.experience-learning .type-mark{background:linear-gradient(135deg,rgba(229,250,247,.96),rgba(236,231,252,.96));color:#35576c;}
+.experience-activity .main-stage-card::after{
+  background:linear-gradient(to bottom,rgba(112,73,37,.01) 18%,rgba(188,101,72,.08) 42%,rgba(90,55,45,.46) 66%,rgba(45,31,33,.87) 100%);
+}
+.experience-activity .type-mark{background:linear-gradient(135deg,rgba(255,244,222,.96),rgba(246,232,214,.96));color:#66503f;}
+.experience-growth .main-stage-card::after{
+  background:linear-gradient(to bottom,rgba(35,105,87,.01) 18%,rgba(69,137,108,.08) 42%,rgba(40,80,65,.46) 66%,rgba(23,47,42,.88) 100%);
+}
+.experience-growth .type-mark{background:linear-gradient(135deg,rgba(229,248,237,.96),rgba(244,239,206,.96));color:#405f4d;}
+.experience-moments .main-stage-card::after{
+  background:linear-gradient(to bottom,rgba(126,63,103,.01) 18%,rgba(149,95,151,.08) 42%,rgba(79,54,86,.45) 66%,rgba(42,35,56,.88) 100%);
+}
+.experience-moments .type-mark{background:linear-gradient(135deg,rgba(252,235,244,.96),rgba(238,231,251,.96));color:#66506a;}
+.experience-together .main-stage-card::after{
+  background:linear-gradient(to bottom,rgba(79,113,137,.01) 18%,rgba(228,147,108,.07) 42%,rgba(76,72,76,.45) 66%,rgba(38,43,53,.88) 100%);
+}
+.experience-together .type-mark{background:linear-gradient(135deg,rgba(255,239,224,.96),rgba(228,244,249,.96));color:#5d5b61;}
+.experience-celebration .main-stage-card::after{
+  background:linear-gradient(to bottom,rgba(164,112,43,.01) 18%,rgba(219,126,160,.08) 42%,rgba(102,67,73,.45) 66%,rgba(52,38,45,.88) 100%);
+}
+.experience-celebration .type-mark{background:linear-gradient(135deg,rgba(255,247,216,.97),rgba(255,229,240,.96));color:#735466;}
+.experience-award .main-stage-card::after{
+  background:linear-gradient(to bottom,rgba(65,72,135,.01) 18%,rgba(189,151,66,.08) 42%,rgba(55,57,100,.48) 66%,rgba(27,29,62,.90) 100%);
+}
+.experience-award .type-mark{background:linear-gradient(135deg,rgba(240,237,255,.97),rgba(255,244,207,.97));color:#554f76;}
+
 /*   expanded story card*/
 .story-detail-experience{
   transition:transform 1.45s cubic-bezier(.20,.62,.18,1),opacity 1.05s ease,filter 1.05s ease;
