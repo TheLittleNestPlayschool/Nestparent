@@ -12,9 +12,10 @@ const APP_VERSION='1.0.0';
 const DB_NAME='nestparent_usage';
 const DB_VERSION=1;
 const STORE_NAME='sessions';
-const SCHEMA_VERSION=1;
+const SCHEMA_VERSION=2;
 const IDLE_TIMEOUT_MS=60000;
 const PERSIST_DELAY_MS=250;
+const IDENTITY_SELECTOR='[data-memory-media-id],[data-media-id],[data-selected-media-ids],[data-memory-archive],[data-memory-collection],[data-memory-chapter],[data-award-category],[data-category-id],[data-award-badge],[data-student-badge-id],[data-celebration-id],[data-celebration-media-id]';
 
 let currentSession=null;
 let activeStartedAt=null;
@@ -219,6 +220,7 @@ function getMeaningfulTarget(rawTarget){
 function getTargetInfo(target){
   const card=target.closest?.('.experience')||null;
   const context=getExperienceContext(card);
+  const identity=getElementIdentity(target,card);
   const navItem=target.closest?.('.nav-item')||null;
   const navText=navItem?.querySelector?.('.nav-text')?.textContent?.trim()||'';
   const position=card?.dataset?.pos;
@@ -234,6 +236,7 @@ function getTargetInfo(target){
   }
   return cleanObject({
     ...context,
+    ...identity,
     action,
     target:target.tagName?target.tagName.toLowerCase():null,
     target_id:target.id||null,
@@ -245,6 +248,29 @@ function getTargetInfo(target){
       card_position:position,
       navigation_destination:navText?slug(navText):null
     }
+  });
+}
+
+function getElementIdentity(target,card=null){
+  if(!(target instanceof Element)){return{};}
+  const source=target.matches?.(IDENTITY_SELECTOR)?target:target.closest?.(IDENTITY_SELECTOR);
+  const dataset={...(card?.dataset||{}),...(source?.dataset||{})};
+  const celebrationMediaId=toPositiveNumber(dataset.celebrationMediaId);
+  return cleanObject({
+    media_id:toPositiveNumber(dataset.memoryMediaId||dataset.mediaId||dataset.celebrationMediaId),
+    media_ids:parseNumberList(dataset.selectedMediaIds||dataset.mediaIds),
+    media_index:toInteger(dataset.memoryMediaIndex),
+    memory_chapter:dataset.memoryChapter||null,
+    memory_collection:dataset.memoryCollection||null,
+    memory_collection_type_id:toPositiveNumber(dataset.memoryCollectionTypeId),
+    memory_archive:dataset.memoryArchive||null,
+    memory_year:toInteger(dataset.memoryYear),
+    memory_month:toInteger(dataset.memoryMonth),
+    development_category_id:toPositiveNumber(dataset.awardCategory||dataset.categoryId||dataset.developmentCategoryId),
+    badge_id:toPositiveNumber(dataset.awardBadge||dataset.badgeId),
+    student_badge_id:toPositiveNumber(dataset.studentBadgeId),
+    celebration_id:toPositiveNumber(dataset.celebrationId),
+    celebration_media_id:celebrationMediaId
   });
 }
 
@@ -263,7 +289,12 @@ function bindViewObserver(){
   const carousel=document.getElementById('carousel');
   if(!carousel){return;}
   viewObserver=new MutationObserver(scheduleActiveViewCheck);
-  viewObserver.observe(carousel,{childList:true,subtree:true,attributes:true,attributeFilter:['data-pos','class']});
+  viewObserver.observe(carousel,{
+    childList:true,
+    subtree:true,
+    attributes:true,
+    attributeFilter:['data-pos','class','data-memory-media-id','data-category-id','data-award-badge','data-student-badge-id','data-celebration-id']
+  });
   scheduleActiveViewCheck();
 }
 
@@ -313,8 +344,17 @@ function finishCurrentView(now=Date.now(),reason='view_changed'){
 }
 
 function getViewKey(card,context){
-  if(card?.dataset?.index!==undefined){return`main:${card.dataset.index}:${context.experience_type_code||''}`;}
-  return`stage:${context.view||'unknown'}:${context.experience_type_code||''}`;
+  const identity=[
+    context.media_id,
+    context.development_category_id,
+    context.badge_id,
+    context.student_badge_id,
+    context.celebration_id,
+    context.memory_collection,
+    context.memory_archive
+  ].filter(value=>value!==null&&value!==undefined&&value!=='').join(':');
+  if(card?.dataset?.index!==undefined){return`main:${card.dataset.index}:${context.experience_type_code||''}:${identity}`;}
+  return`stage:${context.view||'unknown'}:${context.experience_type_code||''}:${identity}`;
 }
 
 function getExperienceContext(card){
@@ -334,7 +374,8 @@ function getExperienceContext(card){
     experience_type_code:experienceCode,
     session_id:sessionBound.has(experienceCode)?sessionId:null,
     moment_id:toPositiveNumber(item?.moment_id),
-    celebration_id:toPositiveNumber(item?.celebration_id||item?.id)
+    celebration_id:toPositiveNumber(item?.celebration_id||item?.id),
+    ...getElementIdentity(card,card)
   });
 }
 
@@ -354,6 +395,7 @@ function getStageExperienceCode(card){
   if(view.includes('memories')||view.includes('memory')){return'memories';}
   if(view.includes('award')){return'award';}
   if(view.includes('nest')){return'nest';}
+  if(view.includes('celebration')){return'celebration';}
   return null;
 }
 
@@ -680,6 +722,20 @@ function structuredCloneSafe(value){
 function toPositiveNumber(value){
   const number=Number(value);
   return Number.isFinite(number)&&number>0?number:null;
+}
+function toInteger(value){
+  if(value===null||value===undefined||value===''){return null;}
+  const number=Number(value);
+  return Number.isFinite(number)?Math.trunc(number):null;
+}
+function parseNumberList(value){
+  if(Array.isArray(value)){
+    const numbers=value.map(toPositiveNumber).filter(Boolean);
+    return numbers.length?numbers:null;
+  }
+  if(typeof value!=='string'||!value.trim()){return null;}
+  const numbers=value.split(',').map(item=>toPositiveNumber(item.trim())).filter(Boolean);
+  return numbers.length?numbers:null;
 }
 function slug(value){
   return String(value||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
