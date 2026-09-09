@@ -1,3 +1,114 @@
+/*   celebration main card*/
+.celebration-main-card{cursor:default;}
+.celebration-main-content{
+  bottom:22px;
+  display:grid;
+  gap:8px;
+  max-height:calc(100% - 78px);
+}
+.experience-celebration .celebration-main-content .main-stage-title{
+  max-width:320px;
+}
+.celebration-parent-title{
+  margin-top:1px;
+  font-size:11px;
+  line-height:1.35;
+  font-weight:800;
+  letter-spacing:.03em;
+  color:rgba(255,244,235,.88);
+}
+.experience-celebration .celebration-main-content .main-stage-copy{
+  margin-top:0;
+  font-size:12px;
+  line-height:1.48;
+  color:rgba(255,255,255,.88);
+}
+.celebration-media-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:3px;
+  padding:0 2px;
+  color:rgba(255,248,240,.82);
+}
+.celebration-media-head span{
+  font-size:9px;
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+.celebration-media-head strong{
+  font-size:9.5px;
+  line-height:1.2;
+  font-weight:700;
+  color:rgba(255,255,255,.74);
+}
+.celebration-media-strip{
+  display:flex;
+  gap:8px;
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:1px 1px 4px;
+  scrollbar-width:none;
+  overscroll-behavior-x:contain;
+}
+.celebration-media-strip::-webkit-scrollbar{display:none;}
+.celebration-media-item{
+  position:relative;
+  flex:0 0 82px;
+  height:62px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:14px;
+  background:
+    radial-gradient(circle at 25% 20%,rgba(255,255,255,.34),transparent 35%),
+    linear-gradient(135deg,rgba(255,226,207,.88),rgba(223,213,246,.88));
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 7px 18px rgba(31,24,34,.18),inset 0 1px 0 rgba(255,255,255,.74);
+}
+.celebration-media-item.has-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,transparent 50%,rgba(27,20,29,.30));
+}
+.celebration-media-kind{
+  position:absolute;
+  left:8px;
+  right:8px;
+  bottom:7px;
+  z-index:2;
+  font-size:8.5px;
+  line-height:1.15;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:#625267;
+}
+.celebration-media-play{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:25px;
+  height:25px;
+  border:1px solid rgba(255,255,255,.80);
+  border-radius:50%;
+  background:rgba(255,255,255,.82);
+  box-shadow:0 4px 12px rgba(36,26,40,.18);
+  transform:translate(-50%,-50%);
+  padding-left:2px;
+  font-size:9px;
+  color:#76596d;
+}
+
 /*   celebration detail card*/
 .celebration-detail-experience{
   transition:transform 1.45s cubic-bezier(.20,.62,.18,1),opacity 1.05s ease,filter 1.05s ease;
@@ -127,5 +238,7 @@
 }
 
 @media(max-width:420px){
+  .celebration-main-content{left:20px;right:20px;}
+  .celebration-media-item{flex-basis:78px;height:59px;}
   .celebration-detail-scroll{padding-left:17px;padding-right:17px;padding-bottom:24px;}
 }
