@@ -39,8 +39,35 @@ function getTypeClass(type){
   })[type]||"story";
 }
 
+/*   together card*/
+function buildTogetherCard(item,typeLabel){
+  const prompt=item?.together_prompt||"";
+  const activity=item?.together_activity||"";
+  return`
+    <div class="card main-stage-card together-main-card">
+      <div class="photo" style="background-image:url('${escapeHtml(item.photo)}')"></div>
+      <div class="type-mark">${escapeHtml(typeLabel)}</div>
+      <div class="content main-stage-content together-main-content">
+        <h2 class="moment-title main-stage-title">${escapeHtml(item.title||"")}</h2>
+        ${prompt?`<div class="together-main-prompt">${escapeHtml(prompt)}</div>`:""}
+        ${activity?`
+          <div class="together-main-activity">
+            <span>Try This Together</span>
+            <p>${escapeHtml(activity)}</p>
+          </div>
+        `:""}
+        ${!prompt&&!activity?`<p class="moment-copy main-stage-copy">${escapeHtml(item.copy||"")}</p>`:""}
+      </div>
+    </div>
+  `;
+}
+
 /*   main card*/
 function buildMainCard(item,typeLabel){
+  if(item?.type==="home"){
+    return buildTogetherCard(item,typeLabel);
+  }
+
   return`
     <div class="card main-stage-card${item?.type==="moments"?" moments-main-card":""}">
       <div class="photo" style="background-image:url('${escapeHtml(item.photo)}')"></div>
