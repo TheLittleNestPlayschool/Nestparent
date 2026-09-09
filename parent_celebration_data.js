@@ -1,32 +1,33 @@
 import{
-  getParentData,
-  getStudent,
   getStudentMedia,
   getSignedThumbnails
 }from"./parent_data.js";
 
+const XANO_BASE_URL="https://x8ki-letl-twmt.n7.xano.io/api:ro6SX8PH";
+let celebrationData=null;
+
 function text(value){return typeof value==="string"?value.trim():"";}
-function firstText(...values){return values.map(text).find(Boolean)||"";}
 function timestamp(value){let time=Number(value)||0;if(time&&time<1000000000000){time*=1000;}return time;}
 
-function isBirthdayToday(value){
-  if(!value){return false;}
-  const birthday=new Date(value);
-  if(Number.isNaN(birthday.getTime())){return false;}
-  const today=new Date();
-  return birthday.getMonth()===today.getMonth()&&birthday.getDate()===today.getDate();
+/*   load celebration data*/
+export async function loadCelebrationData(){
+  const authToken=localStorage.getItem("authToken");
+  const response=await fetch(`${XANO_BASE_URL}/pa_get_celebrations`,{
+    method:"GET",
+    headers:{Authorization:`Bearer ${authToken}`}
+  });
+  const data=await response.json();
+  if(!response.ok){throw new Error(data.message||"Unable to load Celebration.");}
+  celebrationData=data;
+  return data;
 }
 
-function getCelebrationExperienceSource(parentData){
-  const source=[parentData?.session_experiences,parentData?.session_experience,parentData?.current_session_experiences].find(Array.isArray)||[];
-  return source.find(item=>{
-    if(item?.is_active===false){return false;}
-    const type=text(item?.experience_type).toLowerCase();
-    const name=text(item?.experience_name).toLowerCase();
-    return["celebration","event","special_event"].includes(type)||/birthday|celebrat|recognition|special day/.test(name);
-  })||null;
+/*   get celebration data*/
+export function getCelebrationData(){
+  return celebrationData;
 }
 
+/*   get fallback photo*/
 function getLatestPhoto(){
   const media=getStudentMedia()||[];
   const thumbnails=getSignedThumbnails()||[];
@@ -36,17 +37,29 @@ function getLatestPhoto(){
     .sort((a,b)=>timestamp(b.item?.created_at)-timestamp(a.item?.created_at))[0]?.photo||"";
 }
 
+/*   get celebration media photo*/
+function getCelebrationPhoto(celebration){
+  const media=Array.isArray(celebration?.media)?celebration.media:[];
+  for(const item of media){
+    const photo=[
+      item?.signed_thumbnail_url,
+      item?.signed_thumbnail,
+      item?.thumbnail_url,
+      item?.signed_url,
+      item?.media_url
+    ].map(text).find(value=>/^https?:\/\//i.test(value));
+    if(photo){return photo;}
+  }
+  return getLatestPhoto();
+}
+
+/*   get celebration experience*/
 export function getCelebrationExperience(){
-  const parentData=getParentData()||{};
-  const student=getStudent()||{};
-  const studentName=student?.preferred_name||student?.name||"Your little one";
-  const birthday=isBirthdayToday(student?.date_of_birth);
-  const source=getCelebrationExperienceSource(parentData);
-  const hasLiveCelebration=birthday||Boolean(source);
-  const photo=getLatestPhoto();
-  const title=birthday?`Happy Birthday, ${studentName}!`:source?firstText(source?.experience_name,"A Special Little Nest Celebration"):`A Special Moment for ${studentName}`;
-  const copy=birthday?`Today is a special day for ${studentName}, and we're celebrating right along with you.`:source?firstText(source?.parent_description,source?.experience_summary,source?.class_context,`Something special happened in ${studentName}'s Little Nest day.`):`This Celebration card is staying visible while we shape the Parent App experience.`;
-  const message=birthday?`A little day worth celebrating, remembering, and smiling about together.`:source?firstText(source?.parent_description,source?.experience_summary,source?.class_context):`When a birthday, Recognition Day, class celebration, or other special occasion happens, it will become the heart of this experience.`;
+  const celebration=celebrationData?.celebration;
+  if(!celebration||!text(celebration?.name)){return null;}
+
+  const title=text(celebration?.parent_title)||text(celebration?.name)||"A Special Day to Celebrate";
+  const copy=text(celebration?.parent_message)||"A special Little Nest memory worth celebrating together.";
 
   return{
     type:"celebration",
@@ -54,17 +67,13 @@ export function getCelebrationExperience(){
     title,
     label:"Celebration",
     copy,
-    photo,
-    categories:birthday?["Birthday","Special day"]:source?["Special moment","Celebrate together"]:["Special occasion","Celebration"],
-    detail:{
-      eyebrow:"Celebration",
-      title,
-      lead:copy,
-      message,
-      kind:birthday?"birthday":hasLiveCelebration?"special":"preview",
-      media:photo?[photo]:[]
-    },
-    deeper:message,
+    photo:getCelebrationPhoto(celebration),
+    celebration_name:text(celebration?.name),
+    celebration_date:text(celebration?.date),
+    celebration_type:text(celebration?.type),
+    celebration_media:Array.isArray(celebration?.media)?celebration.media:[],
+    categories:[],
+    deeper:"",
     learning:[]
   };
 }
