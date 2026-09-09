@@ -66,12 +66,13 @@ function buildTogetherCard(item,typeLabel){
 /*   celebration card*/
 function buildCelebrationCard(item,typeLabel){
   const media=Array.isArray(item?.celebration_media)?item.celebration_media:[];
+  const celebrationId=Number(item?.celebration_id)||0;
   const mediaItems=media.map((entry,index)=>{
     const kind=String(entry?.kind||"media").toLowerCase();
     const hasImage=Boolean(entry?.url);
     const mediaId=Number(entry?.id)||0;
     return`
-      <div class="celebration-media-item${hasImage?" has-image":""}"${mediaId?` data-celebration-media-id="${mediaId}" data-media-id="${mediaId}"`:""}${hasImage?` style="background-image:url('${escapeHtml(entry.url)}')"`:""}>
+      <div class="celebration-media-item${hasImage?" has-image":""}"${celebrationId?` data-celebration-id="${celebrationId}"`:""}${mediaId?` data-celebration-media-id="${mediaId}" data-media-id="${mediaId}"`:""}${hasImage?` style="background-image:url('${escapeHtml(entry.url)}')"`:""}>
         ${kind==="video"?`<span class="celebration-media-play">▶</span>`:""}
         ${!hasImage?`<span class="celebration-media-kind">${kind==="video"?"Video":"Photo"} ${index+1}</span>`:""}
       </div>
@@ -79,7 +80,7 @@ function buildCelebrationCard(item,typeLabel){
   }).join("");
 
   return`
-    <div class="card main-stage-card celebration-main-card">
+    <div class="card main-stage-card celebration-main-card"${celebrationId?` data-celebration-id="${celebrationId}"`:""}>
       <div class="photo" style="background-image:url('${escapeHtml(item.photo)}')"></div>
       <div class="type-mark">${escapeHtml(typeLabel)}</div>
       <div class="content main-stage-content celebration-main-content">
@@ -160,6 +161,8 @@ function createExperienceCard(item,index,onOpen){
   const typeClass=getTypeClass(item?.type);
   article.className=`experience experience-${typeClass}${item?.type==="session"?" story-main-experience":""}`;
   article.dataset.index=index;
+  const celebrationId=Number(item?.celebration_id)||0;
+  if(celebrationId){article.dataset.celebrationId=String(celebrationId);}
 
   const typeLabel=getTypeLabel(item.type);
   article.innerHTML=buildMainCard(item,typeLabel);
