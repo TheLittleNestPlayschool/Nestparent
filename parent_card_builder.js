@@ -69,8 +69,9 @@ function buildCelebrationCard(item,typeLabel){
   const mediaItems=media.map((entry,index)=>{
     const kind=String(entry?.kind||"media").toLowerCase();
     const hasImage=Boolean(entry?.url);
+    const mediaId=Number(entry?.id)||0;
     return`
-      <div class="celebration-media-item${hasImage?" has-image":""}"${hasImage?` style="background-image:url('${escapeHtml(entry.url)}')"`:""}>
+      <div class="celebration-media-item${hasImage?" has-image":""}"${mediaId?` data-celebration-media-id="${mediaId}" data-media-id="${mediaId}"`:""}${hasImage?` style="background-image:url('${escapeHtml(entry.url)}')"`:""}>
         ${kind==="video"?`<span class="celebration-media-play">▶</span>`:""}
         ${!hasImage?`<span class="celebration-media-kind">${kind==="video"?"Video":"Photo"} ${index+1}</span>`:""}
       </div>
