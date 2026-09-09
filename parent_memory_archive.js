@@ -63,7 +63,7 @@ export function createMemoryArchiveCard({onArchive}={}){
       </div>
       <div class="memory-archive-list">
         ${archiveGroups.map(group=>`
-          <button class="memory-archive-item" type="button" data-memory-archive="${group.id}" data-memory-year="${group.year}" data-memory-month="${group.month}">
+          <button class="memory-archive-item" type="button" data-memory-archive="${group.id}" data-memory-year="${group.year}" data-memory-month="${group.month+1}" data-memory-month-index="${group.month}">
             <span class="memory-archive-item-title">${group.title}</span>
             <span class="memory-archive-item-copy">${studentName}'s ${new Intl.DateTimeFormat("en",{month:"long"}).format(new Date(group.year,group.month,1))} memories</span>
             <span class="memory-archive-item-count">${group.count} ${group.count===1?"moment":"moments"}</span>
@@ -79,7 +79,7 @@ export function createMemoryArchiveCard({onArchive}={}){
       const payload={
         archive:button.dataset.memoryArchive,
         year:Number(button.dataset.memoryYear),
-        month:Number(button.dataset.memoryMonth)
+        month:Number(button.dataset.memoryMonthIndex)
       };
 
       if(typeof onArchive==="function"&&onArchive(payload)===true)return;
