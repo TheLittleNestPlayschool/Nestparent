@@ -155,26 +155,33 @@ function getCategoryDescription(session,key){
   return getText(session?.[`${key}_desc`]);
 }
 
+/*   parent-facing learning*/
 function buildLearningTitle(session){
-  const lessonOne=getText(session?.lesson_1_title);
-  const lessonTwo=getText(session?.lesson_2_title);
-  if(lessonOne&&lessonTwo){return `${lessonOne} & ${lessonTwo}`;}
-  return firstText(lessonOne,lessonTwo,session?.session_theme,"Today's Learning");
+  return firstText(session?.learning_main_heading,session?.lesson_1_title,session?.session_theme,"Today's Learning");
 }
 
-function buildLearningDetail(session,experiences,objectives,growthWeights,photos){
-  const development=growthWeights.slice(0,3).map(item=>({label:item.label,description:getCategoryDescription(session,item.key)}));
-  const teacherConcepts=[];
-  experiences.forEach(item=>{
-    getJsonList(item?.inferred_concepts).forEach(value=>teacherConcepts.push(String(value)));
-    getJsonList(item?.learning_tags).forEach(value=>teacherConcepts.push(String(value)));
-  });
-  return{eyebrow:"Learning",title:buildLearningTitle(session),lead:firstText(objectives[0],session?.session_description,"A little look at what today's session was designed to explore."),objectives:objectives.slice(0,3),development,concepts:[...new Set([...getJsonList(session?.core_concepts).map(String),...teacherConcepts])].slice(0,6),media:photos.slice(0,4)};
+function buildLearningCopy(session,objectives,studentName){
+  return firstText(session?.learning_main_text,objectives[0],`Today's learning gave ${studentName} something clear to explore and practice.`);
 }
 
-function buildGoalCopy(objectives,studentName){
-  if(objectives.length){return objectives[0];}
-  return `Today's learning gave ${studentName} something clear to explore and practice.`;
+function buildLearningDetail(session,photos){
+  const explored=[
+    {title:getText(session?.learning_explored_1_heading),copy:getText(session?.learning_explored_1_text)},
+    {title:getText(session?.learning_explored_2_heading),copy:getText(session?.learning_explored_2_text)},
+    {title:getText(session?.learning_explored_3_heading),copy:getText(session?.learning_explored_3_text)}
+  ].filter(item=>item.title||item.copy);
+  const connections=[
+    {title:getText(session?.learning_connection_1_heading),copy:getText(session?.learning_connection_1_text)},
+    {title:getText(session?.learning_connection_2_heading),copy:getText(session?.learning_connection_2_text)},
+    {title:getText(session?.learning_connection_3_heading),copy:getText(session?.learning_connection_3_text)}
+  ].filter(item=>item.title||item.copy);
+  return{
+    title:firstText(session?.learning_detail_heading,session?.learning_main_heading,"Today's Learning"),
+    lead:firstText(session?.learning_detail_intro,session?.learning_main_text),
+    explored,
+    connections,
+    media:photos.slice(0,4)
+  };
 }
 
 function getActivityExperience(experiences){
@@ -236,9 +243,6 @@ export function getExperiences(){
   const todayPhotos=getUniquePhotos(todayMedia);
 
   const studentName=student?.preferred_name||student?.name||"Your little one";
-  const lessonOne=getText(session?.lesson_1_title);
-  const lessonTwo=getText(session?.lesson_2_title);
-  const manner=getText(session?.manner_topic);
   const objectives=[getText(session?.obj_text_1),getText(session?.obj_text_2),getText(session?.obj_text_3)].filter(Boolean);
 
   const storyTitle=buildStoryTitle(session,studentName);
@@ -248,7 +252,6 @@ export function getExperiences(){
 
   const sessionGrowth=getGrowthWeights(session);
   const studentGrowth=getStudentGrowth(student);
-  const strongestSessionGrowth=sessionGrowth.slice(0,3);
   const strongestStudentGrowth=studentGrowth[0];
   const todayCount=todayMedia.length;
   const todayMomentWord=todayCount===1?"moment":"moments";
@@ -258,6 +261,7 @@ export function getExperiences(){
   const togetherHasHome=Boolean(homeActivity);
   const learningPhoto=todayPhotos[1]||todayPhotos[0]||getExperiencePhoto(livePhotos,1);
   const learningMedia=todayPhotos.length?todayPhotos:livePhotos;
+  const learningConnections=[getText(session?.learning_connection_1_heading),getText(session?.learning_connection_2_heading),getText(session?.learning_connection_3_heading)].filter(Boolean);
   const activityExperience=getActivityExperience(sessionExperiences);
   const activityPhoto=todayPhotos[2]||todayPhotos[0]||getExperiencePhoto(livePhotos,2);
   const activityMedia=todayPhotos.length?todayPhotos:livePhotos;
@@ -282,11 +286,11 @@ export function getExperiences(){
       experience_type_code:"learning_discovery",
       title:buildLearningTitle(session),
       label:"Learning",
-      copy:buildGoalCopy(objectives,studentName),
+      copy:buildLearningCopy(session,objectives,studentName),
       photo:learningPhoto,
-      categories:strongestSessionGrowth.slice(0,2).map(item=>item.label),
-      detail:buildLearningDetail(session,sessionExperiences,objectives,sessionGrowth,learningMedia),
-      deeper:objectives.join(" "),
+      categories:learningConnections.slice(0,2),
+      detail:buildLearningDetail(session,learningMedia),
+      deeper:firstText(session?.learning_detail_intro,session?.learning_main_text),
       learning:[]
     },
     {
