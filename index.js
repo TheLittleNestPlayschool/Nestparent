@@ -4,6 +4,7 @@ import{loadParentData}from"./parent_data.js";
 import{loadAwardsData}from"./parent_awards_data.js";
 import{loadRecentAwardsData}from"./parent_recent_awards_data.js";
 import{loadMomentsData}from"./parent_moments_data.js";
+import{loadCelebrationData}from"./parent_celebration_data.js";
 import{buildCards,activateCarousel}from"./parent_carousel.js";
 import{activateSheet}from"./parent_sheet.js";
 import{activateNavigation}from"./parent_navigation.js";
@@ -45,6 +46,15 @@ async function startParentApp(){
     }catch(error){
       console.error(
         "Unable to preload Parent Moments:",
+        error
+      );
+    }
+
+    try{
+      await loadCelebrationData();
+    }catch(error){
+      console.error(
+        "Unable to preload Parent Celebration:",
         error
       );
     }
