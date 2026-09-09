@@ -25,6 +25,20 @@ function getTypeLabel(type){
   })[type]||"Story";
 }
 
+/*   get card type class*/
+function getTypeClass(type){
+  return({
+    session:"story",
+    learning:"learning",
+    activity:"activity",
+    personal:"growth",
+    moments:"moments",
+    home:"together",
+    celebration:"celebration",
+    award:"award"
+  })[type]||"story";
+}
+
 /*   main card*/
 function buildMainCard(item,typeLabel){
   return`
@@ -42,7 +56,8 @@ function buildMainCard(item,typeLabel){
 /*   create experience card*/
 function createExperienceCard(item,index,onOpen){
   const article=document.createElement("article");
-  article.className=item?.type==="session"?"experience story-main-experience":"experience";
+  const typeClass=getTypeClass(item?.type);
+  article.className=`experience experience-${typeClass}${item?.type==="session"?" story-main-experience":""}`;
   article.dataset.index=index;
 
   const typeLabel=getTypeLabel(item.type);
