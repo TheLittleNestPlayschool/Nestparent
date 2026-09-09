@@ -12,6 +12,8 @@ export function createCelebrationCard(item){
   const article=document.createElement("article");
   article.className="experience celebration-detail-experience";
   article.dataset.experienceType="celebration-detail";
+  const celebrationId=Number(item?.celebration_id)||0;
+  if(celebrationId)article.dataset.celebrationId=String(celebrationId);
 
   const photo=item?.photo||detail?.media?.[0]||"";
   const birthday=detail?.kind==="birthday";
