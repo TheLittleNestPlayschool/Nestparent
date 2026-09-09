@@ -146,7 +146,7 @@ function getLiveMemoryCollections(){
 function buildMemoryCollections(){
   const collections=getLiveMemoryCollections();
   if(collections.length===0){return"";}
-  return`<div class="memory-specials">${collections.map(collection=>`<button class="memory-special" type="button" data-memory-collection="${collection.id}"><span class="memory-special-symbol">${collection.symbol}</span><span class="memory-special-title">${collection.title}</span></button>`).join("")}</div>`;
+  return`<div class="memory-specials">${collections.map(collection=>`<button class="memory-special" type="button" data-memory-collection="${collection.id}" data-memory-collection-type-id="${collection.typeId}"><span class="memory-special-symbol">${collection.symbol}</span><span class="memory-special-title">${collection.title}</span></button>`).join("")}</div>`;
 }
 
 /*   create memories card*/
