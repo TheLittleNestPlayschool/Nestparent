@@ -12,6 +12,12 @@ import{activateArrival}from"./parent_arrival.js";
 import{activateNestControl}from"./parent_nest_control.js";
 import{activateStageRouter}from"./parent_stage_router.js";
 import{activateParentAuth}from"./parent_auth.js";
+import{
+  startParentAnalyticsSession,
+  setParentAnalyticsContext,
+  trackParentAnalyticsEvent,
+  markParentAnalyticsReady
+}from"./parent_analytics.js";
 
 let appStarted=false;
 
@@ -21,6 +27,16 @@ async function startParentApp(){
   appStarted=true;
 
   try{
+    try{
+      await startParentAnalyticsSession();
+      trackParentAnalyticsEvent('login_validated');
+    }catch(error){
+      console.warn(
+        "Unable to start NestParent analytics:",
+        error
+      );
+    }
+
     await loadParentData();
 
     try{
@@ -59,6 +75,7 @@ async function startParentApp(){
       );
     }
 
+    setParentAnalyticsContext();
     applyTimeAtmosphere();
     applyParentGreeting();
     buildCards();
@@ -68,7 +85,13 @@ async function startParentApp(){
     activateArrival();
     activateNestControl();
     activateStageRouter();
+    markParentAnalyticsReady();
   }catch(error){
+    trackParentAnalyticsEvent('startup_failed',{
+      data:{
+        message:error instanceof Error?error.message:'Unable to start Parent App.'
+      }
+    });
     appStarted=false;
     console.error(
       "Unable to start Parent App:",
