@@ -37,20 +37,28 @@ function getLatestPhoto(){
     .sort((a,b)=>timestamp(b.item?.created_at)-timestamp(a.item?.created_at))[0]?.photo||"";
 }
 
-/*   get celebration media photo*/
-function getCelebrationPhoto(celebration){
+/*   get media url*/
+function getMediaUrl(item){
+  return[
+    item?.signed_thumbnail_url,
+    item?.signed_thumbnail,
+    item?.thumbnail_url,
+    item?.signed_url,
+    item?.media_url
+  ].map(text).find(value=>/^https?:\/\//i.test(value))||"";
+}
+
+/*   prepare celebration media*/
+function getCelebrationMedia(celebration){
   const media=Array.isArray(celebration?.media)?celebration.media:[];
-  for(const item of media){
-    const photo=[
-      item?.signed_thumbnail_url,
-      item?.signed_thumbnail,
-      item?.thumbnail_url,
-      item?.signed_url,
-      item?.media_url
-    ].map(text).find(value=>/^https?:\/\//i.test(value));
-    if(photo){return photo;}
-  }
-  return getLatestPhoto();
+  return media.map(item=>({
+    id:Number(item?.id)||0,
+    kind:text(item?.media_kind)||"media",
+    url:getMediaUrl(item),
+    thumbnail_filename:text(item?.thumbnail_filename),
+    original_filename:text(item?.original_filename),
+    created_at:Number(item?.created_at)||0
+  }));
 }
 
 /*   get celebration experience*/
@@ -58,8 +66,11 @@ export function getCelebrationExperience(){
   const celebration=celebrationData?.celebration;
   if(!celebration||!text(celebration?.name)){return null;}
 
-  const title=text(celebration?.parent_title)||text(celebration?.name)||"A Special Day to Celebrate";
+  const media=getCelebrationMedia(celebration);
+  const title=text(celebration?.name)||"A Special Day to Celebrate";
+  const parentTitle=text(celebration?.parent_title);
   const copy=text(celebration?.parent_message)||"A special Little Nest memory worth celebrating together.";
+  const hero=media.find(item=>item.url)?.url||getLatestPhoto();
 
   return{
     type:"celebration",
@@ -67,11 +78,13 @@ export function getCelebrationExperience(){
     title,
     label:"Celebration",
     copy,
-    photo:getCelebrationPhoto(celebration),
-    celebration_name:text(celebration?.name),
+    photo:hero,
+    celebration_name:title,
     celebration_date:text(celebration?.date),
     celebration_type:text(celebration?.type),
-    celebration_media:Array.isArray(celebration?.media)?celebration.media:[],
+    celebration_parent_title:parentTitle,
+    celebration_media:media,
+    celebration_media_count:media.length,
     categories:[],
     deeper:"",
     learning:[]
