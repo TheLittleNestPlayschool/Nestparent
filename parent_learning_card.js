@@ -8,30 +8,17 @@ function escapeHtml(value){
     .replaceAll("'","&#039;");
 }
 
-/*   objectives*/
-function buildObjectives(items){
+/*   explored*/
+function buildExplored(items){
   if(!items.length){return"";}
   return`
     <section class="learning-detail-section">
       <div class="learning-detail-kicker">What We Explored</div>
-      <div class="learning-detail-objectives">
-        ${items.map(item=>`<div class="learning-detail-objective">${escapeHtml(item)}</div>`).join("")}
-      </div>
-    </section>
-  `;
-}
-
-/*   development*/
-function buildDevelopment(items){
-  if(!items.length){return"";}
-  return`
-    <section class="learning-detail-section">
-      <div class="learning-detail-kicker">Developmental Connections</div>
-      <div class="learning-detail-development">
+      <div class="learning-detail-explored">
         ${items.map(item=>`
-          <article class="learning-detail-development-item">
-            <h3>${escapeHtml(item.label)}</h3>
-            ${item.description?`<p>${escapeHtml(item.description)}</p>`:""}
+          <article class="learning-detail-item">
+            ${item.title?`<h3>${escapeHtml(item.title)}</h3>`:""}
+            ${item.copy?`<p>${escapeHtml(item.copy)}</p>`:""}
           </article>
         `).join("")}
       </div>
@@ -39,14 +26,19 @@ function buildDevelopment(items){
   `;
 }
 
-/*   concepts*/
-function buildConcepts(items){
+/*   connections*/
+function buildConnections(items){
   if(!items.length){return"";}
   return`
     <section class="learning-detail-section">
-      <div class="learning-detail-kicker">Learning Threads</div>
-      <div class="learning-detail-chips">
-        ${items.map(item=>`<span>${escapeHtml(item)}</span>`).join("")}
+      <div class="learning-detail-kicker">Learning Connections</div>
+      <div class="learning-detail-connections">
+        ${items.map(item=>`
+          <article class="learning-detail-item">
+            ${item.title?`<h3>${escapeHtml(item.title)}</h3>`:""}
+            ${item.copy?`<p>${escapeHtml(item.copy)}</p>`:""}
+          </article>
+        `).join("")}
       </div>
     </section>
   `;
@@ -57,9 +49,8 @@ function buildMedia(media){
   if(!media.length){return"";}
   return`
     <section class="learning-detail-section learning-detail-media-section">
-      <div class="learning-detail-kicker">A Glimpse From Today</div>
       <div class="learning-detail-media">
-        ${media.slice(0,3).map((url,index)=>`
+        ${media.slice(0,4).map((url,index)=>`
           <div class="learning-detail-photo${index===0?" is-primary":""}" style="background-image:url('${escapeHtml(url)}')"></div>
         `).join("")}
       </div>
@@ -77,9 +68,8 @@ export function createLearningCard(item){
   const title=detail.title||item?.title||"Today's Learning";
   const lead=detail.lead||item?.copy||"";
   const hero=item?.photo||detail.media?.[0]||"";
-  const objectives=Array.isArray(detail.objectives)?detail.objectives:[];
-  const development=Array.isArray(detail.development)?detail.development:[];
-  const concepts=Array.isArray(detail.concepts)?detail.concepts:[];
+  const explored=Array.isArray(detail.explored)?detail.explored:[];
+  const connections=Array.isArray(detail.connections)?detail.connections:[];
   const media=Array.isArray(detail.media)?detail.media:[];
 
   article.innerHTML=`
@@ -89,14 +79,12 @@ export function createLearningCard(item){
       <div class="type-mark">LEARNING</div>
       <div class="learning-detail-scroll">
         <header class="learning-detail-header">
-          <div class="learning-detail-label">${escapeHtml(detail.eyebrow||"Learning")}</div>
           <h2>${escapeHtml(title)}</h2>
           ${lead?`<p class="learning-detail-lead">${escapeHtml(lead)}</p>`:""}
         </header>
         <div class="learning-detail-body">
-          ${buildObjectives(objectives)}
-          ${buildDevelopment(development)}
-          ${buildConcepts(concepts)}
+          ${buildExplored(explored)}
+          ${buildConnections(connections)}
           ${buildMedia(media)}
         </div>
       </div>
