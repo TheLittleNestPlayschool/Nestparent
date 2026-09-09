@@ -44,11 +44,6 @@ import{
 }from"./parent_growth_stage.js";
 
 import{
-  openMomentsStage,
-  isMomentsStageOpen
-}from"./parent_moments_stage.js";
-
-import{
   openTogetherStage,
   isTogetherStageOpen
 }from"./parent_together_stage.js";
@@ -73,7 +68,7 @@ let hasInteracted=false;
 
 /*   experience stage open*/
 function isExperienceStageOpen(){
-  return isStoryStageOpen()||isLearningStageOpen()||isActivityStageOpen()||isGrowthStageOpen()||isMomentsStageOpen()||isTogetherStageOpen()||isCelebrationStageOpen();
+  return isStoryStageOpen()||isLearningStageOpen()||isActivityStageOpen()||isGrowthStageOpen()||isTogetherStageOpen()||isCelebrationStageOpen();
 }
 
 /*   build cards*/
@@ -133,8 +128,6 @@ function openExperience(index){
   }
 
   if(item.experience_type_code==="moments"){
-    openMomentsStage({carousel,activeIndex:index,item,mainCard});
-    hideHint();
     return;
   }
 
