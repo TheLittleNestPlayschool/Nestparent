@@ -32,16 +32,19 @@ function getCollectionLabel(collection){
       year:"numeric"
     }).format(new Date(Number(collection.year),Number(collection.month),1));
   }
-
   if(collection==="week")return"This Week";
-
   if(collection==="month"){
     return new Intl.DateTimeFormat("en",{month:"long"}).format(new Date());
   }
-
   if(collection==="recognition")return"Recognition Days";
   if(collection==="birthday")return"Birthdays";
   return"Today";
+}
+
+/*   get collection key*/
+function getCollectionKey(collection){
+  if(collection&&typeof collection==="object")return String(collection.type||"collection");
+  return String(collection||"today");
 }
 
 /*   create memory viewer card*/
@@ -54,6 +57,12 @@ export function createMemoryViewerCard({
 
   article.className="experience memories-experience memory-viewer-experience";
   article.dataset.type="memory-viewer";
+  article.dataset.memoryCollection=getCollectionKey(collection);
+  if(collection&&typeof collection==="object"&&collection.type==="archive-month"){
+    article.dataset.memoryYear=String(Number(collection.year));
+    article.dataset.memoryMonth=String(Number(collection.month));
+    article.dataset.memoryArchive=`${Number(collection.year)}-${String(Number(collection.month)+1).padStart(2,"0")}`;
+  }
 
   let currentIndex=Math.min(
     Math.max(0,activeIndex),
@@ -101,6 +110,10 @@ export function createMemoryViewerCard({
   function renderCurrent(){
     const item=mediaItems[currentIndex];
     if(!item)return;
+
+    const mediaId=Number(item.id)||0;
+    if(mediaId)article.dataset.memoryMediaId=String(mediaId);
+    else delete article.dataset.memoryMediaId;
 
     renderViewerMedia(mediaContainer,item);
     counter.textContent=`${currentIndex+1} of ${mediaItems.length}`;
