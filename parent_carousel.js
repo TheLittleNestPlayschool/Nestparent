@@ -44,11 +44,6 @@ import{
 }from"./parent_growth_stage.js";
 
 import{
-  openCelebrationStage,
-  isCelebrationStageOpen
-}from"./parent_celebration_stage.js";
-
-import{
   openNestStage as openNestStageView,
   closeNestStage as closeNestStageView,
   isNestStageOpen
@@ -63,7 +58,7 @@ let hasInteracted=false;
 
 /*   experience stage open*/
 function isExperienceStageOpen(){
-  return isStoryStageOpen()||isLearningStageOpen()||isActivityStageOpen()||isGrowthStageOpen()||isCelebrationStageOpen();
+  return isStoryStageOpen()||isLearningStageOpen()||isActivityStageOpen()||isGrowthStageOpen();
 }
 
 /*   build cards*/
@@ -122,13 +117,12 @@ function openExperience(index){
     return;
   }
 
-  if(item.experience_type_code==="moments"||item.experience_type_code==="together"){
+  if(
+    item.experience_type_code==="moments"||
+    item.experience_type_code==="together"||
+    item.experience_type_code==="celebration"
+  ){
     return;
-  }
-
-  if(item.experience_type_code==="celebration"){
-    openCelebrationStage({carousel,activeIndex:index,item,mainCard});
-    hideHint();
   }
 }
 
