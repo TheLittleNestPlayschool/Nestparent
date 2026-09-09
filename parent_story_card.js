@@ -11,17 +11,19 @@ function escapeHtml(value){
 /*   little details*/
 function buildLittleDetails(details){
   if(!details.length){return"";}
+  const symbols=["✦","•","✧"];
   return`
     <section class="story-detail-section story-detail-little-details">
       <div class="story-detail-kicker">Little Details</div>
+      <p class="story-detail-section-intro">A few little pieces that helped shape the morning.</p>
       <div class="story-detail-detail-list">
-        ${details.slice(0,3).map(detail=>{
+        ${details.slice(0,3).map((detail,index)=>{
           if(detail&&typeof detail==="object"){
             const title=detail.title||detail.label||"";
             const copy=detail.copy||detail.description||"";
-            return`<article class="story-detail-detail">${title?`<h3>${escapeHtml(title)}</h3>`:""}${copy?`<p>${escapeHtml(copy)}</p>`:""}</article>`;
+            return`<article class="story-detail-detail"><span class="story-detail-detail-mark" aria-hidden="true">${symbols[index]}</span><div>${title?`<h3>${escapeHtml(title)}</h3>`:""}${copy?`<p>${escapeHtml(copy)}</p>`:""}</div></article>`;
           }
-          return`<article class="story-detail-detail"><p>${escapeHtml(detail)}</p></article>`;
+          return`<article class="story-detail-detail"><span class="story-detail-detail-mark" aria-hidden="true">${symbols[index]}</span><div><p>${escapeHtml(detail)}</p></div></article>`;
         }).join("")}
       </div>
     </section>
