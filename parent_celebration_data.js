@@ -79,6 +79,7 @@ export function getCelebrationExperience(){
     label:"Celebration",
     copy,
     photo:hero,
+    celebration_id:Number(celebration?.id)||0,
     celebration_name:title,
     celebration_date:text(celebration?.date),
     celebration_type:text(celebration?.type),
