@@ -11,9 +11,8 @@ function escapeHtml(value){
 /*   learning rows*/
 function buildRows(items,type){
   if(!items.length){return"";}
-  return items.map((item,index)=>`
+  return items.map(item=>`
     <article class="learning-detail-row learning-detail-row-${type}">
-      <div class="learning-detail-index">${index+1}</div>
       <div class="learning-detail-row-copy">
         ${item.title?`<h3>${escapeHtml(item.title)}</h3>`:""}
         ${item.copy?`<p>${escapeHtml(item.copy)}</p>`:""}
@@ -43,10 +42,6 @@ function buildConnections(items){
   if(!items.length){return"";}
   return`
     <section class="learning-detail-section learning-detail-connections-section">
-      <div class="learning-detail-section-head">
-        <div class="learning-detail-kicker">Learning Connections</div>
-        <p>How those experiences connect with broader development.</p>
-      </div>
       <div class="learning-detail-rows">
         ${buildRows(items,"connection")}
       </div>
