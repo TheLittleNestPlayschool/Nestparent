@@ -1,6 +1,6 @@
 import{getExperiences}from"./parent_experiences.js";
 import{getCelebrationExperience}from"./parent_celebration_data.js";
-import{getLatestAwardEvent}from"./parent_awards_data.js";
+import{getLatestAwardEvent}from"./parent_recent_awards_data.js";
 import{getStudent}from"./parent_data.js";
 
 const awardCategories={
