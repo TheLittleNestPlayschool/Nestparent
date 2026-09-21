@@ -1,5 +1,5 @@
 @import url("./parent_base.css");
-@import url("./parent_login.css");
+@import url("./parent_login.css?v=2");
 
 @import url("./parent_atmosphere.css?v=7");
 @import url("./parent_resting_atmosphere.css");
