@@ -19,7 +19,7 @@ import{
   openOurNestDetailStage,
   openPrivacyNoticeStage,
   isOurNestStageOpen
-}from"./parent_our_nest_stage.js?v=2";
+}from"./parent_our_nest_stage.js?v=3";
 import{loadAwardsData}from"./parent_awards_data.js";
 import{getNestCard}from"./parent_nest_stage.js";
 
