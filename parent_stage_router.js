@@ -17,8 +17,9 @@ import{openJourneyStage,isJourneyStageOpen}from"./parent_journey_stage.js";
 import{
   openOurNestStage,
   openOurNestDetailStage,
+  openPrivacyNoticeStage,
   isOurNestStageOpen
-}from"./parent_our_nest_stage.js";
+}from"./parent_our_nest_stage.js?v=2";
 import{loadAwardsData}from"./parent_awards_data.js";
 import{getNestCard}from"./parent_nest_stage.js";
 
@@ -105,6 +106,14 @@ function routeOurNestOption(event){
   openOurNestDetailStage(option);
 }
 
+/*   route account action*/
+function routeAccountAction(event){
+  const action=event.detail?.action;
+  if(action==="privacy-notice"){
+    openPrivacyNoticeStage();
+  }
+}
+
 /*   route memory chapter*/
 function routeMemoryChapter(event){
   const chapter=event.detail?.chapter;
@@ -125,6 +134,7 @@ function routeMemoryCollection(event){
 export function activateStageRouter(){
   window.addEventListener("parent:nest-destination",routeDestination);
   window.addEventListener("parent:our-nest-option",routeOurNestOption);
+  window.addEventListener("parent:account-action",routeAccountAction);
   window.addEventListener("parent:memory-chapter",routeMemoryChapter);
   window.addEventListener("parent:memory-collection",routeMemoryCollection);
 }
