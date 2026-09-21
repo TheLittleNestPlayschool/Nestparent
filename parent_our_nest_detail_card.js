@@ -8,11 +8,11 @@ const DETAIL_CONTENT={
     title:"Account & Security",
     copy:"Your login, password, privacy and account access.",
     items:[
-      {title:"Login Email",copy:"The email used to sign in"},
-      {title:"Change Password",copy:"Update your NestHome password"},
-      {title:"Privacy Policy",copy:"How NestHome handles your family's information"},
-      {title:"Terms of Use",copy:"NestHome terms and conditions"},
-      {title:"Sign Out",copy:"Sign out of NestHome on this device"}
+      {key:"login-email",title:"Login Email",copy:"The email used to sign in"},
+      {key:"change-password",title:"Change Password",copy:"Update your NestHome password"},
+      {key:"privacy-notice",title:"Privacy Notice",copy:"How NestHome handles your family's information"},
+      {key:"terms-of-use",title:"Terms of Use",copy:"NestHome terms and conditions"},
+      {key:"sign-out",title:"Sign Out",copy:"Sign out of NestHome on this device"}
     ]
   }
 };
@@ -34,14 +34,22 @@ export function createOurNestDetailCard(option){
       ${detail.items?`
         <div class="our-nest-detail-menu">
           ${detail.items.map(item=>`
-            <div class="our-nest-detail-row">
+            <button class="our-nest-detail-row" type="button" data-account-action="${item.key}">
               <span class="our-nest-detail-row-title">${item.title}</span>
               <span class="our-nest-detail-row-copy">${item.copy}</span>
-            </div>
+            </button>
           `).join("")}
         </div>
       `:""}
     </div>
   `;
+  article.querySelectorAll("[data-account-action]").forEach(button=>{
+    button.addEventListener("click",event=>{
+      event.stopPropagation();
+      window.dispatchEvent(new CustomEvent("parent:account-action",{
+        detail:{action:button.dataset.accountAction}
+      }));
+    });
+  });
   return article;
 }
