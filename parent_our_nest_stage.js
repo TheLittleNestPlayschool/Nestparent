@@ -7,7 +7,7 @@ import{
 import{
   createLanguageCard,
   loadLanguageCard
-}from"./parent_language_card.js?v=2";
+}from"./parent_language_card.js?v=3";
 import{pushStageCard,popStageCard,isStageMotionLocked}from"./parent_stage_motion.js";
 
 let ourNestOpen=false;
