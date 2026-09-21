@@ -1,5 +1,5 @@
 import{createOurNestCard}from"./parent_our_nest_card.js";
-import{createOurNestDetailCard}from"./parent_our_nest_detail_card.js?v=2";
+import{createOurNestDetailCard}from"./parent_our_nest_detail_card.js?v=3";
 import{
   createPrivacyNoticeCard,
   loadPrivacyNoticeCard
