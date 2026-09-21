@@ -6,9 +6,11 @@ import{isJourneyStageOpen,closeJourneyStage}from"./parent_journey_stage.js";
 import{
   isOurNestStageOpen,
   isOurNestDetailStageOpen,
+  isPrivacyNoticeStageOpen,
   closeOurNestStage,
-  closeOurNestDetailStage
-}from"./parent_our_nest_stage.js";
+  closeOurNestDetailStage,
+  closePrivacyNoticeStage
+}from"./parent_our_nest_stage.js?v=2";
 import{closeMemories,closeEarlierMemories,closeAwards}from"./parent_stage_router.js";
 import{isStageMotionLocked}from"./parent_stage_motion.js";
 
@@ -59,6 +61,7 @@ function handleNestOrb(){
   if(isMemoryArchiveOpen()){returnFromArchive();return;}
   if(isMemoriesStageOpen()){closeMemories();return;}
   if(isAwardsStageOpen()){returnFromAwards();return;}
+  if(isPrivacyNoticeStageOpen()){closePrivacyNoticeStage();return;}
   if(isOurNestDetailStageOpen()){closeOurNestDetailStage();return;}
   if(isOurNestStageOpen()){closeOurNestStage();return;}
   if(isJourneyStageOpen()){closeJourneyStage();return;}
@@ -69,6 +72,7 @@ function handleNestOrb(){
 /*   handle main stage return*/
 function handleMainStageReturn(){
   if(isStageMotionLocked()||!isNestStageOpen())return;
+  if(isPrivacyNoticeStageOpen()){closePrivacyNoticeStage();return;}
   if(isOurNestDetailStageOpen()){closeOurNestDetailStage();return;}
   if(isOurNestStageOpen()){closeOurNestStage();return;}
   if(isJourneyStageOpen()){closeJourneyStage();return;}
