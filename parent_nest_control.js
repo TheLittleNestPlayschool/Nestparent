@@ -10,7 +10,7 @@ import{
   closeOurNestStage,
   closeOurNestDetailStage,
   closePrivacyNoticeStage
-}from"./parent_our_nest_stage.js?v=2";
+}from"./parent_our_nest_stage.js?v=3";
 import{closeMemories,closeEarlierMemories,closeAwards}from"./parent_stage_router.js";
 import{isStageMotionLocked}from"./parent_stage_motion.js";
 
