@@ -7,6 +7,7 @@ let selectedLanguageId=null;
 /*   normalize language list*/
 function normalizeLanguages(data){
   if(Array.isArray(data))return data;
+  if(Array.isArray(data?.pa_language))return data.pa_language;
   if(Array.isArray(data?.languages))return data.languages;
   if(Array.isArray(data?.pa_languages))return data.pa_languages;
   if(Array.isArray(data?.items))return data.items;
