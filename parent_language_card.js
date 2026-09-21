@@ -5,7 +5,7 @@ import{
   getLanguageLabel,
   getLanguageCode,
   getLanguageNativeName
-}from"./parent_language_data.js?v=2";
+}from"./parent_language_data.js?v=3";
 
 /*   escape text*/
 function escapeHtml(value){
@@ -27,7 +27,7 @@ export function createLanguageCard(){
       <div class="nest-section-heading language-heading">
         <span class="nest-section-kicker">Settings</span>
         <h2 class="nest-section-title">Language</h2>
-        <p class="nest-section-copy">Choose the language you prefer to use in NestHome.</p>
+        <p class="nest-section-copy">Choose the language you prefer to use in MyLittleNest.</p>
       </div>
       <div class="language-scroll">
         <div class="language-list" data-language-list>
