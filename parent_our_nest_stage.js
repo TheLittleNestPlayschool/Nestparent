@@ -4,6 +4,10 @@ import{
   createPrivacyNoticeCard,
   loadPrivacyNoticeCard
 }from"./parent_privacy_notice_card.js?v=1";
+import{
+  createLanguageCard,
+  loadLanguageCard
+}from"./parent_language_card.js?v=1";
 import{pushStageCard,popStageCard,isStageMotionLocked}from"./parent_stage_motion.js";
 
 let ourNestOpen=false;
@@ -12,6 +16,8 @@ let detailOpen=false;
 let detailCard=null;
 let privacyOpen=false;
 let privacyCard=null;
+let languageOpen=false;
+let languageCard=null;
 let currentNestCard=null;
 let currentCarousel=null;
 
@@ -49,7 +55,7 @@ export function openOurNestDetailStage(option){
 
 /*   open privacy notice*/
 export function openPrivacyNoticeStage(){
-  if(!detailOpen||privacyOpen||!detailCard||!currentCarousel||isStageMotionLocked())return;
+  if(!detailOpen||privacyOpen||languageOpen||!detailCard||!currentCarousel||isStageMotionLocked())return;
   const newPrivacyCard=createPrivacyNoticeCard();
   detailCard.addEventListener("click",handleDetailCardBack);
   currentCarousel.appendChild(newPrivacyCard);
@@ -63,16 +69,39 @@ export function openPrivacyNoticeStage(){
   loadPrivacyNoticeCard(newPrivacyCard);
 }
 
+/*   open language*/
+export function openLanguageStage(){
+  if(!detailOpen||languageOpen||privacyOpen||!detailCard||!currentCarousel||isStageMotionLocked())return;
+  const newLanguageCard=createLanguageCard();
+  detailCard.addEventListener("click",handleDetailCardBack);
+  currentCarousel.appendChild(newLanguageCard);
+  if(!pushStageCard(newLanguageCard)){
+    detailCard.removeEventListener("click",handleDetailCardBack);
+    newLanguageCard.remove();
+    return;
+  }
+  languageCard=newLanguageCard;
+  languageOpen=true;
+  loadLanguageCard(newLanguageCard);
+}
+
 /*   detail card back*/
 function handleDetailCardBack(event){
-  if(!privacyOpen||!detailCard?.classList.contains("is-stage-back"))return;
-  event.stopPropagation();
-  closePrivacyNoticeStage();
+  if(!detailCard?.classList.contains("is-stage-back"))return;
+  if(privacyOpen){
+    event.stopPropagation();
+    closePrivacyNoticeStage();
+    return;
+  }
+  if(languageOpen){
+    event.stopPropagation();
+    closeLanguageStage();
+  }
 }
 
 /*   our nest card back*/
 function handleOurNestCardBack(event){
-  if(!detailOpen||privacyOpen||!ourNestCard?.classList.contains("is-stage-back"))return;
+  if(!detailOpen||privacyOpen||languageOpen||!ourNestCard?.classList.contains("is-stage-back"))return;
   event.stopPropagation();
   closeOurNestDetailStage();
 }
@@ -94,11 +123,25 @@ export function closePrivacyNoticeStage(){
   privacyOpen=false;
 }
 
+/*   close language*/
+export function closeLanguageStage(){
+  if(!languageOpen||!languageCard||isStageMotionLocked())return;
+  const closingCard=languageCard;
+  if(!popStageCard(closingCard))return;
+  detailCard?.removeEventListener("click",handleDetailCardBack);
+  languageCard=null;
+  languageOpen=false;
+}
+
 /*   close our nest detail*/
 export function closeOurNestDetailStage(){
   if(!detailOpen||!detailCard||isStageMotionLocked())return;
   if(privacyOpen){
     closePrivacyNoticeStage();
+    return;
+  }
+  if(languageOpen){
+    closeLanguageStage();
     return;
   }
   const closingCard=detailCard;
@@ -128,3 +171,4 @@ export function closeOurNestStage(){
 export function isOurNestStageOpen(){return ourNestOpen;}
 export function isOurNestDetailStageOpen(){return detailOpen;}
 export function isPrivacyNoticeStageOpen(){return privacyOpen;}
+export function isLanguageStageOpen(){return languageOpen;}
