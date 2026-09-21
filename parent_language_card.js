@@ -5,7 +5,7 @@ import{
   getLanguageLabel,
   getLanguageCode,
   getLanguageNativeName
-}from"./parent_language_data.js?v=1";
+}from"./parent_language_data.js?v=2";
 
 /*   escape text*/
 function escapeHtml(value){
