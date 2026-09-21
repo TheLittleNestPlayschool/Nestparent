@@ -1,10 +1,10 @@
 const OUR_NEST_OPTIONS=[
-  {key:"family-access",icon:"♡",title:"Family Access",copy:"Choose who can be part of your family's Nest"},
-  {key:"parent-profile",icon:"◯",title:"Parent Profile",copy:"Your details and parent preferences"},
+  {key:"family-access",icon:"♡",title:"Family Access",copy:"Manage who can share your child's Nest"},
+  {key:"parent-profile",icon:"◯",title:"Parent Profile",copy:"Your contact and parent details"},
   {key:"child-details",icon:"✦",title:"Child Details",copy:"Your child's information"},
-  {key:"notifications",icon:"◌",title:"Notifications",copy:"How NestHome keeps you updated"},
-  {key:"settings",icon:"⚙",title:"Settings",copy:"Your NestHome preferences"},
-  {key:"account-information",icon:"i",title:"Account Information",copy:"Your account details"}
+  {key:"notifications",icon:"◌",title:"Notifications",copy:"Choose how NestHome updates you"},
+  {key:"settings",icon:"⚙",title:"Settings",copy:"Language and app preferences"},
+  {key:"account-security",icon:"⌁",title:"Account & Security",copy:"Login, password and privacy"}
 ];
 
 /*   create our nest card*/
