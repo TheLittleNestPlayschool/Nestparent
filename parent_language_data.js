@@ -31,6 +31,15 @@ export function getLanguageNativeName(language){
   return nativeName&&nativeName!==label?nativeName:"";
 }
 
+/*   parent language id*/
+function getSavedParentLanguageId(){
+  const parent=getParent();
+  const value=parent?.parent_language??parent?.pa_language_id;
+  if(value===undefined||value===null||value==="")return null;
+  const languageId=Number(value);
+  return Number.isInteger(languageId)&&languageId>0?languageId:null;
+}
+
 /*   load languages*/
 export async function loadParentLanguages(){
   const authToken=localStorage.getItem("authToken");
@@ -50,16 +59,15 @@ export async function loadParentLanguages(){
       if(aOrder!==bOrder)return aOrder-bOrder;
       return getLanguageLabel(a).localeCompare(getLanguageLabel(b));
     });
-  const parentLanguageId=getParent()?.pa_language_id;
-  if(selectedLanguageId===null&&parentLanguageId!==undefined&&parentLanguageId!==null){
-    selectedLanguageId=Number(parentLanguageId);
+  if(selectedLanguageId===null){
+    selectedLanguageId=getSavedParentLanguageId();
   }
   return languages;
 }
 
 /*   update parent language*/
-export async function updateParentLanguage(paLanguageId){
-  const languageId=Number(paLanguageId);
+export async function updateParentLanguage(parentLanguage){
+  const languageId=Number(parentLanguage);
   if(!Number.isInteger(languageId)||languageId<=0){
     throw new Error("Please choose a valid language.");
   }
@@ -70,13 +78,15 @@ export async function updateParentLanguage(paLanguageId){
       "Content-Type":"application/json",
       Authorization:`Bearer ${authToken}`
     },
-    body:JSON.stringify({pa_language_id:languageId})
+    body:JSON.stringify({parent_language:languageId})
   });
   const data=await response.json();
   if(!response.ok){
     throw new Error(data?.message||"Unable to save your language.");
   }
   selectedLanguageId=languageId;
+  const parent=getParent();
+  if(parent)parent.parent_language=languageId;
   return data;
 }
 
@@ -84,6 +94,5 @@ export async function updateParentLanguage(paLanguageId){
 export function getParentLanguages(){return languages;}
 export function getSelectedLanguageId(){
   if(selectedLanguageId!==null)return selectedLanguageId;
-  const parentLanguageId=getParent()?.pa_language_id;
-  return parentLanguageId===undefined||parentLanguageId===null?null:Number(parentLanguageId);
+  return getSavedParentLanguageId();
 }
