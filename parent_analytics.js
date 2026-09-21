@@ -7,7 +7,7 @@ import{
 import{getParentExperiences}from"./parent_experience_feed.js";
 
 /*   analytics configuration*/
-const USAGE_URL='https://x8ki-letl-twmt.n7.xano.io/api:ro6SX8PH/np_usage_session';
+const USAGE_URL='https://x58r-xped-p4y6.n7e.xano.io/api:ro6SX8PH/np_usage_session';
 const APP_VERSION='1.0.0';
 const DB_NAME='nestparent_usage';
 const DB_VERSION=1;
