@@ -18,8 +18,9 @@ import{
   openOurNestStage,
   openOurNestDetailStage,
   openPrivacyNoticeStage,
+  openLanguageStage,
   isOurNestStageOpen
-}from"./parent_our_nest_stage.js?v=3";
+}from"./parent_our_nest_stage.js?v=4";
 import{loadAwardsData}from"./parent_awards_data.js";
 import{getNestCard}from"./parent_nest_stage.js";
 
@@ -114,6 +115,14 @@ function routeAccountAction(event){
   }
 }
 
+/*   route settings action*/
+function routeSettingsAction(event){
+  const action=event.detail?.action;
+  if(action==="language"){
+    openLanguageStage();
+  }
+}
+
 /*   route memory chapter*/
 function routeMemoryChapter(event){
   const chapter=event.detail?.chapter;
@@ -135,6 +144,7 @@ export function activateStageRouter(){
   window.addEventListener("parent:nest-destination",routeDestination);
   window.addEventListener("parent:our-nest-option",routeOurNestOption);
   window.addEventListener("parent:account-action",routeAccountAction);
+  window.addEventListener("parent:settings-action",routeSettingsAction);
   window.addEventListener("parent:memory-chapter",routeMemoryChapter);
   window.addEventListener("parent:memory-collection",routeMemoryCollection);
 }
