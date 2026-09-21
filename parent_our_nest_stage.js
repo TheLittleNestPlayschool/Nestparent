@@ -1,11 +1,17 @@
 import{createOurNestCard}from"./parent_our_nest_card.js";
-import{createOurNestDetailCard}from"./parent_our_nest_detail_card.js";
+import{createOurNestDetailCard}from"./parent_our_nest_detail_card.js?v=2";
+import{
+  createPrivacyNoticeCard,
+  loadPrivacyNoticeCard
+}from"./parent_privacy_notice_card.js?v=1";
 import{pushStageCard,popStageCard,isStageMotionLocked}from"./parent_stage_motion.js";
 
 let ourNestOpen=false;
 let ourNestCard=null;
 let detailOpen=false;
 let detailCard=null;
+let privacyOpen=false;
+let privacyCard=null;
 let currentNestCard=null;
 let currentCarousel=null;
 
@@ -41,9 +47,32 @@ export function openOurNestDetailStage(option){
   detailOpen=true;
 }
 
+/*   open privacy notice*/
+export function openPrivacyNoticeStage(){
+  if(!detailOpen||privacyOpen||!detailCard||!currentCarousel||isStageMotionLocked())return;
+  const newPrivacyCard=createPrivacyNoticeCard();
+  detailCard.addEventListener("click",handleDetailCardBack);
+  currentCarousel.appendChild(newPrivacyCard);
+  if(!pushStageCard(newPrivacyCard)){
+    detailCard.removeEventListener("click",handleDetailCardBack);
+    newPrivacyCard.remove();
+    return;
+  }
+  privacyCard=newPrivacyCard;
+  privacyOpen=true;
+  loadPrivacyNoticeCard(newPrivacyCard);
+}
+
+/*   detail card back*/
+function handleDetailCardBack(event){
+  if(!privacyOpen||!detailCard?.classList.contains("is-stage-back"))return;
+  event.stopPropagation();
+  closePrivacyNoticeStage();
+}
+
 /*   our nest card back*/
 function handleOurNestCardBack(event){
-  if(!detailOpen||!ourNestCard?.classList.contains("is-stage-back"))return;
+  if(!detailOpen||privacyOpen||!ourNestCard?.classList.contains("is-stage-back"))return;
   event.stopPropagation();
   closeOurNestDetailStage();
 }
@@ -55,9 +84,23 @@ function handleNestCardBack(event){
   closeOurNestStage();
 }
 
+/*   close privacy notice*/
+export function closePrivacyNoticeStage(){
+  if(!privacyOpen||!privacyCard||isStageMotionLocked())return;
+  const closingCard=privacyCard;
+  if(!popStageCard(closingCard))return;
+  detailCard?.removeEventListener("click",handleDetailCardBack);
+  privacyCard=null;
+  privacyOpen=false;
+}
+
 /*   close our nest detail*/
 export function closeOurNestDetailStage(){
   if(!detailOpen||!detailCard||isStageMotionLocked())return;
+  if(privacyOpen){
+    closePrivacyNoticeStage();
+    return;
+  }
   const closingCard=detailCard;
   if(!popStageCard(closingCard))return;
   ourNestCard?.removeEventListener("click",handleOurNestCardBack);
@@ -84,3 +127,4 @@ export function closeOurNestStage(){
 /*   our nest state*/
 export function isOurNestStageOpen(){return ourNestOpen;}
 export function isOurNestDetailStageOpen(){return detailOpen;}
+export function isPrivacyNoticeStageOpen(){return privacyOpen;}
