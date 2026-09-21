@@ -11,7 +11,7 @@ import{activateNavigation}from"./parent_navigation.js";
 import{activateArrival}from"./parent_arrival.js";
 import{activateNestControl}from"./parent_nest_control.js";
 import{activateStageRouter}from"./parent_stage_router.js";
-import{activateParentAuth}from"./parent_auth.js";
+import{activateParentAuth}from"./parent_auth.js?v=2";
 import{
   startParentAnalyticsSession,
   setParentAnalyticsContext,
