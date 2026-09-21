@@ -1,4 +1,4 @@
-const XANO_BASE_URL='https://x8ki-letl-twmt.n7.xano.io/api:wtEDiEuV';
+const XANO_BASE_URL='https://x58r-xped-p4y6.n7e.xano.io/api:wtEDiEuV';
 
 /*   wait for login exit*/
 function waitForLoginExit(login){
