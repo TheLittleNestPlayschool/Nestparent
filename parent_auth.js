@@ -6,19 +6,14 @@ function waitForLoginExit(login){
     let done=false;
 
     const finish=()=>{
-      if(done) return;
+      if(done)return;
       done=true;
       login.removeEventListener('transitionend',handleEnd);
       resolve();
     };
 
     const handleEnd=event=>{
-      if(
-        event.target===login&&
-        event.propertyName==='opacity'
-      ){
-        finish();
-      }
+      if(event.target===login&&event.propertyName==='opacity')finish();
     };
 
     login.addEventListener('transitionend',handleEnd);
@@ -33,11 +28,38 @@ export function activateParentAuth(startApp){
   const email=document.getElementById('loginEmail');
   const password=document.getElementById('loginPassword');
   const button=document.getElementById('loginButton');
+  const actionText=login?.querySelector('.parent-login-action-text');
   const error=document.getElementById('loginError');
+  let submitting=false;
 
   login.classList.add('is-visible');
 
+  /*   login progress*/
+  function setLoading(loading){
+    submitting=loading;
+    email.disabled=loading;
+    password.disabled=loading;
+    button.disabled=loading;
+    button.classList.toggle('is-loading',loading);
+    login.classList.toggle('is-authenticating',loading);
+
+    if(actionText){
+      actionText.textContent=loading?'Opening your Nest…':'Enter The Nest';
+    }
+
+    button.innerHTML=loading
+      ?'<span class="parent-login-spinner" aria-hidden="true"></span>'
+      :'→';
+
+    button.setAttribute(
+      'aria-label',
+      loading?'Opening your Nest':'Enter The Nest'
+    );
+  }
+
   async function submit(){
+    if(submitting)return;
+
     error.textContent='';
     error.classList.remove('is-visible');
 
@@ -47,14 +69,12 @@ export function activateParentAuth(startApp){
       return;
     }
 
-    button.disabled=true;
+    setLoading(true);
 
     try{
       const response=await fetch(`${XANO_BASE_URL}/auth/login`,{
         method:'POST',
-        headers:{
-          'Content-Type':'application/json'
-        },
+        headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
           email:email.value.trim(),
           password:password.value
@@ -64,10 +84,7 @@ export function activateParentAuth(startApp){
       const data=await response.json();
 
       if(!response.ok){
-        throw new Error(
-          data.message||
-          'Invalid email or password.'
-        );
+        throw new Error(data.message||'Invalid email or password.');
       }
 
       localStorage.setItem('authToken',data.authToken);
@@ -79,17 +96,16 @@ export function activateParentAuth(startApp){
       login.classList.remove('is-visible');
       await waitForLoginExit(login);
       experience.classList.add('is-visible');
-
     }catch(err){
-      error.textContent=err.message;
+      error.textContent=err.message||'We couldn’t sign you in. Please check your email and password.';
       error.classList.add('is-visible');
-      button.disabled=false;
+      setLoading(false);
     }
   }
 
   button.addEventListener('click',submit);
 
   password.addEventListener('keydown',event=>{
-    if(event.key==='Enter') submit();
+    if(event.key==='Enter')submit();
   });
 }
