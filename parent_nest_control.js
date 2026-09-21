@@ -12,7 +12,7 @@ import{
   closeOurNestDetailStage,
   closePrivacyNoticeStage,
   closeLanguageStage
-}from"./parent_our_nest_stage.js?v=5";
+}from"./parent_our_nest_stage.js?v=6";
 import{closeMemories,closeEarlierMemories,closeAwards}from"./parent_stage_router.js";
 import{isStageMotionLocked}from"./parent_stage_motion.js";
 
