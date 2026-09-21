@@ -7,10 +7,12 @@ import{
   isOurNestStageOpen,
   isOurNestDetailStageOpen,
   isPrivacyNoticeStageOpen,
+  isLanguageStageOpen,
   closeOurNestStage,
   closeOurNestDetailStage,
-  closePrivacyNoticeStage
-}from"./parent_our_nest_stage.js?v=3";
+  closePrivacyNoticeStage,
+  closeLanguageStage
+}from"./parent_our_nest_stage.js?v=4";
 import{closeMemories,closeEarlierMemories,closeAwards}from"./parent_stage_router.js";
 import{isStageMotionLocked}from"./parent_stage_motion.js";
 
@@ -62,6 +64,7 @@ function handleNestOrb(){
   if(isMemoriesStageOpen()){closeMemories();return;}
   if(isAwardsStageOpen()){returnFromAwards();return;}
   if(isPrivacyNoticeStageOpen()){closePrivacyNoticeStage();return;}
+  if(isLanguageStageOpen()){closeLanguageStage();return;}
   if(isOurNestDetailStageOpen()){closeOurNestDetailStage();return;}
   if(isOurNestStageOpen()){closeOurNestStage();return;}
   if(isJourneyStageOpen()){closeJourneyStage();return;}
@@ -73,6 +76,7 @@ function handleNestOrb(){
 function handleMainStageReturn(){
   if(isStageMotionLocked()||!isNestStageOpen())return;
   if(isPrivacyNoticeStageOpen()){closePrivacyNoticeStage();return;}
+  if(isLanguageStageOpen()){closeLanguageStage();return;}
   if(isOurNestDetailStageOpen()){closeOurNestDetailStage();return;}
   if(isOurNestStageOpen()){closeOurNestStage();return;}
   if(isJourneyStageOpen()){closeJourneyStage();return;}
