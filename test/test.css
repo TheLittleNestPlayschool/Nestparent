@@ -11,6 +11,17 @@
 .nh-turn strong{display:block;font-size:28px;font-weight:500;margin-bottom:10px}
 @media(orientation:portrait){.parent-experience.is-visible .nh-turn{display:flex}.parent-experience.is-visible .nh-journey{visibility:hidden}}
 
+/*   install guidance*/
+.nh-install{position:fixed;left:50%;bottom:22px;z-index:99997;width:min(720px,calc(100vw - 28px));transform:translate(-50%,24px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .32s ease,transform .32s ease,visibility 0s linear .32s}
+.nh-install.is-visible{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0);transition:opacity .32s ease,transform .32s ease,visibility 0s}
+.nh-install-card{position:relative;display:grid;grid-template-columns:54px 1fr auto;gap:15px;align-items:center;padding:17px 18px;border:1px solid rgba(255,255,255,.82);border-radius:24px;background:rgba(247,251,249,.94);box-shadow:0 18px 55px rgba(18,36,43,.22),inset 0 1px 0 rgba(255,255,255,.96);backdrop-filter:blur(24px) saturate(1.15);-webkit-backdrop-filter:blur(24px) saturate(1.15);color:#263a34}
+.nh-install-close{position:absolute;top:8px;right:10px;width:28px;height:28px;border:0;background:transparent;color:rgba(38,58,52,.52);font:400 24px/1 system-ui,sans-serif;cursor:pointer}
+.nh-install-icon{width:54px;height:54px;display:flex;align-items:center;justify-content:center;border-radius:17px;background:linear-gradient(145deg,#7cdbcb,#3c9f98);box-shadow:0 8px 20px rgba(38,126,120,.24),inset 0 1px 0 rgba(255,255,255,.6);color:white;font:600 29px/1 system-ui,sans-serif}
+.nh-install-copy{min-width:0;padding-right:8px}.nh-install-kicker{display:block;margin-bottom:3px;color:#4d8f84;font:800 10px/1.2 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}.nh-install-copy strong{display:block;font:650 19px/1.2 system-ui,sans-serif}.nh-install-copy p{margin:5px 0 0;color:rgba(38,58,52,.68);font:500 13px/1.42 system-ui,sans-serif;max-width:410px}
+.nh-install-button{margin-right:22px;padding:12px 17px;border:0;border-radius:14px;background:#287f78;color:#fff;box-shadow:0 8px 18px rgba(31,100,95,.2);font:750 13px/1 system-ui,sans-serif;white-space:nowrap;cursor:pointer}
+.nh-ios-steps{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}.nh-ios-steps span{display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:11px;background:rgba(55,121,111,.08);font:650 11px/1.3 system-ui,sans-serif;color:#405d56}.nh-ios-steps b{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#4f9d91;color:white;font-size:10px}
+@media(max-width:620px){.nh-install{bottom:12px;width:calc(100vw - 20px)}.nh-install-card{grid-template-columns:44px 1fr;padding:14px 14px 15px;gap:11px;border-radius:20px}.nh-install-icon{width:44px;height:44px;border-radius:14px;font-size:24px}.nh-install-copy strong{font-size:16px}.nh-install-copy p{font-size:12px}.nh-install-button{grid-column:1 / -1;width:100%;margin:0;padding:12px}.nh-ios-steps{grid-column:2}.nh-install-close{top:5px;right:7px}}
+
 /*   compact login for installed landscape test app*/
 @media(orientation:landscape) and (max-height:560px){
   .parent-login{align-items:center;overflow:hidden;padding:42px 28px 16px;}
@@ -25,4 +36,8 @@
   .parent-login-action-text{font-size:.88rem;line-height:1.2;}
   .parent-login-button{width:50px;height:50px;flex:none;}
   .parent-login-error{grid-column:2 / 4;grid-row:3;margin-top:0;}
+  .nh-install{bottom:10px;width:min(820px,calc(100vw - 24px));}
+  .nh-install-card{grid-template-columns:46px 1fr auto;padding:12px 16px;gap:12px;border-radius:18px;}
+  .nh-install-icon{width:46px;height:46px;border-radius:14px;font-size:24px;}
+  .nh-install-copy strong{font-size:15px}.nh-install-copy p{font-size:11px;margin-top:3px}.nh-install-button{grid-column:auto;width:auto;margin-right:18px;padding:11px 14px}.nh-ios-steps{margin-top:6px}.nh-ios-steps span{padding:5px 7px;font-size:10px}
 }
