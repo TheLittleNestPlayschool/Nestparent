@@ -1,0 +1,13 @@
+{
+  "id": "/Nestparent/test/",
+  "name": "NestHome Testing",
+  "short_name": "NestHome Test",
+  "description": "The Little Nest NestHome testing experience",
+  "start_url": "/Nestparent/test/",
+  "scope": "/Nestparent/test/",
+  "display": "standalone",
+  "display_override": ["standalone"],
+  "orientation": "landscape",
+  "background_color": "#eef4f1",
+  "theme_color": "#eef4f1"
+}
