@@ -5,3 +5,4 @@ import{activateParentAuth}from"../parent_auth.js?v=2";
 let appStarted=false;
 async function startParentApp(){if(appStarted)return;appStarted=true;try{await loadParentData();applyTimeAtmosphere();applyParentGreeting();}catch(error){appStarted=false;console.error("Unable to start NestHome test:",error);}}
 activateParentAuth(startParentApp);
+ 
