@@ -1,0 +1,12 @@
+/*   NestHome test journey canvas*/
+.nh-test-banner{position:fixed;top:0;left:0;right:0;z-index:99999;background:#fff3b8;color:#5a4810;text-align:center;padding:7px 12px;font:700 12px/1.2 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 1px 8px rgba(0,0,0,.12)}
+.nh-journey{display:none;position:fixed;inset:0;z-index:30;overflow:hidden;background:linear-gradient(135deg,rgba(236,244,241,.88),rgba(244,237,228,.82));color:#32443e}
+.parent-experience.is-visible .nh-journey{display:block}
+.nh-journey-rail{height:100%;width:max-content;min-width:100%;display:flex;align-items:stretch;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.nh-journey-rail::-webkit-scrollbar{display:none}
+.nh-journey-space{width:100vw;min-width:100vw;height:100%;position:relative;flex:none;border-right:1px solid rgba(50,68,62,.08)}
+.nh-journey-space:nth-child(2){width:115vw}.nh-journey-space:nth-child(3){width:130vw}.nh-journey-space:nth-child(4){width:110vw}
+.nh-journey-mark{position:absolute;left:7vw;bottom:9vh;font:500 clamp(12px,1.6vw,18px)/1.4 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;opacity:.38}
+.nh-turn{display:none;position:fixed;inset:0;z-index:99998;align-items:center;justify-content:center;text-align:center;padding:36px;background:rgba(238,244,241,.96);color:#32443e;font:500 18px/1.5 system-ui,sans-serif}
+.nh-turn strong{display:block;font-size:28px;font-weight:500;margin-bottom:10px}
+@media(orientation:portrait){.parent-experience.is-visible .nh-turn{display:flex}.parent-experience.is-visible .nh-journey{visibility:hidden}}
