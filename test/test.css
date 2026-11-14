@@ -2,7 +2,7 @@
 .nh-test-banner{position:fixed;top:0;left:0;right:0;z-index:99999;background:#fff3b8;color:#5a4810;text-align:center;padding:7px 12px;font:700 12px/1.2 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 1px 8px rgba(0,0,0,.12)}
 .nh-journey{display:none;position:fixed;inset:0;z-index:30;overflow:hidden;background:linear-gradient(90deg,rgba(8,31,44,.13),rgba(221,245,238,.08) 42%,rgba(255,225,194,.07) 72%,rgba(40,22,70,.12));color:#f7fbfb}
 .parent-experience.is-visible .nh-journey{display:block}
-.nh-journey-rail{height:100%;width:max-content;min-width:100%;display:flex;align-items:stretch;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.nh-journey-rail{height:100%;width:max-content;min-width:100%;display:flex;align-items:stretch;overflow-x:auto;overflow-y:hidden;overscroll-behavior:contain;touch-action:none;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .nh-journey-rail::-webkit-scrollbar{display:none}
 .nh-journey-space{width:100vw;min-width:100vw;height:100%;position:relative;flex:none;box-sizing:border-box;border-right:1px solid rgba(255,255,255,.08)}
 .nh-journey-space:nth-child(2){width:115vw}.nh-journey-space:nth-child(3){width:130vw}.nh-journey-space:nth-child(4){width:110vw}
