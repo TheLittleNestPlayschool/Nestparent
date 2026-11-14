@@ -78,6 +78,53 @@ function setupInstallPrompt(){
   },1800);
 }
 
+function setupJourneyNavigation(){
+  const rail=document.getElementById("journeyRail");
+  if(!rail)return;
+
+  let dragging=false;
+  let startX=0;
+  let startScrollLeft=0;
+  let activePointerId=null;
+
+  rail.style.cursor="grab";
+
+  rail.addEventListener("pointerdown",event=>{
+    if(event.pointerType!=="mouse"||event.button!==0)return;
+    dragging=true;
+    activePointerId=event.pointerId;
+    startX=event.clientX;
+    startScrollLeft=rail.scrollLeft;
+    rail.setPointerCapture(event.pointerId);
+    rail.style.cursor="grabbing";
+    event.preventDefault();
+  });
+
+  rail.addEventListener("pointermove",event=>{
+    if(!dragging||event.pointerId!==activePointerId)return;
+    const distance=event.clientX-startX;
+    rail.scrollLeft=startScrollLeft-distance;
+    event.preventDefault();
+  });
+
+  const stopDragging=event=>{
+    if(!dragging||event.pointerId!==activePointerId)return;
+    dragging=false;
+    if(rail.hasPointerCapture(event.pointerId))rail.releasePointerCapture(event.pointerId);
+    activePointerId=null;
+    rail.style.cursor="grab";
+  };
+
+  rail.addEventListener("pointerup",stopDragging);
+  rail.addEventListener("pointercancel",stopDragging);
+
+  rail.addEventListener("wheel",event=>{
+    if(Math.abs(event.deltaY)<=Math.abs(event.deltaX))return;
+    rail.scrollLeft+=event.deltaY;
+    event.preventDefault();
+  },{passive:false});
+}
+
 function hydrateJourneyHero(){
   const image=document.getElementById("journeyHeroImage");
   const fallback=document.getElementById("journeyHeroFallback");
@@ -122,4 +169,5 @@ async function startParentApp(){
 }
 
 setupInstallPrompt();
+setupJourneyNavigation();
 activateParentAuth(startParentApp);
