@@ -90,13 +90,13 @@ function setupJourneyNavigation(){
   rail.style.cursor="grab";
 
   rail.addEventListener("pointerdown",event=>{
-    if(event.pointerType!=="mouse"||event.button!==0)return;
+    if(event.pointerType==="mouse"&&event.button!==0)return;
     dragging=true;
     activePointerId=event.pointerId;
     startX=event.clientX;
     startScrollLeft=rail.scrollLeft;
     rail.setPointerCapture(event.pointerId);
-    rail.style.cursor="grabbing";
+    if(event.pointerType==="mouse")rail.style.cursor="grabbing";
     event.preventDefault();
   });
 
@@ -112,7 +112,7 @@ function setupJourneyNavigation(){
     dragging=false;
     if(rail.hasPointerCapture(event.pointerId))rail.releasePointerCapture(event.pointerId);
     activePointerId=null;
-    rail.style.cursor="grab";
+    if(event.pointerType==="mouse")rail.style.cursor="grab";
   };
 
   rail.addEventListener("pointerup",stopDragging);
